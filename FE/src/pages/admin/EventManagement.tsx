@@ -132,7 +132,7 @@ const EventCard = ({
         <div
           className={`absolute top-3 right-3 px-2 py-1 rounded-md text-xs font-medium ${
             event.status === "upcoming"
-              ? "bg-sky-100 text-sky-800"
+              ? "bg-amber-100 text-amber-800"
               : event.status === "ongoing"
               ? "bg-green-100 text-green-800"
               : event.status === "completed"
@@ -199,7 +199,7 @@ const EventCard = ({
                   : event.registeredCount &&
                     event.registeredCount >= event.capacity * 0.8
                   ? "bg-yellow-500"
-                  : "bg-sky-500"
+                  : "bg-amber-500"
               }`}
               style={{
                 width: `${Math.min(
@@ -228,7 +228,7 @@ const EventCard = ({
           ) : (
             <button
               onClick={() => onSelect(event)}
-              className="flex-1 py-2 px-3 bg-sky-600 text-white text-sm font-medium rounded-md hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500 transition-colors"
+              className="flex-1 py-2 px-3 bg-amber-600 text-white text-sm font-medium rounded-md hover:bg-amber-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500 transition-colors"
               disabled={event.status === "cancelled"}
             >
               Quét QR
@@ -590,7 +590,7 @@ const EventFormModal = ({
               onChange={(e) =>
                 setFormData({ ...formData, title: e.target.value })
               }
-              className="w-full px-4 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-sky-500"
+              className="w-full px-4 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-500"
               placeholder="Nhập tiêu đề sự kiện"
               required
             />
@@ -605,7 +605,7 @@ const EventFormModal = ({
               onChange={(e) =>
                 setFormData({ ...formData, description: e.target.value })
               }
-              className="w-full px-4 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-sky-500 h-24"
+              className="w-full px-4 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-500 h-24"
               placeholder="Nhập mô tả sự kiện"
               required
             />
@@ -625,7 +625,7 @@ const EventFormModal = ({
                     registrationStartDate: e.target.value,
                   })
                 }
-                className="w-full px-4 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-sky-500"
+                className="w-full px-4 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-500"
                 required
               />
             </div>
@@ -643,7 +643,7 @@ const EventFormModal = ({
                     registrationEndDate: e.target.value,
                   })
                 }
-                className="w-full px-4 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-sky-500"
+                className="w-full px-4 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-500"
                 required
               />
             </div>
@@ -660,7 +660,7 @@ const EventFormModal = ({
                 onChange={(e) =>
                   setFormData({ ...formData, startDate: e.target.value })
                 }
-                className="w-full px-4 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-sky-500"
+                className="w-full px-4 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-500"
                 required
               />
             </div>
@@ -675,7 +675,7 @@ const EventFormModal = ({
                 onChange={(e) =>
                   setFormData({ ...formData, endDate: e.target.value })
                 }
-                className="w-full px-4 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-sky-500"
+                className="w-full px-4 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-500"
                 required
               />
             </div>
@@ -691,7 +691,7 @@ const EventFormModal = ({
               onChange={(e) =>
                 setFormData({ ...formData, location: e.target.value })
               }
-              className="w-full px-4 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-sky-500"
+              className="w-full px-4 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-500"
               placeholder="Nhập địa điểm tổ chức"
               required
             />
@@ -711,7 +711,7 @@ const EventFormModal = ({
                   capacity: parseInt(e.target.value) || 0,
                 })
               }
-              className="w-full px-4 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-sky-500"
+              className="w-full px-4 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-500"
               placeholder="Số lượng người tham gia tối đa"
               required
             />
@@ -757,7 +757,7 @@ const EventFormModal = ({
                   <select
                     value={selectedSponsorId}
                     onChange={(e) => setSelectedSponsorId(e.target.value)}
-                    className="w-full h-11 px-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-sky-500 bg-white"
+                    className="w-full h-11 px-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-500 bg-white"
                   >
                     <option value="">-- Chọn nhà tài trợ --</option>
                     {availableSponsors.map((sponsor) => (
@@ -775,7 +775,7 @@ const EventFormModal = ({
                     type="text"
                     value={sponsorDonation}
                     onChange={(e) => setSponsorDonation(e.target.value)}
-                    className="w-full h-11 px-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-sky-500"
+                    className="w-full h-11 px-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-500"
                     placeholder="10.000.000 VNĐ, 100 áo thun, ..."
                   />
                 </div>
@@ -794,7 +794,7 @@ const EventFormModal = ({
                           | "Bronze"
                       )
                     }
-                    className="w-full h-11 px-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-sky-500 bg-white"
+                    className="w-full h-11 px-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-500 bg-white"
                   >
                     <option value="Bronze">Bronze</option>
                     <option value="Silver">Silver</option>
@@ -807,7 +807,7 @@ const EventFormModal = ({
                 <button
                   type="button"
                   onClick={handleAddSponsor}
-                  className="px-4 py-2 bg-sky-600 text-white rounded-lg hover:bg-sky-700 transition-colors text-sm"
+                  className="px-4 py-2 bg-amber-600 text-white rounded-lg hover:bg-amber-700 transition-colors text-sm"
                 >
                   Thêm nhà tài trợ
                 </button>
@@ -924,7 +924,7 @@ const EventFormModal = ({
                     toast.error("Tải ảnh lên thất bại!");
                   }
                 }}
-                className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-sky-50 file:text-sky-700 hover:file:bg-sky-100"
+                className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-amber-50 file:text-amber-700 hover:file:bg-amber-100"
               />
             </div>
           </div>
@@ -939,7 +939,7 @@ const EventFormModal = ({
             </button>
             <button
               type="submit"
-              className="flex-1 py-3 px-4 rounded-xl bg-sky-600 text-white font-medium hover:bg-sky-700 transition-all"
+              className="flex-1 py-3 px-4 rounded-xl bg-amber-600 text-white font-medium hover:bg-amber-700 transition-all"
             >
               {isEditing ? "Cập nhật" : "Tạo sự kiện"}
             </button>
@@ -977,7 +977,7 @@ const EventFormModal = ({
                     onChange={(e) =>
                       setNewSponsor({ ...newSponsor, name: e.target.value })
                     }
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500"
                     placeholder="Nhập tên nhà tài trợ"
                   />
                 </div>
@@ -992,7 +992,7 @@ const EventFormModal = ({
                     onChange={(e) =>
                       setNewSponsor({ ...newSponsor, email: e.target.value })
                     }
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500"
                     placeholder="sponsor@example.com"
                   />
                 </div>
@@ -1038,7 +1038,7 @@ const EventFormModal = ({
                           toast.error("Tải logo lên thất bại!");
                         }
                       }}
-                      className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-sky-50 file:text-sky-700 hover:file:bg-sky-100"
+                      className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-amber-50 file:text-amber-700 hover:file:bg-amber-100"
                     />
                   </div>
                 </div>
@@ -1344,14 +1344,14 @@ const QRScannerModal = ({
         </h3>
         <p className="text-gray-500 text-center mb-4">
           Sự kiện:{" "}
-          <span className="font-semibold text-sky-600">{eventTitle}</span>
+          <span className="font-semibold text-amber-600">{eventTitle}</span>
         </p>
         <div className="rounded-xl overflow-hidden border border-gray-200 mb-4 flex justify-center">
           <div id={qrRegionId} style={{ width: 300, height: 300 }} />
         </div>
         <div className="flex flex-col items-center mb-2">
           <button
-            className="px-4 py-2 bg-sky-100 text-sky-700 rounded-lg font-semibold hover:bg-sky-200 mb-1"
+            className="px-4 py-2 bg-amber-100 text-amber-700 rounded-lg font-semibold hover:bg-amber-200 mb-1"
             onClick={() => fileInputRef.current?.click()}
           >
             Tải ảnh QR từ máy tính
@@ -1464,12 +1464,12 @@ const EventReportModal = ({
         >
           ×
         </button>
-        <h2 className="text-2xl font-bold mb-6 text-sky-700 flex items-center gap-2">
+        <h2 className="text-2xl font-bold mb-6 text-amber-700 flex items-center gap-2">
           <span>📊 Báo cáo sự kiện:</span>{" "}
           <span className="truncate">{event.title}</span>
         </h2>
         {loading ? (
-          <div className="text-center py-12 text-lg text-sky-600 font-semibold">
+          <div className="text-center py-12 text-lg text-amber-600 font-semibold">
             Đang tải dữ liệu...
           </div>
         ) : (
@@ -1478,9 +1478,9 @@ const EventReportModal = ({
             <div>
               <div className="mb-4 flex flex-col gap-2">
                 <div className="flex items-center gap-2 text-lg font-semibold text-gray-700">
-                  <span className="inline-block w-3 h-3 rounded-full bg-sky-500"></span>
+                  <span className="inline-block w-3 h-3 rounded-full bg-amber-500"></span>
                   Tổng đăng ký:{" "}
-                  <span className="text-sky-700">{registered}</span>
+                  <span className="text-amber-700">{registered}</span>
                 </div>
                 <div className="flex items-center gap-2 text-lg font-semibold text-gray-700">
                   <span className="inline-block w-3 h-3 rounded-full bg-green-500"></span>
@@ -1511,7 +1511,7 @@ const EventReportModal = ({
             </div>
             {/* Feedback */}
             <div>
-              <h3 className="font-semibold mb-3 text-sky-700 text-lg flex items-center gap-2">
+              <h3 className="font-semibold mb-3 text-amber-700 text-lg flex items-center gap-2">
                 📝 Feedback của sự kiện
               </h3>
               {feedbacks.length === 0 ? (
@@ -1522,7 +1522,7 @@ const EventReportModal = ({
                 <ul className="max-h-64 overflow-y-auto divide-y divide-gray-200">
                   {feedbacks.map((fb, idx) => (
                     <li key={idx} className="py-3 flex gap-3 items-start">
-                      <div className="w-10 h-10 rounded-full bg-sky-100 flex items-center justify-center text-sky-600 font-bold text-lg">
+                      <div className="w-10 h-10 rounded-full bg-amber-100 flex items-center justify-center text-amber-600 font-bold text-lg">
                         {fb.userId?.fullName ? fb.userId.fullName[0] : "A"}
                       </div>
                       <div className="flex-1">
@@ -1919,7 +1919,7 @@ const AdminEventManagement = () => {
                     placeholder="Tìm kiếm sự kiện..."
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
-                    className="focus:ring-sky-500 focus:border-sky-500 block w-full pl-10 sm:text-sm border-gray-300 rounded-md"
+                    className="focus:ring-amber-500 focus:border-amber-500 block w-full pl-10 sm:text-sm border-gray-300 rounded-md"
                   />
                 </div>
               </div>
@@ -1932,7 +1932,7 @@ const AdminEventManagement = () => {
                 <select
                   value={filter}
                   onChange={(e) => setFilter(e.target.value)}
-                  className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-sky-500 focus:border-sky-500 sm:text-sm rounded-md"
+                  className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-amber-500 focus:border-amber-500 sm:text-sm rounded-md"
                 >
                   <option value="all">Tất cả</option>
                   <option value="upcoming">Sắp diễn ra</option>
@@ -1950,7 +1950,7 @@ const AdminEventManagement = () => {
                 <select
                   value={sortBy}
                   onChange={(e) => setSortBy(e.target.value)}
-                  className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-sky-500 focus:border-sky-500 sm:text-sm rounded-md"
+                  className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-amber-500 focus:border-amber-500 sm:text-sm rounded-md"
                 >
                   <option value="newest">Mới nhất</option>
                   <option value="oldest">Cũ nhất</option>
@@ -1973,7 +1973,7 @@ const AdminEventManagement = () => {
                   setEditingEvent(null);
                   setShowEventForm(true);
                 }}
-                className="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm leading-4 font-medium rounded-md text-white bg-sky-600 hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500"
+                className="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm leading-4 font-medium rounded-md text-white bg-amber-600 hover:bg-amber-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500"
               >
                 <FiPlus className="mr-2 h-4 w-4" />
                 Tạo sự kiện mới
@@ -2016,7 +2016,7 @@ const AdminEventManagement = () => {
           <div className="bg-white shadow rounded-lg w-full mb-6">
             {loading ? (
               <div className="flex justify-center items-center h-64">
-                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-sky-500"></div>
+                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-amber-500"></div>
               </div>
             ) : (
               <>

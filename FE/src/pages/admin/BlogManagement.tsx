@@ -404,7 +404,7 @@ const BlogManagement: React.FC = () => {
         <h1 className="text-2xl font-semibold text-gray-800">Quản lý bài viết</h1>
         <button
           onClick={handleAddNew}
-          className="px-4 py-2 bg-sky-600 text-white rounded-md hover:bg-sky-700 flex items-center"
+          className="px-4 py-2 bg-amber-600 text-white rounded-md hover:bg-amber-700 flex items-center"
         >
           <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
@@ -420,7 +420,7 @@ const BlogManagement: React.FC = () => {
           {(searchTerm || statusFilter || authorFilter) && (
             <button
               onClick={() => { setSearchTerm(''); setStatusFilter(''); setAuthorFilter(''); }}
-              className="text-sm text-sky-600 hover:text-sky-800 flex items-center"
+              className="text-sm text-amber-600 hover:text-amber-800 flex items-center"
             >
               <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
@@ -438,7 +438,7 @@ const BlogManagement: React.FC = () => {
                 value={searchTerm}
                 onChange={e => setSearchTerm(e.target.value)}
                 placeholder="Tìm theo tiêu đề, tác giả..."
-                className="w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500 sm:text-sm pl-10"
+                className="w-full rounded-md border-gray-300 shadow-sm focus:border-amber-500 focus:ring-amber-500 sm:text-sm pl-10"
               />
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                 <svg className="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -452,7 +452,7 @@ const BlogManagement: React.FC = () => {
             <select
               value={statusFilter}
               onChange={e => setStatusFilter(e.target.value)}
-              className="w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500 sm:text-sm"
+              className="w-full rounded-md border-gray-300 shadow-sm focus:border-amber-500 focus:ring-amber-500 sm:text-sm"
             >
               <option value="">Tất cả trạng thái</option>
               <option value="published">Đã xuất bản</option>
@@ -466,7 +466,7 @@ const BlogManagement: React.FC = () => {
             <select
               value={authorFilter}
               onChange={e => setAuthorFilter(e.target.value)}
-              className="w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500 sm:text-sm"
+              className="w-full rounded-md border-gray-300 shadow-sm focus:border-amber-500 focus:ring-amber-500 sm:text-sm"
             >
               <option value="">Tất cả tác giả</option>
               {blogs
@@ -502,19 +502,19 @@ const BlogManagement: React.FC = () => {
       {/* Thêm thanh tab phía trên bảng */}
       <div className="flex gap-2 mb-4">
         <button
-          className={`px-4 py-2 rounded-t-lg font-medium border-b-2 ${activeTab === 'draft' ? 'border-sky-500 text-sky-700 bg-sky-50' : 'border-transparent text-gray-500 bg-white'}`}
+          className={`px-4 py-2 rounded-t-lg font-medium border-b-2 ${activeTab === 'draft' ? 'border-amber-500 text-amber-700 bg-amber-50' : 'border-transparent text-gray-500 bg-white'}`}
           onClick={() => setActiveTab('draft')}
         >Chưa duyệt</button>
         <button
-          className={`px-4 py-2 rounded-t-lg font-medium border-b-2 ${activeTab === 'published' ? 'border-sky-500 text-sky-700 bg-sky-50' : 'border-transparent text-gray-500 bg-white'}`}
+          className={`px-4 py-2 rounded-t-lg font-medium border-b-2 ${activeTab === 'published' ? 'border-amber-500 text-amber-700 bg-amber-50' : 'border-transparent text-gray-500 bg-white'}`}
           onClick={() => setActiveTab('published')}
         >Đã xuất bản</button>
         <button
-          className={`px-4 py-2 rounded-t-lg font-medium border-b-2 ${activeTab === 'unpublished' ? 'border-sky-500 text-sky-700 bg-sky-50' : 'border-transparent text-gray-500 bg-white'}`}
+          className={`px-4 py-2 rounded-t-lg font-medium border-b-2 ${activeTab === 'unpublished' ? 'border-amber-500 text-amber-700 bg-amber-50' : 'border-transparent text-gray-500 bg-white'}`}
           onClick={() => setActiveTab('unpublished')}
         >Ngừng xuất bản</button>
         <button
-          className={`px-4 py-2 rounded-t-lg font-medium border-b-2 ${activeTab === 'rejected' ? 'border-sky-500 text-sky-700 bg-sky-50' : 'border-transparent text-gray-500 bg-white'}`}
+          className={`px-4 py-2 rounded-t-lg font-medium border-b-2 ${activeTab === 'rejected' ? 'border-amber-500 text-amber-700 bg-amber-50' : 'border-transparent text-gray-500 bg-white'}`}
           onClick={() => setActiveTab('rejected')}
         >Từ chối</button>
       </div>
@@ -523,7 +523,7 @@ const BlogManagement: React.FC = () => {
       <div className="overflow-hidden shadow-md ring-1 ring-black ring-opacity-5 bg-white rounded-xl">
         <div className="overflow-x-auto">
           <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-sky-50">
+            <thead className="bg-amber-50">
               <tr>
                 <th scope="col" className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Tiêu đề
@@ -555,7 +555,7 @@ const BlogManagement: React.FC = () => {
             <tbody className="text-gray-600 text-sm divide-y divide-gray-200">
             {paginatedBlogs.length > 0 ? (
               paginatedBlogs.map(blog => (
-                <tr key={blog._id} className="border-b border-gray-200 hover:bg-sky-50/50">
+                <tr key={blog._id} className="border-b border-gray-200 hover:bg-amber-50/50">
                   <td className="px-4 py-3 whitespace-nowrap font-medium">{blog.title}</td>
                   {/*
                   <td className="px-4 py-3 whitespace-nowrap">
@@ -579,7 +579,7 @@ const BlogManagement: React.FC = () => {
                   <td className="px-4 py-3 whitespace-nowrap">
                     {blog.topics && blog.topics.length > 0 ? (
                       blog.topics.map(topic => (
-                        <span key={topic} className="inline-block bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full mr-1 mb-1">{topic}</span>
+                        <span key={topic} className="inline-block bg-amber-100 text-amber-800 text-xs px-2 py-1 rounded-full mr-1 mb-1">{topic}</span>
                       ))
                     ) : (
                       <span className="text-xs text-gray-400">Không có topic</span>
@@ -591,13 +591,13 @@ const BlogManagement: React.FC = () => {
                       {activeTab === 'draft' ? (
                         <div className="flex items-center gap-1">
                           {/* Icon bút chì */}
-                          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-gray-400 mr-1 group-hover:text-sky-500 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-gray-400 mr-1 group-hover:text-amber-500 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                           </svg>
                           <select
                             value={blog.published}
                             onChange={e => handleAdminDraftStatus(blog, e.target.value as 'draft' | 'published' | 'rejected')}
-                            className="px-2 py-1 rounded border border-gray-300 text-sm bg-white text-gray-700 focus:outline-none focus:ring-2 focus:ring-sky-400"
+                            className="px-2 py-1 rounded border border-gray-300 text-sm bg-white text-gray-700 focus:outline-none focus:ring-2 focus:ring-amber-400"
                             style={{ minWidth: 120 }}
                           >
                             <option value="draft">Chưa duyệt</option>
@@ -607,13 +607,13 @@ const BlogManagement: React.FC = () => {
                         </div>
                       ) : (blog.published === 'published' || blog.published === 'unpublished') ? (
                         <div className="flex items-center gap-1">
-                          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-gray-400 mr-1 group-hover:text-sky-500 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-gray-400 mr-1 group-hover:text-amber-500 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                           </svg>
                           <select
                             value={blog.published}
                             onChange={e => handleAdminChangeStatus(blog, e.target.value as 'published' | 'unpublished')}
-                            className="px-2 py-1 rounded border border-gray-300 text-sm bg-white text-gray-700 focus:outline-none focus:ring-2 focus:ring-sky-400"
+                            className="px-2 py-1 rounded border border-gray-300 text-sm bg-white text-gray-700 focus:outline-none focus:ring-2 focus:ring-amber-400"
                             style={{ minWidth: 120 }}
                           >
                             <option value="published">Đã xuất bản</option>
@@ -630,7 +630,7 @@ const BlogManagement: React.FC = () => {
                     <div className="flex items-center space-x-3">
                       <button
                         onClick={() => { setBlogDangXem(blog); setHienModalXem(true); }}
-                        className="p-2 rounded-full bg-sky-100 text-sky-600 hover:bg-sky-200"
+                        className="p-2 rounded-full bg-amber-100 text-amber-600 hover:bg-amber-200"
                         title="Xem"
                       >
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -680,7 +680,7 @@ const BlogManagement: React.FC = () => {
         {Array.from({ length: totalPages }, (_, i) => (
           <button
             key={i}
-            className={`px-3 py-1 rounded ${currentPage === i + 1 ? 'bg-sky-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
+            className={`px-3 py-1 rounded ${currentPage === i + 1 ? 'bg-amber-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
             onClick={() => setCurrentPage(i + 1)}
           >
             {i + 1}

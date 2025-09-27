@@ -577,7 +577,7 @@ const Consultant: React.FC = () => {
     return (
       <div className="p-6 bg-white rounded-lg shadow-sm">
         <div className="flex justify-center items-center h-64">
-          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-sky-500"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-amber-500"></div>
         </div>
       </div>
     );
@@ -628,7 +628,7 @@ const Consultant: React.FC = () => {
               <input
                 type="text"
                 placeholder="Tìm theo tên, email..."
-                className="focus:ring-sky-500 focus:border-sky-500 block w-full pl-10 sm:text-sm border-gray-300 rounded-md"
+                className="focus:ring-amber-500 focus:border-amber-500 block w-full pl-10 sm:text-sm border-gray-300 rounded-md"
                 onChange={() => {}}
               />
             </div>
@@ -638,7 +638,7 @@ const Consultant: React.FC = () => {
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Trạng thái</label>
             <select
-              className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-sky-500 focus:border-sky-500 sm:text-sm rounded-md"
+              className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-amber-500 focus:border-amber-500 sm:text-sm rounded-md"
               onChange={() => {}}
             >
               <option value="">Tất cả trạng thái</option>
@@ -652,7 +652,7 @@ const Consultant: React.FC = () => {
             <label className="block text-sm font-medium text-gray-700 mb-1">Ngày bắt đầu</label>
             <input
               type="date"
-              className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-sky-500 focus:border-sky-500 sm:text-sm rounded-md"
+              className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-amber-500 focus:border-amber-500 sm:text-sm rounded-md"
               onChange={() => {}}
             />
           </div>
@@ -660,7 +660,7 @@ const Consultant: React.FC = () => {
         
         <div className="mt-4 flex justify-end">
           <button
-            className="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500"
+            className="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500"
           >
             <svg className="mr-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
@@ -673,7 +673,7 @@ const Consultant: React.FC = () => {
             <div className="overflow-x-auto shadow-md rounded-lg max-h-[70vh] overflow-y-auto">
         <table className="min-w-full bg-white">
           <thead>
-            <tr className="bg-gradient-to-r from-sky-50 to-cyan-50 text-gray-700 text-left text-sm font-semibold uppercase tracking-wider">
+            <tr className="bg-gradient-to-r from-amber-50 to-cyan-50 text-gray-700 text-left text-sm font-semibold uppercase tracking-wider">
               <th className="px-4 py-3 rounded-tl-lg">Họ và tên</th>
               <th className="px-4 py-3">Email</th>
               <th className="px-4 py-3">Trạng thái</th>
@@ -683,7 +683,7 @@ const Consultant: React.FC = () => {
           </thead>
           <tbody className="text-gray-600 text-sm divide-y divide-gray-200">
             {paginatedConsultants.map(consultant => (
-              <tr key={consultant._id} className="hover:bg-sky-50 transition-colors duration-150">
+              <tr key={consultant._id} className="hover:bg-amber-50 transition-colors duration-150">
                 <td className="px-4 py-3 font-medium flex items-center">
                   <img src={consultant.accountId.photoUrl || '/avarta.png'} alt="avatar" className="w-10 h-10 rounded-full object-cover mr-2 inline-block" />
                   {consultant.accountId.fullName}
@@ -705,7 +705,7 @@ const Consultant: React.FC = () => {
                                             <td className="px-4 py-3 text-center">
                   <button 
                     onClick={() => handleOpenScheduleModal(consultant)}
-                    className="px-3 py-1 bg-sky-50 text-sky-600 rounded-full text-xs border border-sky-200 hover:bg-sky-100 transition-colors"
+                    className="px-3 py-1 bg-amber-50 text-amber-600 rounded-full text-xs border border-amber-200 hover:bg-amber-100 transition-colors"
                   >
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 inline-block mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
@@ -718,7 +718,7 @@ const Consultant: React.FC = () => {
                     <Tooltip text="Xem chi tiết">
                       <button
                         onClick={() => { setSelectedConsultant(consultant); setIsDetailModalOpen(true); }}
-                        className="p-2 rounded-full bg-sky-100 text-sky-600 hover:bg-sky-200 transition-colors"
+                        className="p-2 rounded-full bg-amber-100 text-amber-600 hover:bg-amber-200 transition-colors"
                       >
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -741,7 +741,7 @@ const Consultant: React.FC = () => {
                     <Tooltip text="Quản lý chứng chỉ">
                       <button
                         onClick={() => handleOpenCertificateModal(consultant)}
-                        className="p-2 rounded-full bg-sky-100 text-sky-600 hover:bg-sky-200 transition-colors"
+                        className="p-2 rounded-full bg-amber-100 text-amber-600 hover:bg-amber-200 transition-colors"
                       >
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
@@ -767,7 +767,7 @@ const Consultant: React.FC = () => {
         {Array.from({ length: totalPages }, (_, i) => (
           <button
             key={i}
-            className={`px-3 py-1 rounded ${currentPage === i + 1 ? 'bg-sky-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
+            className={`px-3 py-1 rounded ${currentPage === i + 1 ? 'bg-amber-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
             onClick={() => setCurrentPage(i + 1)}
           >
             {i + 1}
@@ -810,7 +810,7 @@ const Consultant: React.FC = () => {
                       />
                       <label 
                         htmlFor="avatar-upload-update" 
-                        className="mt-3 px-4 py-2 bg-sky-100 text-sky-700 text-sm font-medium rounded-lg cursor-pointer hover:bg-sky-200 transition"
+                        className="mt-3 px-4 py-2 bg-amber-100 text-amber-700 text-sm font-medium rounded-lg cursor-pointer hover:bg-amber-200 transition"
                       >
                         {isUploadingAvatar ? 'Đang tải lên...' : 'Thay đổi ảnh đại diện'}
                       </label>
@@ -834,7 +834,7 @@ const Consultant: React.FC = () => {
                         value={formData.introduction}
                         onChange={handleInputChange}
                         rows={4}
-                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500"
+                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-amber-500 focus:ring-amber-500"
                         placeholder="Nhập thông tin giới thiệu về tư vấn viên"
                       />
                     </div>
@@ -846,7 +846,7 @@ const Consultant: React.FC = () => {
                         name="contact"
                         value={formData.contact}
                         onChange={handleInputChange}
-                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500"
+                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-amber-500 focus:ring-amber-500"
                         placeholder="Thông tin liên hệ thêm (nếu có)"
                       />
                     </div>
@@ -858,7 +858,7 @@ const Consultant: React.FC = () => {
                         name="startDateofWork"
                         value={formData.startDateofWork ? new Date(formData.startDateofWork).toISOString().split('T')[0] : ''}
                         onChange={handleInputChange}
-                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500"
+                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-amber-500 focus:ring-amber-500"
                         required
                       />
                     </div>
@@ -869,7 +869,7 @@ const Consultant: React.FC = () => {
                         name="status"
                         value={formData.status}
                         onChange={handleInputChange}
-                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500"
+                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-amber-500 focus:ring-amber-500"
                       >
                         <option value="active">Hoạt động</option>
                         <option value="inactive">Không hoạt động</option>
@@ -883,7 +883,7 @@ const Consultant: React.FC = () => {
                 <button type="button" onClick={handleCloseUpdateModal} className="px-4 py-2 bg-white border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50">
                   Hủy
                 </button>
-                <button type="submit" className="px-4 py-2 bg-sky-600 text-white rounded-lg hover:bg-sky-700">
+                <button type="submit" className="px-4 py-2 bg-amber-600 text-white rounded-lg hover:bg-amber-700">
                   Cập nhật
                 </button>
               </div>
@@ -941,7 +941,7 @@ const Consultant: React.FC = () => {
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>
             </button>
             <div className="text-center">
-              <img src={selectedConsultant.accountId.photoUrl || '/avarta.png'} alt="avatar" className="w-24 h-24 rounded-full object-cover mx-auto mb-2 border-2 border-sky-200" />
+              <img src={selectedConsultant.accountId.photoUrl || '/avarta.png'} alt="avatar" className="w-24 h-24 rounded-full object-cover mx-auto mb-2 border-2 border-amber-200" />
               <h3 className="text-xl font-bold text-gray-800">{selectedConsultant.accountId.fullName}</h3>
               <span className={`mt-1 inline-block px-2 py-0.5 rounded-full text-xs font-semibold ${selectedConsultant.status === 'active' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
                 {selectedConsultant.status === 'active' ? 'Hoạt động' : 'Không hoạt động'}
@@ -990,7 +990,7 @@ const Consultant: React.FC = () => {
                 <img 
                   src={selectedConsultant.accountId.photoUrl || '/avarta.png'} 
                   alt={selectedConsultant.accountId.fullName} 
-                  className="w-12 h-12 rounded-full object-cover mr-4 border-2 border-sky-200"
+                  className="w-12 h-12 rounded-full object-cover mr-4 border-2 border-amber-200"
                 />
                 <div>
                   <h2 className="text-xl font-semibold text-gray-800">Quản lý chứng chỉ</h2>
@@ -1010,7 +1010,7 @@ const Consultant: React.FC = () => {
             <div className="flex justify-end mb-6">
               <button
                 onClick={handleOpenCreateCertificateModal}
-                className="px-4 py-2 bg-sky-600 text-white rounded-md hover:bg-sky-700 flex items-center shadow-md transition-all duration-200"
+                className="px-4 py-2 bg-amber-600 text-white rounded-md hover:bg-amber-700 flex items-center shadow-md transition-all duration-200"
               >
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
@@ -1022,7 +1022,7 @@ const Consultant: React.FC = () => {
             {/* Hiển thị trạng thái loading */}
             {certificateLoading && (
               <div className="flex justify-center items-center h-64">
-                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-sky-500"></div>
+                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-amber-500"></div>
               </div>
             )}
 
@@ -1040,7 +1040,7 @@ const Consultant: React.FC = () => {
 
             {/* Hiển thị thông báo không có dữ liệu */}
             {!certificateLoading && !certificateError && certificates.length === 0 && (
-              <div className="bg-sky-50 border-l-4 border-sky-500 text-sky-700 p-4 mb-6 rounded flex items-center">
+              <div className="bg-amber-50 border-l-4 border-amber-500 text-amber-700 p-4 mb-6 rounded flex items-center">
                 <svg className="h-6 w-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
@@ -1053,7 +1053,7 @@ const Consultant: React.FC = () => {
               <div className="overflow-x-auto shadow-md rounded-lg max-h-[70vh] overflow-y-auto">
                 <table className="min-w-full bg-white">
                   <thead>
-                    <tr className="bg-gradient-to-r from-sky-50 to-cyan-50 text-gray-700 text-left text-sm font-semibold uppercase tracking-wider">
+                    <tr className="bg-gradient-to-r from-amber-50 to-cyan-50 text-gray-700 text-left text-sm font-semibold uppercase tracking-wider">
                       <th className="px-4 py-3 rounded-tl-lg">Tiêu đề</th>
                       <th className="px-4 py-3">Loại</th>
                       <th className="px-4 py-3">Ngày cấp</th>
@@ -1064,13 +1064,13 @@ const Consultant: React.FC = () => {
                   </thead>
                   <tbody className="text-gray-600 text-sm divide-y divide-gray-200">
                     {certificates.map((certificate) => (
-                      <tr key={certificate._id} className="hover:bg-sky-50 transition-colors duration-150">
+                      <tr key={certificate._id} className="hover:bg-amber-50 transition-colors duration-150">
                         <td className="px-4 py-3 font-medium">
                           <a 
                             href={certificate.fileUrl} 
                             target="_blank" 
                             rel="noopener noreferrer"
-                            className="text-sky-600 hover:text-sky-900 hover:underline flex items-center"
+                            className="text-amber-600 hover:text-amber-900 hover:underline flex items-center"
                           >
                             {certificate.title}
                             <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -1089,7 +1089,7 @@ const Consultant: React.FC = () => {
                                 href={certificate.fileUrl}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="p-2 rounded-full bg-sky-100 text-sky-600 hover:bg-sky-200 relative group"
+                                className="p-2 rounded-full bg-amber-100 text-amber-600 hover:bg-amber-200 relative group"
                                 onClick={(e) => {
                                   // Ngăn chặn mở link nếu người dùng chỉ muốn xem trước
                                   if (e.ctrlKey || e.metaKey) {
@@ -1119,12 +1119,12 @@ const Consultant: React.FC = () => {
                                     d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
                                   />
                                 </svg>
-                                <div className="absolute hidden group-hover:block transition-opacity bg-white p-3 rounded-md shadow-lg -top-48 left-1/2 transform -translate-x-1/2 z-50 border border-sky-100">
+                                <div className="absolute hidden group-hover:block transition-opacity bg-white p-3 rounded-md shadow-lg -top-48 left-1/2 transform -translate-x-1/2 z-50 border border-amber-100">
                                   <div className="text-center mb-1 text-xs text-gray-500">Xem trước chứng chỉ</div>
                                   <img 
                                     src={certificate.fileUrl} 
                                     alt="Xem trước chứng chỉ" 
-                                    className="h-40 w-auto max-w-[280px] object-contain border border-gray-200 rounded cursor-pointer hover:border-sky-300"
+                                    className="h-40 w-auto max-w-[280px] object-contain border border-gray-200 rounded cursor-pointer hover:border-amber-300"
                                     onClick={(e) => {
                                       e.stopPropagation();
                                       handleOpenImagePreview(certificate.fileUrl);
@@ -1218,7 +1218,7 @@ const Consultant: React.FC = () => {
                   name="title"
                   value={certificateFormData.title}
                   onChange={handleCertificateInputChange}
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500"
+                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-amber-500 focus:ring-amber-500"
                   required
                   placeholder="Nhập tiêu đề chứng chỉ"
                 />
@@ -1231,7 +1231,7 @@ const Consultant: React.FC = () => {
                   name="type"
                   value={certificateFormData.type}
                   onChange={handleCertificateInputChange}
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500"
+                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-amber-500 focus:ring-amber-500"
                   required
                   placeholder="Ví dụ: Kỹ năng, Ngoại ngữ, Chuyên môn..."
                 />
@@ -1243,7 +1243,7 @@ const Consultant: React.FC = () => {
                   name="issuedBy"
                   value={certificateFormData.issuedBy}
                   onChange={handleCertificateInputChange}
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500"
+                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-amber-500 focus:ring-amber-500"
                   required
                 >
                   <option value="">-- Chọn đơn vị cấp --</option>
@@ -1263,7 +1263,7 @@ const Consultant: React.FC = () => {
                     name="issueDate"
                     value={certificateFormData.issueDate}
                     onChange={handleCertificateInputChange}
-                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500"
+                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-amber-500 focus:ring-amber-500"
                     required
                   />
                 </div>
@@ -1275,7 +1275,7 @@ const Consultant: React.FC = () => {
                     name="expireDate"
                     value={certificateFormData.expireDate}
                     onChange={handleCertificateInputChange}
-                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500"
+                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-amber-500 focus:ring-amber-500"
                   />
                 </div>
               </div>
@@ -1287,7 +1287,7 @@ const Consultant: React.FC = () => {
                   value={certificateFormData.description}
                   onChange={handleCertificateInputChange}
                   rows={3}
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500"
+                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-amber-500 focus:ring-amber-500"
                   placeholder="Mô tả chi tiết về chứng chỉ này"
                 />
               </div>
@@ -1302,7 +1302,7 @@ const Consultant: React.FC = () => {
                           href={certificateFormData.fileUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="text-sky-600 hover:text-sky-900 flex items-center"
+                          className="text-amber-600 hover:text-amber-900 flex items-center"
                         >
                           <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -1342,7 +1342,7 @@ const Consultant: React.FC = () => {
                     >
                       {uploading ? (
                         <span className="flex items-center">
-                          <svg className="animate-spin -ml-1 mr-2 h-5 w-5 text-sky-500" fill="none" viewBox="0 0 24 24">
+                          <svg className="animate-spin -ml-1 mr-2 h-5 w-5 text-amber-500" fill="none" viewBox="0 0 24 24">
                             <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                             <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                           </svg>
@@ -1372,7 +1372,7 @@ const Consultant: React.FC = () => {
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 text-sm font-medium text-white bg-sky-600 hover:bg-sky-700 rounded-md shadow-sm transition-colors"
+                  className="px-4 py-2 text-sm font-medium text-white bg-amber-600 hover:bg-amber-700 rounded-md shadow-sm transition-colors"
                   disabled={uploading}
                 >
                   Tạo chứng chỉ
@@ -1407,7 +1407,7 @@ const Consultant: React.FC = () => {
                   name="title"
                   value={certificateFormData.title}
                   onChange={handleCertificateInputChange}
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500"
+                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-amber-500 focus:ring-amber-500"
                   required
                   placeholder="Nhập tiêu đề chứng chỉ"
                 />
@@ -1420,7 +1420,7 @@ const Consultant: React.FC = () => {
                   name="type"
                   value={certificateFormData.type}
                   onChange={handleCertificateInputChange}
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500"
+                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-amber-500 focus:ring-amber-500"
                   required
                   placeholder="Ví dụ: Kỹ năng, Ngoại ngữ, Chuyên môn..."
                 />
@@ -1432,7 +1432,7 @@ const Consultant: React.FC = () => {
                   name="issuedBy"
                   value={certificateFormData.issuedBy}
                   onChange={handleCertificateInputChange}
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500"
+                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-amber-500 focus:ring-amber-500"
                   required
                 >
                   <option value="">-- Chọn đơn vị cấp --</option>
@@ -1452,7 +1452,7 @@ const Consultant: React.FC = () => {
                     name="issueDate"
                     value={certificateFormData.issueDate}
                     onChange={handleCertificateInputChange}
-                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500"
+                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-amber-500 focus:ring-amber-500"
                     required
                   />
                 </div>
@@ -1464,7 +1464,7 @@ const Consultant: React.FC = () => {
                     name="expireDate"
                     value={certificateFormData.expireDate}
                     onChange={handleCertificateInputChange}
-                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500"
+                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-amber-500 focus:ring-amber-500"
                   />
                 </div>
               </div>
@@ -1476,7 +1476,7 @@ const Consultant: React.FC = () => {
                   value={certificateFormData.description}
                   onChange={handleCertificateInputChange}
                   rows={3}
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500"
+                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-amber-500 focus:ring-amber-500"
                   placeholder="Mô tả chi tiết về chứng chỉ này"
                 />
               </div>
@@ -1491,7 +1491,7 @@ const Consultant: React.FC = () => {
                           href={certificateFormData.fileUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="text-sky-600 hover:text-sky-900 flex items-center"
+                          className="text-amber-600 hover:text-amber-900 flex items-center"
                         >
                           <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -1531,7 +1531,7 @@ const Consultant: React.FC = () => {
                     >
                       {uploading ? (
                         <span className="flex items-center">
-                          <svg className="animate-spin -ml-1 mr-2 h-5 w-5 text-sky-500" fill="none" viewBox="0 0 24 24">
+                          <svg className="animate-spin -ml-1 mr-2 h-5 w-5 text-amber-500" fill="none" viewBox="0 0 24 24">
                             <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                             <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                           </svg>
@@ -1561,7 +1561,7 @@ const Consultant: React.FC = () => {
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 text-sm font-medium text-white bg-sky-600 hover:bg-sky-700 rounded-md shadow-sm transition-colors"
+                  className="px-4 py-2 text-sm font-medium text-white bg-amber-600 hover:bg-amber-700 rounded-md shadow-sm transition-colors"
                   disabled={uploading}
                 >
                   Cập nhật

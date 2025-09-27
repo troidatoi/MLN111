@@ -39,7 +39,7 @@ export const updateEventStatus = async () => {
       }
     );
 
-    console.log(`Event status updated: ${upcomingToOngoing.modifiedCount} to ongoing, ${ongoingToCompleted.modifiedCount} to completed`);
+    // console.log(`Event status updated: ${upcomingToOngoing.modifiedCount} to ongoing, ${ongoingToCompleted.modifiedCount} to completed`);
   } catch (error) {
     console.error('Error updating event status:', error);
   }

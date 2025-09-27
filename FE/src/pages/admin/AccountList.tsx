@@ -108,7 +108,7 @@ const PhoneNumberInput: React.FC<{
     icon = (
       <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 animate-spin" fill="none" viewBox="0 0 24 24" stroke="currentColor"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"/></svg>
     );
-    iconColor = 'text-blue-500';
+    iconColor = 'text-amber-500';
   } else if (phoneExists) {
     icon = (
       <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>
@@ -131,7 +131,7 @@ const PhoneNumberInput: React.FC<{
           value={value}
           onChange={onChange}
           disabled={disabled}
-          className={`mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500 sm:text-sm pr-10 ${phoneExists ? 'border-red-500' : ''}`}
+          className={`mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-amber-500 focus:ring-amber-500 sm:text-sm pr-10 ${phoneExists ? 'border-red-500' : ''}`}
         />
         {/* Icon trạng thái, luôn giữ chỗ, luôn căn giữa dọc */}
         <span
@@ -141,7 +141,7 @@ const PhoneNumberInput: React.FC<{
           {icon || <span style={{ width: 20, height: 20 }} />}
         </span>
       </div>
-      {phoneCheckLoading && <div className="text-xs text-blue-500 mt-1">Đang kiểm tra...</div>}
+      {phoneCheckLoading && <div className="text-xs text-amber-500 mt-1">Đang kiểm tra...</div>}
       {phoneExists && <div className="text-xs text-red-500 mt-1">Số điện thoại đã tồn tại</div>}
     </div>
   );
@@ -228,7 +228,7 @@ const AccountList: React.FC = () => {
       case 'admin':
         return 'bg-red-100 text-red-800';
       case 'consultant':
-        return 'bg-sky-100 text-sky-800';
+        return 'bg-amber-100 text-amber-800';
       default: // customer
         return 'bg-emerald-100 text-emerald-800';
     }
@@ -652,7 +652,7 @@ const AccountList: React.FC = () => {
     return (
       <div className="p-6 bg-white rounded-lg shadow-sm">
         <div className="flex justify-center items-center h-64">
-          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-indigo-500"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-amber-500"></div>
         </div>
       </div>
     );
@@ -706,7 +706,7 @@ const AccountList: React.FC = () => {
                     value={searchTerm}
                     onChange={handleSearch}
                     placeholder="Tìm theo tên, email..."
-                    className="focus:ring-sky-500 focus:border-sky-500 block w-full pl-10 sm:text-sm border-gray-300 rounded-md"
+                    className="focus:ring-amber-500 focus:border-amber-500 block w-full pl-10 sm:text-sm border-gray-300 rounded-md"
                   />
                 </div>
               </div>
@@ -716,7 +716,7 @@ const AccountList: React.FC = () => {
                 <select
                   value={roleFilter}
                   onChange={handleRoleFilter}
-                  className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-sky-500 focus:border-sky-500 sm:text-sm rounded-md"
+                  className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-amber-500 focus:border-amber-500 sm:text-sm rounded-md"
                 >
                   <option value="">Tất cả vai trò</option>
                   <option value="admin">Admin</option>
@@ -730,7 +730,7 @@ const AccountList: React.FC = () => {
                 <select
                   value={statusFilter}
                   onChange={handleStatusFilter}
-                  className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-sky-500 focus:border-sky-500 sm:text-sm rounded-md"
+                  className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-amber-500 focus:border-amber-500 sm:text-sm rounded-md"
                 >
                   <option value="">Tất cả trạng thái</option>
                   <option value="active">Đang hoạt động</option>
@@ -743,7 +743,7 @@ const AccountList: React.FC = () => {
                 <select
                   value={genderFilter}
                   onChange={handleGenderFilter}
-                  className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-sky-500 focus:border-sky-500 sm:text-sm rounded-md"
+                  className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-amber-500 focus:border-amber-500 sm:text-sm rounded-md"
                 >
                   <option value="">Tất cả giới tính</option>
                   <option value="male">Nam</option>
@@ -761,7 +761,7 @@ const AccountList: React.FC = () => {
               <div className="flex space-x-2">
                 <button
                   onClick={handleResetFilters}
-                  className="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500"
+                  className="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500"
                 >
                   <svg className="mr-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
@@ -770,7 +770,7 @@ const AccountList: React.FC = () => {
                 </button>
                 <button
                   onClick={handleOpenCreateModal}
-                  className="inline-flex items-center px-3 py-2 border border-transparent shadow-sm text-sm leading-4 font-medium rounded-md text-white bg-sky-600 hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500"
+                  className="inline-flex items-center px-3 py-2 border border-transparent shadow-sm text-sm leading-4 font-medium rounded-md text-white bg-amber-600 hover:bg-amber-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500"
                 >
                   <svg className="mr-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
@@ -785,14 +785,14 @@ const AccountList: React.FC = () => {
           <div className="bg-white shadow rounded-lg w-full mb-6">
             {loading ? (
               <div className="flex justify-center items-center h-64">
-                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-sky-500"></div>
+                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-amber-500"></div>
               </div>
             ) : error ? (
               <div className="p-6 text-center text-red-500">{error}</div>
             ) : (
               <>
                 <table className="min-w-full divide-y divide-gray-200">
-                  <thead className="bg-sky-50">
+                  <thead className="bg-amber-50">
                     <tr>
                       <th scope="col" className="w-1/4 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                         Tài khoản
@@ -883,7 +883,7 @@ const AccountList: React.FC = () => {
                             <Tooltip text="Chi tiết">
                               <button
                                 onClick={() => handleOpenDetailModal(account._id)}
-                                className="text-sky-400 hover:text-sky-500"
+                                className="text-amber-400 hover:text-amber-500"
                               >
                                 <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -911,7 +911,7 @@ const AccountList: React.FC = () => {
                     {Array.from({ length: totalPages }, (_, i) => (
                       <button
                         key={i}
-                        className={`px-3 py-1 rounded ${currentPage === i + 1 ? 'bg-sky-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
+                        className={`px-3 py-1 rounded ${currentPage === i + 1 ? 'bg-amber-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
                         onClick={() => setCurrentPage(i + 1)}
                       >
                         {i + 1}
@@ -953,7 +953,7 @@ const AccountList: React.FC = () => {
                         <img
                           src={avatarPreview || updateForm.photoUrl || selectedAccount?.photoUrl || '/avarta.png'}
                           alt="avatar"
-                          className="w-24 h-24 rounded-full object-cover border-2 border-indigo-200 mb-2"
+                          className="w-24 h-24 rounded-full object-cover border-2 border-amber-200 mb-2"
                         />
                         <label className="block text-sm font-medium text-gray-700">Ảnh đại diện</label>
                         <input
@@ -963,7 +963,7 @@ const AccountList: React.FC = () => {
                           className="mt-1 block w-full text-sm"
                           disabled={isUploadingAvatar}
                         />
-                        {isUploadingAvatar && <div className="text-xs text-blue-500 mt-1">Đang tải ảnh lên...</div>}
+                        {isUploadingAvatar && <div className="text-xs text-amber-500 mt-1">Đang tải ảnh lên...</div>}
                       </div>
                       <div>
                         <label className="block text-sm font-medium text-gray-700">Họ tên</label>
@@ -972,7 +972,7 @@ const AccountList: React.FC = () => {
                           name="fullName"
                           value={updateForm.fullName}
                           onChange={handleUpdateFormChange}
-                          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500 sm:text-sm"
+                          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-amber-500 focus:ring-amber-500 sm:text-sm"
                         />
                       </div>
                       <div>
@@ -982,7 +982,7 @@ const AccountList: React.FC = () => {
                           name="username"
                           value={updateForm.username}
                           disabled
-                          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500 sm:text-sm bg-gray-100 cursor-not-allowed"
+                          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-amber-500 focus:ring-amber-500 sm:text-sm bg-gray-100 cursor-not-allowed"
                           required
                         />
                       </div>
@@ -993,7 +993,7 @@ const AccountList: React.FC = () => {
                           name="email"
                           value={updateForm.email}
                           disabled
-                          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500 sm:text-sm bg-gray-100 cursor-not-allowed"
+                          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-amber-500 focus:ring-amber-500 sm:text-sm bg-gray-100 cursor-not-allowed"
                           required
                         />
                       </div>
@@ -1008,7 +1008,7 @@ const AccountList: React.FC = () => {
                           name="gender"
                           value={updateForm.gender}
                           onChange={handleUpdateFormChange}
-                          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500 sm:text-sm"
+                          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-amber-500 focus:ring-amber-500 sm:text-sm"
                         >
                           <option value="">Chọn giới tính</option>
                           <option value="male">Nam</option>
@@ -1025,7 +1025,7 @@ const AccountList: React.FC = () => {
                             name="role"
                             value={updateForm.role}
                             onChange={handleUpdateFormChange}
-                            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500 sm:text-sm"
+                            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-amber-500 focus:ring-amber-500 sm:text-sm"
                           >
                             {/* Nếu là consultant thì không cho phép chọn customer */}
                             {selectedAccount.role !== 'consultant' && (
@@ -1045,14 +1045,14 @@ const AccountList: React.FC = () => {
                       {/* Nếu chuyển từ customer sang consultant thì hiện form tư vấn viên */}
                       {selectedAccount && selectedAccount.role === 'customer' && updateForm.role === 'consultant' && (
                         <div className="border-t pt-4 mt-4">
-                          <h3 className="text-base font-semibold mb-2 text-sky-600">Thông tin tư vấn viên</h3>
+                          <h3 className="text-base font-semibold mb-2 text-amber-600">Thông tin tư vấn viên</h3>
                           <div className="mb-3">
                             <label className="block text-sm font-medium text-gray-700">Giới thiệu</label>
                             <textarea
                               name="introduction"
                               value={consultantForm.introduction}
                               onChange={handleConsultantFormChange}
-                              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500 sm:text-sm"
+                              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-amber-500 focus:ring-amber-500 sm:text-sm"
                               rows={2}
                             />
                             {consultantFormErrors.introduction && (
@@ -1066,7 +1066,7 @@ const AccountList: React.FC = () => {
                               name="contact"
                               value={consultantForm.contact}
                               onChange={handleConsultantFormChange}
-                              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500 sm:text-sm"
+                              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-amber-500 focus:ring-amber-500 sm:text-sm"
                             />
                             {consultantFormErrors.contact && (
                               <p className="mt-1 text-sm text-red-600">{consultantFormErrors.contact}</p>
@@ -1079,7 +1079,7 @@ const AccountList: React.FC = () => {
                               name="startDateofWork"
                               value={consultantForm.startDateofWork}
                               onChange={handleConsultantFormChange}
-                              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500 sm:text-sm"
+                              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-amber-500 focus:ring-amber-500 sm:text-sm"
                             />
                             {consultantFormErrors.startDateofWork && (
                               <p className="mt-1 text-sm text-red-600">{consultantFormErrors.startDateofWork}</p>
@@ -1098,7 +1098,7 @@ const AccountList: React.FC = () => {
                       </button>
                       <button
                         type="submit"
-                        className="px-4 py-2 text-sm font-medium text-white bg-sky-600 rounded-md hover:bg-sky-700"
+                        className="px-4 py-2 text-sm font-medium text-white bg-amber-600 rounded-md hover:bg-amber-700"
                       >
                         Cập nhật
                       </button>
@@ -1196,7 +1196,7 @@ const AccountList: React.FC = () => {
 
                 {loadingDetail ? (
                   <div className="flex justify-center items-center h-64">
-                    <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-sky-500"></div>
+                    <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-amber-500"></div>
                   </div>
                 ) : (
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -1323,7 +1323,7 @@ const AccountList: React.FC = () => {
                       name="fullName"
                       value={createForm.fullName}
                       onChange={handleCreateFormChange}
-                      className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500"
+                      className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-amber-500 focus:ring-amber-500"
                       required
                     />
                   </div>
@@ -1336,7 +1336,7 @@ const AccountList: React.FC = () => {
                       name="username"
                       value={createForm.username}
                       onChange={handleCreateFormChange}
-                      className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500"
+                      className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-amber-500 focus:ring-amber-500"
                       required
                     />
                     {formErrors.username && (
@@ -1352,7 +1352,7 @@ const AccountList: React.FC = () => {
                       name="email"
                       value={createForm.email}
                       onChange={handleCreateFormChange}
-                      className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500"
+                      className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-amber-500 focus:ring-amber-500"
                       required
                     />
                     {formErrors.email && (
@@ -1368,7 +1368,7 @@ const AccountList: React.FC = () => {
                       name="password"
                       value={createForm.password}
                       onChange={handleCreateFormChange}
-                      className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500"
+                      className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-amber-500 focus:ring-amber-500"
                       required
                     />
                     {formErrors.password && (
@@ -1384,7 +1384,7 @@ const AccountList: React.FC = () => {
                       name="confirmPassword"
                       value={createForm.confirmPassword}
                       onChange={handleCreateFormChange}
-                      className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500"
+                      className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-amber-500 focus:ring-amber-500"
                       required
                     />
                     {formErrors.confirmPassword && (
@@ -1400,7 +1400,7 @@ const AccountList: React.FC = () => {
                       name="phoneNumber"
                       value={createForm.phoneNumber}
                       onChange={handleCreateFormChange}
-                      className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500"
+                      className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-amber-500 focus:ring-amber-500"
                       required
                     />
                   </div>
@@ -1412,7 +1412,7 @@ const AccountList: React.FC = () => {
                       name="gender"
                       value={createForm.gender}
                       onChange={handleCreateFormChange}
-                      className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500"
+                      className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-amber-500 focus:ring-amber-500"
                       required
                     >
                       <option value="">Chọn giới tính</option>
@@ -1428,7 +1428,7 @@ const AccountList: React.FC = () => {
                       name="role"
                       value={createForm.role}
                       onChange={handleCreateFormChange}
-                      className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500"
+                      className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-amber-500 focus:ring-amber-500"
                       required
                     >
                       {AVAILABLE_ROLES.map(role => (
@@ -1450,7 +1450,7 @@ const AccountList: React.FC = () => {
                     <button
                       type="submit"
                       disabled={isSubmitting}
-                      className="px-4 py-2 text-sm font-medium text-white bg-sky-600 hover:bg-sky-700 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500 disabled:bg-sky-300"
+                      className="px-4 py-2 text-sm font-medium text-white bg-amber-600 hover:bg-amber-700 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500 disabled:bg-amber-300"
                     >
                       {isSubmitting ? 'Đang tạo...' : 'Tạo tài khoản'}
                     </button>
@@ -1464,7 +1464,7 @@ const AccountList: React.FC = () => {
           <div className="fixed bottom-8 right-8">
             <button
               onClick={handleOpenCreateModal}
-              className="bg-sky-600 hover:bg-sky-700 text-white p-4 rounded-full shadow-lg flex items-center justify-center"
+              className="bg-amber-600 hover:bg-amber-700 text-white p-4 rounded-full shadow-lg flex items-center justify-center"
               aria-label="Thêm tài khoản mới"
             >
               <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">

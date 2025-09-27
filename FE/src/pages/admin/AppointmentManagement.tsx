@@ -53,8 +53,8 @@ interface Appointment {
 const statusColors = {
   available: 'bg-emerald-50 text-emerald-800 border-emerald-200',
   pending: 'bg-amber-50 text-amber-800 border-amber-200',
-  confirmed: 'bg-sky-100 text-sky-800 border-sky-300',
-  completed: 'bg-indigo-50 text-indigo-800 border-indigo-200',
+  confirmed: 'bg-amber-100 text-amber-800 border-amber-300',
+  completed: 'bg-amber-50 text-amber-800 border-amber-200',
   cancelled: 'bg-rose-50 text-rose-800 border-rose-200'
 };
 
@@ -510,7 +510,7 @@ const AppointmentManagement = () => {
               <select
                 value={selectedConsultant}
                 onChange={handleConsultantChange}
-                className="w-full rounded-md border border-gray-300 shadow-sm py-2 px-3 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 appearance-none bg-white"
+                className="w-full rounded-md border border-gray-300 shadow-sm py-2 px-3 text-sm focus:ring-2 focus:ring-amber-500 focus:border-amber-500 appearance-none bg-white"
               >
                 <option value="all">Tất cả tư vấn viên</option>
                 {consultants.map(consultant => (
@@ -531,7 +531,7 @@ const AppointmentManagement = () => {
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">Lọc theo trạng thái</label>
             <div className="grid grid-cols-3 gap-2 text-sm">
-              <label className={`flex items-center justify-center px-2 py-2 rounded-md cursor-pointer border ${statusFilter === 'all' ? 'bg-blue-50 border-blue-500 text-blue-700' : 'border-gray-300 hover:bg-gray-50'}`}>
+              <label className={`flex items-center justify-center px-2 py-2 rounded-md cursor-pointer border ${statusFilter === 'all' ? 'bg-amber-50 border-amber-500 text-amber-700' : 'border-gray-300 hover:bg-gray-50'}`}>
                 <input
                   type="radio"
                   name="statusFilter"
@@ -564,7 +564,7 @@ const AppointmentManagement = () => {
                 />
                 <span className="font-medium">Chờ thanh toán</span>
               </label>
-              <label className={`flex items-center justify-center px-2 py-2 rounded-md cursor-pointer border ${statusFilter === 'confirmed' ? 'bg-sky-50 border-sky-500 text-sky-700' : 'border-gray-300 hover:bg-gray-50'}`}>
+              <label className={`flex items-center justify-center px-2 py-2 rounded-md cursor-pointer border ${statusFilter === 'confirmed' ? 'bg-amber-50 border-amber-500 text-amber-700' : 'border-gray-300 hover:bg-gray-50'}`}>
                 <input
                   type="radio"
                   name="statusFilter"
@@ -575,7 +575,7 @@ const AppointmentManagement = () => {
                 />
                 <span className="font-medium">Đã thanh toán</span>
               </label>
-              <label className={`flex items-center justify-center px-2 py-2 rounded-md cursor-pointer border ${statusFilter === 'completed' ? 'bg-indigo-50 border-indigo-500 text-indigo-700' : 'border-gray-300 hover:bg-gray-50'}`}>
+              <label className={`flex items-center justify-center px-2 py-2 rounded-md cursor-pointer border ${statusFilter === 'completed' ? 'bg-amber-50 border-amber-500 text-amber-700' : 'border-gray-300 hover:bg-gray-50'}`}>
                 <input
                   type="radio"
                   name="statusFilter"
@@ -615,7 +615,7 @@ const AppointmentManagement = () => {
               </button>
               <button
                 onClick={handleCurrentWeek}
-                className="px-3 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition text-sm"
+                className="px-3 py-2 bg-amber-600 text-white rounded-md hover:bg-amber-700 transition text-sm"
               >
                 Tuần này
               </button>
@@ -636,7 +636,7 @@ const AppointmentManagement = () => {
       {/* Calendar grid */}
       {loading ? (
         <div className="text-center py-12 bg-white rounded-lg shadow-sm">
-          <div className="w-8 h-8 rounded-full border-3 border-blue-500 border-t-transparent animate-spin mx-auto"></div>
+          <div className="w-8 h-8 rounded-full border-3 border-amber-500 border-t-transparent animate-spin mx-auto"></div>
           <p className="mt-3 text-gray-600">Đang tải lịch hẹn...</p>
         </div>
       ) : (
@@ -644,7 +644,7 @@ const AppointmentManagement = () => {
           <div className="w-full">
             <div className="appointment-grid">
               {/* Time column header */}
-              <div className="py-2 px-2 text-center font-medium bg-sky-50 rounded-tl-lg sticky left-0 shadow-sm z-10 appointment-cell">
+              <div className="py-2 px-2 text-center font-medium bg-amber-50 rounded-tl-lg sticky left-0 shadow-sm z-10 appointment-cell">
                 <span className="text-gray-600 uppercase text-sm tracking-wide">Giờ</span>
               </div>
               
@@ -652,7 +652,7 @@ const AppointmentManagement = () => {
               {weekDays.map((day) => (
                 <div 
                   key={day.formattedDate} 
-                  className={`py-2 px-2 text-center font-medium appointment-cell ${day.isToday ? 'bg-blue-50' : 'bg-sky-50'} ${day.date.getDay() === 0 ? 'rounded-tr-lg' : ''}`}
+                  className={`py-2 px-2 text-center font-medium appointment-cell ${day.isToday ? 'bg-amber-50' : 'bg-amber-50'} ${day.date.getDay() === 0 ? 'rounded-tr-lg' : ''}`}
                 >
                   <div className="uppercase text-xs tracking-wide text-gray-500">
                     {(() => {
@@ -660,7 +660,7 @@ const AppointmentManagement = () => {
                       return fullNames[day.date.getDay()];
                     })()}
                   </div>
-                  <div className={`text-sm font-bold ${day.isToday ? 'text-blue-700' : 'text-gray-800'}`}>{day.formattedDate}</div>
+                  <div className={`text-sm font-bold ${day.isToday ? 'text-amber-700' : 'text-gray-800'}`}>{day.formattedDate}</div>
                 </div>
               ))}
 
@@ -668,7 +668,7 @@ const AppointmentManagement = () => {
               {timeSlots.map((timeSlot, timeIndex) => (
                 <React.Fragment key={timeSlot}>
                   {/* Time slot */}
-                  <div className={`py-2 px-2 text-center bg-sky-50 border-t border-gray-100 sticky left-0 shadow-sm z-10 appointment-cell ${timeIndex % 2 === 0 ? 'bg-sky-50' : 'bg-sky-100'}`}>
+                  <div className={`py-2 px-2 text-center bg-amber-50 border-t border-gray-100 sticky left-0 shadow-sm z-10 appointment-cell ${timeIndex % 2 === 0 ? 'bg-amber-50' : 'bg-amber-100'}`}>
                     <div className="font-medium text-sm text-gray-700">{timeSlot}</div>
                   </div>
                   
@@ -680,7 +680,7 @@ const AppointmentManagement = () => {
                     return (
                       <div 
                         key={`${day.formattedDate}-${timeSlot}`}
-                        className={`p-1 min-h-[60px] border-t border-l border-gray-100 appointment-cell ${day.isToday ? 'bg-blue-50/30' : timeIndex % 2 === 0 ? 'bg-white' : 'bg-gray-50/30'} relative`}
+                        className={`p-1 min-h-[60px] border-t border-l border-gray-100 appointment-cell ${day.isToday ? 'bg-amber-50/30' : timeIndex % 2 === 0 ? 'bg-white' : 'bg-gray-50/30'} relative`}
                       >
                         {slotsForThisTimeSlot.length > 0 ? (
                           <div className="space-y-1">
@@ -698,8 +698,8 @@ const AppointmentManagement = () => {
                                     key={appointment._id}
                                     className={`p-1.5 rounded-md shadow-sm border-l-2 appointment-slot ${
                                       appointment.status === 'pending' ? 'border-amber-400' : 
-                                      appointment.status === 'confirmed' ? 'border-sky-400' : 
-                                      appointment.status === 'completed' ? 'border-indigo-400' : 
+                                      appointment.status === 'confirmed' ? 'border-amber-400' : 
+                                      appointment.status === 'completed' ? 'border-amber-400' : 
                                       'border-rose-400'
                                     } cursor-pointer hover:shadow-md transition-shadow relative group`}
                                     onClick={() => handleAppointmentClick(appointment._id)}
@@ -772,8 +772,8 @@ const AppointmentManagement = () => {
           <div className="flex items-center">
             <div className={`w-3 h-3 rounded-full mr-2 ${
               hoveredAppointment.status === 'pending' ? 'bg-amber-500' : 
-              hoveredAppointment.status === 'confirmed' ? 'bg-sky-500' : 
-              hoveredAppointment.status === 'completed' ? 'bg-indigo-500' : 
+              hoveredAppointment.status === 'confirmed' ? 'bg-amber-500' : 
+              hoveredAppointment.status === 'completed' ? 'bg-amber-500' : 
               'bg-rose-500'
             }`}></div>
             <div className="font-medium text-lg">{(hoveredAppointment.user_id as AppointmentUser)?.fullName || "Không có tên"}</div>
@@ -817,7 +817,7 @@ const AppointmentManagement = () => {
           
           <div className="mt-3">
             <div className="text-sm text-gray-600 font-medium">Lý do:</div>
-            <div className="mt-1 bg-gray-50 rounded-lg p-2 text-sm text-gray-700 border-l-2 border-blue-300">
+            <div className="mt-1 bg-gray-50 rounded-lg p-2 text-sm text-gray-700 border-l-2 border-amber-300">
               {hoveredAppointment.reason || "Không có lý do"}
             </div>
           </div>
@@ -900,15 +900,15 @@ const AppointmentManagement = () => {
             <div className="bg-white rounded-lg border border-gray-200 mb-6 overflow-hidden">
               <div className={`py-3 px-4 ${
                 selectedAppointment.status === 'pending' ? 'bg-amber-50' : 
-                selectedAppointment.status === 'confirmed' ? 'bg-sky-50' : 
-                selectedAppointment.status === 'completed' ? 'bg-indigo-50' : 
+                selectedAppointment.status === 'confirmed' ? 'bg-amber-50' : 
+                selectedAppointment.status === 'completed' ? 'bg-amber-50' : 
                 'bg-rose-50'
               }`}>
                 <div className="flex items-center">
                   <div className={`w-3 h-3 rounded-full mr-2 ${
                     selectedAppointment.status === 'pending' ? 'bg-amber-500' : 
-                    selectedAppointment.status === 'confirmed' ? 'bg-sky-500' : 
-                    selectedAppointment.status === 'completed' ? 'bg-indigo-500' : 
+                    selectedAppointment.status === 'confirmed' ? 'bg-amber-500' : 
+                    selectedAppointment.status === 'completed' ? 'bg-amber-500' : 
                     'bg-rose-500'
                   }`}></div>
                   <span className="font-medium text-gray-800">

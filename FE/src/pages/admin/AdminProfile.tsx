@@ -174,7 +174,7 @@ const AdminProfile: React.FC = () => {
       <div className="bg-white rounded-2xl shadow-lg p-8 w-full max-w-2xl">
         <div className="flex flex-col items-center mb-8">
           <div className="relative group cursor-pointer" onClick={handleAvatarClick}>
-            <div className="w-28 h-28 rounded-full overflow-hidden border-4 border-sky-200">
+            <div className="w-28 h-28 rounded-full overflow-hidden border-4 border-amber-200">
               <img
                 src={avatarPreview || user?.photoUrl || whaleLogo}
                 alt="avatar"
@@ -197,7 +197,7 @@ const AdminProfile: React.FC = () => {
               onChange={handleAvatarChange}
             />
             {isUploadingAvatar && (
-              <div className="text-sm text-blue-500 animate-pulse">Đang tải ảnh lên...</div>
+              <div className="text-sm text-amber-500 animate-pulse">Đang tải ảnh lên...</div>
             )}
           </div>
           <div className="font-bold text-xl text-gray-800 mt-4">{user?.fullName || '---'}</div>
@@ -235,11 +235,11 @@ const AdminProfile: React.FC = () => {
           </div>
           <div className="flex justify-end gap-2">
             {!editMode ? (
-              <button onClick={handleEdit} className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors">Chỉnh sửa</button>
+              <button onClick={handleEdit} className="px-4 py-2 bg-amber-500 text-white rounded-lg hover:bg-amber-600 transition-colors">Chỉnh sửa</button>
             ) : (
               <>
                 <button onClick={() => { setEditMode(false); setEditData(user || {}); }} className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors">Hủy</button>
-                <button onClick={handleUpdate} className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors">Lưu</button>
+                <button onClick={handleUpdate} className="px-4 py-2 bg-amber-500 text-white rounded-lg hover:bg-amber-600 transition-colors">Lưu</button>
               </>
             )}
           </div>
@@ -251,7 +251,7 @@ const AdminProfile: React.FC = () => {
               <div className="text-gray-700 font-medium">••••••••</div>
             </div>
             <button
-              className="border border-blue-600 text-blue-600 px-4 py-1.5 rounded-lg text-sm font-medium bg-white transition-colors hover:bg-blue-50"
+              className="border border-amber-600 text-amber-600 px-4 py-1.5 rounded-lg text-sm font-medium bg-white transition-colors hover:bg-amber-50"
               onClick={() => setShowPwdModal(true)}
             >
               Đổi mật khẩu
@@ -297,7 +297,7 @@ const AdminProfile: React.FC = () => {
                     />
                   </div>
                   <button
-                    className="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 transition-colors"
+                    className="w-full bg-amber-500 text-white py-2 rounded-lg hover:bg-amber-600 transition-colors"
                     onClick={handleChangePassword}
                     disabled={changePwdLoading}
                   >

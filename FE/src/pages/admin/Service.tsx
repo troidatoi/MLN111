@@ -557,7 +557,7 @@ const Service: React.FC = () => {
   if (loading) {
     return (
       <div className="p-6 bg-white rounded-lg flex justify-center items-center h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-sky-500"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-amber-500"></div>
       </div>
     );
   }
@@ -590,11 +590,11 @@ const Service: React.FC = () => {
 
       {/* Thông báo thành công */}
       {successMessage && (
-        <div className="mb-6 bg-sky-50 border-l-4 border-sky-500 p-4 relative animate-fade-in-down">
+        <div className="mb-6 bg-amber-50 border-l-4 border-amber-500 p-4 relative animate-fade-in-down">
           <div className="flex items-center">
             <div className="flex-shrink-0">
               <svg
-                className="h-5 w-5 text-sky-500"
+                className="h-5 w-5 text-amber-500"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -608,7 +608,7 @@ const Service: React.FC = () => {
               </svg>
             </div>
             <div className="ml-3">
-              <p className="text-sm font-medium text-sky-800">
+              <p className="text-sm font-medium text-amber-800">
                 {successMessage}
               </p>
             </div>
@@ -616,7 +616,7 @@ const Service: React.FC = () => {
               <div className="-mx-1.5 -my-1.5">
                 <button
                   onClick={() => setSuccessMessage(null)}
-                  className="inline-flex rounded-md p-1.5 text-sky-500 hover:bg-sky-100 focus:outline-none"
+                  className="inline-flex rounded-md p-1.5 text-amber-500 hover:bg-amber-100 focus:outline-none"
                 >
                   <span className="sr-only">Đóng</span>
                   <svg
@@ -653,7 +653,7 @@ const Service: React.FC = () => {
         </h1>
         <button
           onClick={handleOpenCreateModal}
-          className="px-4 py-2 bg-sky-600 text-white rounded-md hover:bg-sky-700 flex items-center"
+          className="px-4 py-2 bg-amber-600 text-white rounded-md hover:bg-amber-700 flex items-center"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -708,7 +708,7 @@ const Service: React.FC = () => {
                   setCurrentPage(1);
                 }}
                 placeholder="Tìm theo tên, mô tả..."
-                className="focus:ring-sky-500 focus:border-sky-500 block w-full pl-10 sm:text-sm border-gray-300 rounded-md"
+                className="focus:ring-amber-500 focus:border-amber-500 block w-full pl-10 sm:text-sm border-gray-300 rounded-md"
               />
             </div>
           </div>
@@ -724,7 +724,7 @@ const Service: React.FC = () => {
                 setStatusFilter(e.target.value);
                 setCurrentPage(1);
               }}
-              className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-sky-500 focus:border-sky-500 sm:text-sm rounded-md"
+              className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-amber-500 focus:border-amber-500 sm:text-sm rounded-md"
             >
               <option value="">Tất cả trạng thái</option>
               <option value="active">Hoạt động</option>
@@ -747,7 +747,7 @@ const Service: React.FC = () => {
                     setCurrentPage(1);
                   }}
                   placeholder="Giá tối thiểu"
-                  className="focus:ring-sky-500 focus:border-sky-500 block w-full sm:text-sm border-gray-300 rounded-md"
+                  className="focus:ring-amber-500 focus:border-amber-500 block w-full sm:text-sm border-gray-300 rounded-md"
                 />
               </div>
               <div className="flex-1">
@@ -759,7 +759,7 @@ const Service: React.FC = () => {
                     setCurrentPage(1);
                   }}
                   placeholder="Giá tối đa"
-                  className="focus:ring-sky-500 focus:border-sky-500 block w-full sm:text-sm border-gray-300 rounded-md"
+                  className="focus:ring-amber-500 focus:border-amber-500 block w-full sm:text-sm border-gray-300 rounded-md"
                 />
               </div>
             </div>
@@ -769,7 +769,7 @@ const Service: React.FC = () => {
         <div className="mt-4 flex justify-end">
           <button
             onClick={handleResetFilters}
-            className="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500"
+            className="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500"
           >
             <svg
               className="mr-2 h-4 w-4"
@@ -804,7 +804,7 @@ const Service: React.FC = () => {
       <div className="overflow-x-auto shadow-md rounded-lg max-h-[70vh] overflow-y-auto">
         <table className="min-w-full bg-white">
           <thead>
-            <tr className="bg-sky-50 text-gray-700 text-left text-sm font-semibold uppercase tracking-wider">
+            <tr className="bg-amber-50 text-gray-700 text-left text-sm font-semibold uppercase tracking-wider">
               <th className="px-4 py-3 rounded-tl-lg">Tên dịch vụ</th>
               <th className="px-4 py-3">Mô tả</th>
               <th className="px-4 py-3">Giá</th>
@@ -817,7 +817,7 @@ const Service: React.FC = () => {
             {paginatedServices.map((service) => (
               <tr
                 key={service._id}
-                className="border-b border-gray-200 hover:bg-sky-50 transition-colors duration-150"
+                className="border-b border-gray-200 hover:bg-amber-50 transition-colors duration-150"
               >
                 <td className="px-4 py-3 font-medium">{service.name}</td>
                 <td className="px-4 py-3 max-w-xs truncate">
@@ -891,7 +891,7 @@ const Service: React.FC = () => {
             key={i}
             className={`px-3 py-1 rounded ${
               currentPage === i + 1
-                ? "bg-sky-600 text-white"
+                ? "bg-amber-600 text-white"
                 : "bg-gray-100 text-gray-700 hover:bg-gray-200"
             }`}
             onClick={() => setCurrentPage(i + 1)}
@@ -913,7 +913,7 @@ const Service: React.FC = () => {
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg p-6 w-full max-w-xl shadow-lg">
             <div className="flex justify-between items-start mb-4">
-              <h2 className="text-xl font-semibold text-sky-700">
+              <h2 className="text-xl font-semibold text-amber-700">
                 Thêm dịch vụ mới
               </h2>
               <button
@@ -976,7 +976,7 @@ const Service: React.FC = () => {
                     onChange={handleInputChange}
                     onBlur={handleFieldBlur}
                     placeholder="Nhập tên dịch vụ"
-                    className={`block w-full rounded-md py-2 px-3 text-sm border focus:ring-sky-500 focus:border-sky-500 ${
+                    className={`block w-full rounded-md py-2 px-3 text-sm border focus:ring-amber-500 focus:border-amber-500 ${
                       errors.name
                         ? "border-red-300 bg-red-50"
                         : "border-gray-300"
@@ -1003,7 +1003,7 @@ const Service: React.FC = () => {
                     onBlur={handleFieldBlur}
                     step="1000"
                     placeholder="Nhập giá dịch vụ"
-                    className={`block w-full rounded-md py-2 px-3 text-sm border focus:ring-sky-500 focus:border-sky-500 ${
+                    className={`block w-full rounded-md py-2 px-3 text-sm border focus:ring-amber-500 focus:border-amber-500 ${
                       errors.price
                         ? "border-red-300 bg-red-50"
                         : "border-gray-300"
@@ -1030,7 +1030,7 @@ const Service: React.FC = () => {
                   onBlur={handleFieldBlur}
                   rows={3}
                   placeholder="Nhập mô tả chi tiết về dịch vụ"
-                  className={`block w-full rounded-md py-2 px-3 text-sm border focus:ring-sky-500 focus:border-sky-500 ${
+                  className={`block w-full rounded-md py-2 px-3 text-sm border focus:ring-amber-500 focus:border-amber-500 ${
                     errors.description
                       ? "border-red-300 bg-red-50"
                       : "border-gray-300"
@@ -1051,7 +1051,7 @@ const Service: React.FC = () => {
                   <button
                     type="button"
                     onClick={handleSelectImage}
-                    className="px-3 py-2 bg-sky-100 text-sky-700 rounded-md hover:bg-sky-200 transition-colors flex items-center text-sm"
+                    className="px-3 py-2 bg-amber-100 text-amber-700 rounded-md hover:bg-amber-200 transition-colors flex items-center text-sm"
                     disabled={uploading}
                   >
                     <svg
@@ -1115,7 +1115,7 @@ const Service: React.FC = () => {
                   name="status"
                   value={formData.status}
                   onChange={handleInputChange}
-                  className="block w-full rounded-md py-2 px-3 text-sm border-gray-300 focus:ring-sky-500 focus:border-sky-500"
+                  className="block w-full rounded-md py-2 px-3 text-sm border-gray-300 focus:ring-amber-500 focus:border-amber-500"
                 >
                   <option value="active">Hoạt động</option>
                   <option value="inactive">Không hoạt động</option>
@@ -1134,7 +1134,7 @@ const Service: React.FC = () => {
                   name="level"
                   value={formData.level}
                   onChange={handleInputChange}
-                  className="block w-full rounded-md py-2 px-3 text-sm border-gray-300 focus:ring-sky-500 focus:border-sky-500"
+                  className="block w-full rounded-md py-2 px-3 text-sm border-gray-300 focus:ring-amber-500 focus:border-amber-500"
                 >
                   {LEVEL_OPTIONS.map((opt) => (
                     <option key={opt.value} value={opt.value}>
@@ -1156,8 +1156,8 @@ const Service: React.FC = () => {
                   type="submit"
                   className={`px-4 py-2 text-sm font-medium text-white rounded-md transition-colors ${
                     uploading
-                      ? "bg-sky-400 cursor-not-allowed"
-                      : "bg-sky-600 hover:bg-sky-700"
+                      ? "bg-amber-400 cursor-not-allowed"
+                      : "bg-amber-600 hover:bg-amber-700"
                   }`}
                   disabled={uploading}
                 >
@@ -1214,7 +1214,7 @@ const Service: React.FC = () => {
                   value={formData.name}
                   onChange={handleInputChange}
                   onBlur={handleFieldBlur}
-                  className={`w-full px-4 py-2 border rounded-lg focus:ring-sky-500 focus:border-sky-500 ${
+                  className={`w-full px-4 py-2 border rounded-lg focus:ring-amber-500 focus:border-amber-500 ${
                     errors.name ? "border-red-300 bg-red-50" : "border-gray-300"
                   }`}
                 />
@@ -1232,7 +1232,7 @@ const Service: React.FC = () => {
                   onChange={handleInputChange}
                   onBlur={handleFieldBlur}
                   rows={4}
-                  className={`w-full px-4 py-2 border rounded-lg focus:ring-sky-500 focus:border-sky-500 ${
+                  className={`w-full px-4 py-2 border rounded-lg focus:ring-amber-500 focus:border-amber-500 ${
                     errors.description
                       ? "border-red-300 bg-red-50"
                       : "border-gray-300"
@@ -1254,7 +1254,7 @@ const Service: React.FC = () => {
                   value={formData.price}
                   onChange={handleInputChange}
                   onBlur={handleFieldBlur}
-                  className={`w-full px-4 py-2 border rounded-lg focus:ring-sky-500 focus:border-sky-500 ${
+                  className={`w-full px-4 py-2 border rounded-lg focus:ring-amber-500 focus:border-amber-500 ${
                     errors.price
                       ? "border-red-300 bg-red-50"
                       : "border-gray-300"
@@ -1288,7 +1288,7 @@ const Service: React.FC = () => {
                     onClick={handleSelectImage}
                     disabled={uploading}
                     className={`px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white ${
-                      uploading ? "bg-gray-400" : "bg-sky-600 hover:bg-sky-700"
+                      uploading ? "bg-gray-400" : "bg-amber-600 hover:bg-amber-700"
                     } focus:outline-none`}
                   >
                     {uploading ? "Đang tải..." : "Chọn ảnh"}
@@ -1306,7 +1306,7 @@ const Service: React.FC = () => {
                   name="status"
                   value={formData.status}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-sky-500 focus:border-sky-500"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-amber-500 focus:border-amber-500"
                 >
                   <option value="active">Hoạt động</option>
                   <option value="inactive">Không hoạt động</option>
@@ -1320,7 +1320,7 @@ const Service: React.FC = () => {
                   name="level"
                   value={formData.level}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-sky-500 focus:border-sky-500"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-amber-500 focus:border-amber-500"
                 >
                   {LEVEL_OPTIONS.map((opt) => (
                     <option key={opt.value} value={opt.value}>
@@ -1341,7 +1341,7 @@ const Service: React.FC = () => {
               </button>
               <button
                 type="submit"
-                className="px-5 py-2.5 text-sm font-medium text-white bg-sky-600 hover:bg-sky-700 rounded-lg"
+                className="px-5 py-2.5 text-sm font-medium text-white bg-amber-600 hover:bg-amber-700 rounded-lg"
               >
                 Lưu thay đổi
               </button>

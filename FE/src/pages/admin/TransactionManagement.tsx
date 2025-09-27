@@ -55,7 +55,7 @@ const statusLabels = {
 };
 
 const paymentMethodColors = {
-  paypal: 'bg-blue-50 text-blue-800 border-blue-200',
+  paypal: 'bg-amber-50 text-amber-800 border-amber-200',
   momo: 'bg-pink-50 text-pink-800 border-pink-200',
   vnpay: 'bg-green-50 text-green-800 border-green-200',
   cash: 'bg-gray-50 text-gray-800 border-gray-200',
@@ -246,7 +246,7 @@ const TransactionManagement = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-sky-500"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-amber-500"></div>
       </div>
     );
   }
@@ -264,8 +264,8 @@ const TransactionManagement = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mb-8">
           <div className="bg-white p-6 rounded-lg border border-gray-200 shadow-sm">
             <div className="flex items-center">
-              <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center">
-                <DollarSign className="w-6 h-6 text-blue-600" />
+              <div className="w-12 h-12 rounded-full bg-amber-100 flex items-center justify-center">
+                <DollarSign className="w-6 h-6 text-amber-600" />
               </div>
               <div className="ml-4">
                 <p className="text-sm text-gray-500">Tổng giao dịch</p>
@@ -334,7 +334,7 @@ const TransactionManagement = () => {
                 placeholder="Tìm kiếm giao dịch..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-transparent"
+                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent"
               />
             </div>
 
@@ -342,7 +342,7 @@ const TransactionManagement = () => {
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
-              className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-transparent"
+              className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent"
             >
               <option value="all">Tất cả trạng thái</option>
               <option value="pending">Chờ thanh toán</option>
@@ -354,7 +354,7 @@ const TransactionManagement = () => {
             <select
               value={methodFilter}
               onChange={(e) => setMethodFilter(e.target.value)}
-              className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-transparent"
+              className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent"
             >
               <option value="all">Tất cả phương thức</option>
               <option value="momo">MoMo</option>
@@ -368,7 +368,7 @@ const TransactionManagement = () => {
             <select
               value={dateFilter}
               onChange={(e) => setDateFilter(e.target.value)}
-              className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-transparent"
+              className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent"
             >
               <option value="all">Tất cả thời gian</option>
               <option value="today">Hôm nay</option>
@@ -379,7 +379,7 @@ const TransactionManagement = () => {
             {/* Export Button */}
             <button
               onClick={exportToCSV}
-              className="flex items-center justify-center px-4 py-2 bg-sky-600 text-white rounded-lg hover:bg-sky-700 transition-colors"
+              className="flex items-center justify-center px-4 py-2 bg-amber-600 text-white rounded-lg hover:bg-amber-700 transition-colors"
             >
               <Download className="w-4 h-4 mr-2" />
               Xuất CSV
@@ -437,8 +437,8 @@ const TransactionManagement = () => {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center">
-                        <div className="w-8 h-8 rounded-full bg-sky-100 flex items-center justify-center">
-                          <User className="w-4 h-4 text-sky-600" />
+                        <div className="w-8 h-8 rounded-full bg-amber-100 flex items-center justify-center">
+                          <User className="w-4 h-4 text-amber-600" />
                         </div>
                         <div className="ml-3">
                           <p className="text-sm font-medium text-gray-900">{payment.accountId.fullName}</p>
@@ -471,7 +471,7 @@ const TransactionManagement = () => {
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                       <button
                         onClick={() => handlePaymentClick(payment)}
-                        className="text-sky-600 hover:text-sky-900 flex items-center"
+                        className="text-amber-600 hover:text-amber-900 flex items-center"
                       >
                         <Eye className="w-4 h-4 mr-1" />
                         Chi tiết

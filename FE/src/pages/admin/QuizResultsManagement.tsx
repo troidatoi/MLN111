@@ -239,7 +239,7 @@ export default function QuizResultsManagement() {
           </p>
           <button
             onClick={() => fetchResults(1)}
-            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+            className="bg-amber-500 text-white px-4 py-2 rounded hover:bg-amber-600"
           >
             Tải lại
           </button>
@@ -255,7 +255,7 @@ export default function QuizResultsManagement() {
           <h1 className="text-2xl font-bold">Quản lý kết quả trắc nghiệm</h1>
           <button
             onClick={() => setShowStats(!showStats)}
-            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+            className="bg-amber-500 text-white px-4 py-2 rounded hover:bg-amber-600"
           >
             {showStats ? "Ẩn thống kê" : "Xem thống kê"}
           </button>
@@ -267,7 +267,7 @@ export default function QuizResultsManagement() {
             <h3 className="text-lg font-semibold mb-3">Thống kê tổng quan</h3>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               <div className="bg-white p-3 rounded shadow">
-                <div className="text-2xl font-bold text-blue-600">
+                <div className="text-2xl font-bold text-amber-600">
                   {stats?.totalResults || 0}
                 </div>
                 <div className="text-sm text-gray-600">Tổng kết quả</div>
@@ -324,7 +324,7 @@ export default function QuizResultsManagement() {
             <div>
               <label className="block font-semibold mb-1">Bài đánh giá</label>
               <select
-                className="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-amber-500"
                 value={quizId}
                 onChange={(e) => setQuizId(e.target.value)}
               >
@@ -342,7 +342,7 @@ export default function QuizResultsManagement() {
                 Người dùng (ID/email)
               </label>
               <input
-                className="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-amber-500"
                 value={user}
                 onChange={(e) => setUser(e.target.value)}
                 placeholder="Nhập ID hoặc email"
@@ -352,7 +352,7 @@ export default function QuizResultsManagement() {
             <div>
               <label className="block font-semibold mb-1">Mức rủi ro</label>
               <select
-                className="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-amber-500"
                 value={riskLevel}
                 onChange={(e) => setRiskLevel(e.target.value)}
               >
@@ -368,7 +368,7 @@ export default function QuizResultsManagement() {
               <label className="block font-semibold mb-1">Từ ngày</label>
               <input
                 type="date"
-                className="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-amber-500"
                 value={from}
                 onChange={(e) => setFrom(e.target.value)}
               />
@@ -378,7 +378,7 @@ export default function QuizResultsManagement() {
               <label className="block font-semibold mb-1">Đến ngày</label>
               <input
                 type="date"
-                className="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-amber-500"
                 value={to}
                 onChange={(e) => setTo(e.target.value)}
               />
@@ -395,7 +395,7 @@ export default function QuizResultsManagement() {
         {/* Danh sách kết quả */}
         {loading ? (
           <div className="text-center py-8">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto"></div>
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-amber-500 mx-auto"></div>
             <p className="mt-2 text-gray-600">Đang tải...</p>
           </div>
         ) : Object.keys(grouped).length === 0 ? (
@@ -406,12 +406,12 @@ export default function QuizResultsManagement() {
           <>
             {Object.entries(grouped).map(([title, items]) => (
               <div key={title} className="mb-8">
-                <h2 className="text-xl font-bold mb-3 text-blue-700">
+                <h2 className="text-xl font-bold mb-3 text-amber-700">
                   {title}
                 </h2>
                 <div className="overflow-x-auto rounded-lg shadow bg-white">
                   <table className="min-w-full">
-                    <thead className="bg-sky-50">
+                    <thead className="bg-amber-50">
                       <tr>
                         <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">
                           Người dùng
@@ -471,7 +471,7 @@ export default function QuizResultsManagement() {
                           <td className="px-4 py-3 text-center">
                             <button
                               onClick={() => handleViewDetail(r._id)}
-                              className="text-blue-600 hover:text-blue-800 hover:underline text-sm font-medium"
+                              className="text-amber-600 hover:text-amber-800 hover:underline text-sm font-medium"
                             >
                               Xem chi tiết
                             </button>
@@ -505,7 +505,7 @@ export default function QuizResultsManagement() {
                         onClick={() => handlePageChange(page)}
                         className={`px-3 py-2 border rounded ${
                           page === pagination.current
-                            ? "bg-blue-500 text-white"
+                            ? "bg-amber-500 text-white"
                             : "hover:bg-gray-50"
                         }`}
                       >

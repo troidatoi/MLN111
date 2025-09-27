@@ -33,9 +33,9 @@ const ConsultantLayout = lazy(
   () => import("./components/layout/ConsultantLayout")
 );
 const AdminDashboard = lazy(() => import("./pages/admin/Dashboard"));
-const ConsultantDashboard = lazy(
-  () => import("./pages/consultant/ConsultantDashboard")
-);
+// const ConsultantDashboard = lazy(
+//   () => import("./pages/consultant/ConsultantDashboard")
+// );
 const ScheduleManagement = lazy(
   () => import("./pages/consultant/ScheduleManagement")
 );
@@ -101,8 +101,9 @@ function ConsultantRoute({ children }: { children: React.ReactNode }) {
     return <Navigate to="/login" replace />;
   }
 
+  // Redirect consultant to home page instead of showing consultant dashboard
   return user.role === "consultant" ? (
-    <>{children}</>
+    <Navigate to="/" replace />
   ) : (
     <Navigate to="/" replace />
   );
@@ -221,8 +222,8 @@ function AppContent() {
             }
           />
 
-          {/* Consultant Routes */}
-          <Route
+          {/* Consultant Routes - Hidden */}
+          {/* <Route
             path="/consultants/*"
             element={
               <ConsultantRoute>
@@ -250,7 +251,7 @@ function AppContent() {
                 </ConsultantLayout>
               </ConsultantRoute>
             }
-          />
+          /> */}
         </Routes>
       </Suspense>
     </Router>

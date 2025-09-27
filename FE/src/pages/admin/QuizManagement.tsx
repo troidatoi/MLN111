@@ -313,7 +313,7 @@ const QuizManagement: React.FC = () => {
   }, [showAddQuiz]);
 
   return (
-    <div className="p-6 bg-sky-50">
+    <div className="p-6 bg-amber-50">
       <ToastContainer
         position="top-right"
         autoClose={2500}
@@ -331,7 +331,7 @@ const QuizManagement: React.FC = () => {
         <div className="flex justify-between items-center mb-4">
           <h1 className="text-2xl font-bold">Quản lý trắc nghiệm</h1>
           <button
-            className="bg-sky-600 text-white px-5 py-2 rounded hover:bg-sky-700 shadow font-semibold"
+            className="bg-amber-600 text-white px-5 py-2 rounded hover:bg-amber-700 shadow font-semibold"
             onClick={() => navigate("/admin/quiz-results")}
           >
             Kết quả trắc nghiệm
@@ -422,7 +422,7 @@ const QuizManagement: React.FC = () => {
             {/* Xuất CSV */}
             <div className="flex flex-col gap-2 md:items-end justify-end">
               <button
-                className="bg-blue-600 text-white px-5 py-2 rounded hover:bg-blue-700 w-full md:w-auto"
+                className="bg-amber-600 text-white px-5 py-2 rounded hover:bg-amber-700 w-full md:w-auto"
                 onClick={() => setShowAddQuiz(true)}
               >
                 Thêm
@@ -433,7 +433,7 @@ const QuizManagement: React.FC = () => {
         {/* Table */}
         <div className="overflow-x-auto rounded shadow bg-white">
           <table className="min-w-full">
-            <thead className="bg-sky-50">
+            <thead className="bg-amber-50">
               <tr>
                 <th className="px-3 py-2 text-left">Tiêu đề</th>
                 <th className="px-3 py-2 text-left">Mô tả</th>
@@ -455,7 +455,7 @@ const QuizManagement: React.FC = () => {
                     {quiz.ageGroups?.map((a: string) => (
                       <span
                         key={a}
-                        className="inline-block bg-blue-100 text-blue-700 rounded px-2 py-0.5 text-xs mr-1 mb-1"
+                        className="inline-block bg-amber-100 text-amber-700 rounded px-2 py-0.5 text-xs mr-1 mb-1"
                       >
                         {ageGroupLabel(a)}
                       </span>
@@ -502,7 +502,7 @@ const QuizManagement: React.FC = () => {
                   </td>
                   <td className="px-3 py-2 text-center">
                     <button
-                      className="text-blue-600 hover:underline text-xs mr-2"
+                      className="text-amber-600 hover:underline text-xs mr-2"
                       onClick={() => handleViewQuiz(quiz)}
                     >
                       Xem
@@ -607,7 +607,7 @@ const QuizManagement: React.FC = () => {
                 Sửa trắc nghiệm
               </button>
               <button
-                className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+                className="bg-amber-600 text-white px-4 py-2 rounded hover:bg-amber-700"
                 onClick={handleAddQuestion}
               >
                 Thêm câu hỏi
@@ -722,7 +722,7 @@ const QuizManagement: React.FC = () => {
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 rounded bg-blue-600 text-white"
+                  className="px-4 py-2 rounded bg-amber-600 text-white"
                 >
                   Lưu
                 </button>
@@ -832,7 +832,7 @@ const QuizManagement: React.FC = () => {
                 ))}
                 <button
                   type="button"
-                  className="mt-2 px-3 py-1 bg-blue-100 rounded text-blue-700 text-sm"
+                  className="mt-2 px-3 py-1 bg-amber-100 rounded text-amber-700 text-sm"
                   onClick={() =>
                     setQuestionForm((f) => ({
                       ...f,
@@ -935,7 +935,7 @@ const QuizManagement: React.FC = () => {
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 rounded bg-blue-600 text-white"
+                  className="px-4 py-2 rounded bg-amber-600 text-white"
                 >
                   Thêm
                 </button>
@@ -1086,12 +1086,12 @@ const QuizManagement: React.FC = () => {
                         return (
                           <span
                             key={tagValue}
-                            className="inline-flex items-center bg-blue-100 text-blue-700 rounded-full px-3 py-1 text-xs font-semibold mr-1 mb-1"
+                            className="inline-flex items-center bg-amber-100 text-amber-700 rounded-full px-3 py-1 text-xs font-semibold mr-1 mb-1"
                           >
                             {tagObj ? tagObj.label : tagValue}
                             <button
                               type="button"
-                              className="ml-1 text-blue-500 hover:text-red-500"
+                              className="ml-1 text-amber-500 hover:text-red-500"
                               onClick={(e) => {
                                 e.stopPropagation();
                                 setAddQuizForm((f) => ({
@@ -1116,9 +1116,9 @@ const QuizManagement: React.FC = () => {
                       {GENERAL_TAGS.map((tag) => (
                         <div
                           key={tag.value}
-                          className={`px-3 py-2 cursor-pointer hover:bg-blue-100 flex items-center gap-2 ${
+                          className={`px-3 py-2 cursor-pointer hover:bg-amber-100 flex items-center gap-2 ${
                             addQuizForm.tags?.includes(tag.value)
-                              ? "bg-blue-50 font-semibold"
+                              ? "bg-amber-50 font-semibold"
                               : ""
                           }`}
                           onClick={(e) => {
@@ -1156,7 +1156,7 @@ const QuizManagement: React.FC = () => {
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 rounded bg-blue-600 text-white"
+                  className="px-4 py-2 rounded bg-amber-600 text-white"
                 >
                   Lưu
                 </button>
@@ -1255,7 +1255,7 @@ const QuizManagement: React.FC = () => {
                 ))}
                 <button
                   type="button"
-                  className="mt-2 px-3 py-1 bg-blue-100 rounded text-blue-700 text-sm"
+                  className="mt-2 px-3 py-1 bg-amber-100 rounded text-amber-700 text-sm"
                   onClick={() =>
                     setEditQuestionForm((f) => ({
                       ...f,
@@ -1361,7 +1361,7 @@ const QuizManagement: React.FC = () => {
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 rounded bg-blue-600 text-white"
+                  className="px-4 py-2 rounded bg-amber-600 text-white"
                 >
                   Lưu
                 </button>
