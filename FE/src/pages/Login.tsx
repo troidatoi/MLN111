@@ -227,11 +227,6 @@ function LoginPage() {
                 src={logo}
                 className="mx-auto h-16 w-auto"
               />
-              <p className="mt-2 text-center text-sm text-amber-700">
-                <a href="#" className="font-semibold text-amber-800">
-                  PhilosoSpace - Nơi Kết Nối Tâm Hồn
-                </a>
-              </p>
               <h2 className="mt-10 text-center text-2xl/9 font-bold tracking-tight text-amber-900">
                 Sign in to your account
               </h2>
