@@ -3,7 +3,6 @@ import { Link, useLocation } from "react-router-dom";
 import {
   getAccountByIdApi,
   updateAccountApi,
-  changePasswordApi,
   sendResetPasswordEmailApi,
   getBlogsByUserIdApi,
   updateBlogApi,
@@ -69,16 +68,6 @@ export default function Profile() {
     fullName?: string;
     phoneNumber?: string;
   }>({});
-  const [showPwdModal, setShowPwdModal] = useState(false);
-  const [pwdStep, setPwdStep] = useState<"email" | "otp" | "newpass">("email");
-  const [pwdEmail, setPwdEmail] = useState("");
-  const [pwdOtp, setPwdOtp] = useState("");
-  const [pwdNew, setPwdNew] = useState("");
-  const [pwdConfirm, setPwdConfirm] = useState("");
-  const [pwdError, setPwdError] = useState("");
-  const [pwdLoading, setPwdLoading] = useState(false);
-  const [showPwdNew, setShowPwdNew] = useState(false);
-  const [showPwdConfirm, setShowPwdConfirm] = useState(false);
   const [blogs, setBlogs] = useState<Blog[]>([]);
   const [blogDangXem, setBlogDangXem] = useState<Blog | null>(null);
   const [modalBlog, setModalBlog] = useState(false);
@@ -158,64 +147,8 @@ export default function Profile() {
     }
   };
 
-  const handleSendOtp = async () => {
-    setPwdError("");
-    setPwdLoading(true);
-    try {
-      await sendResetPasswordEmailApi(pwdEmail);
-      setPwdStep("otp");
-      setPwdOtp(""); // Clear OTP when resending
-      setPwdError(""); // Clear any previous errors
-    } catch {
-      setPwdError("Không gửi được OTP, kiểm tra email!");
-    } finally {
-      setPwdLoading(false);
-    }
-  };
 
-  const handleVerifyOtp = async () => {
-    setPwdError("");
-    setPwdLoading(true);
-    try {
-      const response = await fetch("/api/auth/check-otp", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ verifyCode: pwdOtp }),
-      });
 
-      if (!response.ok) {
-        throw new Error("OTP không đúng hoặc đã hết hạn!");
-      }
-
-      setPwdStep("newpass");
-    } catch {
-      setPwdError("OTP không đúng hoặc đã hết hạn!");
-      setPwdOtp(""); // Clear OTP input when wrong
-    } finally {
-      setPwdLoading(false);
-    }
-  };
-
-  const handleChangePassword = async () => {
-    setPwdError("");
-    setPwdLoading(true);
-    try {
-      if (!user?.email) throw new Error("Không tìm thấy email người dùng");
-      await changePasswordApi(user.email, pwdNew, pwdConfirm, pwdOtp);
-      setShowPwdModal(false);
-      setPwdStep("email");
-      setPwdEmail("");
-      setPwdOtp("");
-      setPwdNew("");
-      setPwdConfirm("");
-    } catch (err: unknown) {
-      const axiosErr = err as AxiosError<{ message?: string }>;
-      setPwdError(
-        axiosErr?.response?.data?.message || "Đổi mật khẩu thất bại!"
-      );
-    }
-    setPwdLoading(false);
-  };
 
   // Hàm lọc blog
   const filteredBlogs = blogs.filter((blog) => {
@@ -614,27 +547,6 @@ export default function Profile() {
                         </div>
                       </div>
 
-                      {/* Nút đổi mật khẩu */}
-                      <div className="col-span-2">
-                        <button
-                          onClick={() => setShowPwdModal(true)}
-                          className="mt-4 px-4 py-2 bg-amber-600 text-white rounded-lg hover:bg-amber-700 transition-colors flex items-center gap-2"
-                        >
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            className="h-5 w-5"
-                            viewBox="0 0 20 20"
-                            fill="currentColor"
-                          >
-                            <path
-                              fillRule="evenodd"
-                              d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"
-                              clipRule="evenodd"
-                            />
-                          </svg>
-                          Đổi mật khẩu
-                        </button>
-                      </div>
                     </div>
                   </div>
                 </div>
@@ -997,199 +909,6 @@ export default function Profile() {
           </div>
         </div>
       </div>
-      {showPwdModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
-          <div className="bg-white rounded-lg p-8 max-w-md w-full">
-            <div className="flex justify-between items-center mb-6">
-              <h3 className="text-xl font-semibold">Đổi mật khẩu</h3>
-              <button
-                onClick={() => {
-                  setShowPwdModal(false);
-                  setPwdStep("email");
-                  setPwdEmail("");
-                  setPwdOtp("");
-                  setPwdNew("");
-                  setPwdConfirm("");
-                  setPwdError("");
-                }}
-                className="text-gray-500 hover:text-gray-700"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-6 w-6"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M6 18L18 6M6 6l12 12"
-                  />
-                </svg>
-              </button>
-            </div>
-
-            {/* Email Step */}
-            {pwdStep === "email" && (
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Email xác thực
-                  </label>
-                  <input
-                    type="email"
-                    value={pwdEmail}
-                    onChange={(e) => setPwdEmail(e.target.value)}
-                    className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-200"
-                    placeholder="Nhập email của bạn"
-                    disabled={pwdLoading}
-                  />
-                </div>
-                {pwdError && <p className="text-red-500 text-sm">{pwdError}</p>}
-                <button
-                  onClick={handleSendOtp}
-                  disabled={pwdLoading || !pwdEmail}
-                  className={`w-full py-2 rounded-lg font-medium ${
-                    pwdLoading || !pwdEmail
-                      ? "bg-gray-300 cursor-not-allowed"
-                      : "bg-blue-500 hover:bg-blue-600 text-white"
-                  }`}
-                >
-                  {pwdLoading ? "Đang gửi..." : "Gửi mã OTP"}
-                </button>
-              </div>
-            )}
-
-            {/* OTP Step */}
-            {pwdStep === "otp" && (
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Mã OTP
-                  </label>
-                  <input
-                    type="text"
-                    value={pwdOtp}
-                    onChange={(e) => {
-                      setPwdOtp(e.target.value);
-                      if (pwdError) setPwdError(""); // Clear error when user types
-                    }}
-                    className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-200 ${
-                      pwdError ? "border-red-500" : "border-gray-300"
-                    }`}
-                    placeholder="Nhập mã OTP"
-                    disabled={pwdLoading}
-                  />
-                </div>
-                {pwdError && (
-                  <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-                    <p className="text-red-500 text-sm">{pwdError}</p>
-                  </div>
-                )}
-                <div className="flex gap-4">
-                  <button
-                    onClick={handleVerifyOtp}
-                    disabled={pwdLoading || !pwdOtp}
-                    className={`flex-1 py-2 rounded-lg font-medium ${
-                      pwdLoading || !pwdOtp
-                        ? "bg-gray-300 cursor-not-allowed"
-                        : "bg-blue-500 hover:bg-blue-600 text-white"
-                    }`}
-                  >
-                    {pwdLoading ? "Đang xác thực..." : "Xác nhận"}
-                  </button>
-                  <button
-                    onClick={handleSendOtp}
-                    disabled={pwdLoading}
-                    className={`px-4 py-2 border rounded-lg ${
-                      pwdLoading
-                        ? "border-gray-300 text-gray-300 cursor-not-allowed"
-                        : "border-blue-500 text-blue-500 hover:bg-blue-50"
-                    }`}
-                  >
-                    Gửi lại OTP
-                  </button>
-                </div>
-                <p className="text-sm text-gray-500 text-center">
-                  Không nhận được mã? Bấm "Gửi lại OTP"
-                </p>
-              </div>
-            )}
-
-            {/* New Password Step */}
-            {pwdStep === "newpass" && (
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Mật khẩu mới
-                  </label>
-                  <div className="relative">
-                    <input
-                      type={showPwdNew ? "text" : "password"}
-                      value={pwdNew}
-                      onChange={(e) => setPwdNew(e.target.value)}
-                      className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-200"
-                      placeholder="Nhập mật khẩu mới"
-                      disabled={pwdLoading}
-                    />
-                    <button
-                      type="button"
-                      onClick={() => setShowPwdNew(!showPwdNew)}
-                      className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500"
-                    >
-                      {showPwdNew ? <EyeOff size={20} /> : <Eye size={20} />}
-                    </button>
-                  </div>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Xác nhận mật khẩu
-                  </label>
-                  <div className="relative">
-                    <input
-                      type={showPwdConfirm ? "text" : "password"}
-                      value={pwdConfirm}
-                      onChange={(e) => setPwdConfirm(e.target.value)}
-                      className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-200"
-                      placeholder="Nhập lại mật khẩu mới"
-                      disabled={pwdLoading}
-                    />
-                    <button
-                      type="button"
-                      onClick={() => setShowPwdConfirm(!showPwdConfirm)}
-                      className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500"
-                    >
-                      {showPwdConfirm ? (
-                        <EyeOff size={20} />
-                      ) : (
-                        <Eye size={20} />
-                      )}
-                    </button>
-                  </div>
-                </div>
-                {pwdError && (
-                  <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-                    <p className="text-red-500 text-sm">{pwdError}</p>
-                  </div>
-                )}
-                <button
-                  onClick={handleChangePassword}
-                  disabled={pwdLoading || !pwdNew || !pwdConfirm}
-                  className={`w-full py-2 rounded-lg font-medium ${
-                    pwdLoading || !pwdNew || !pwdConfirm
-                      ? "bg-gray-300 cursor-not-allowed"
-                      : "bg-blue-500 hover:bg-blue-600 text-white"
-                  }`}
-                >
-                  {pwdLoading ? "Đang cập nhật..." : "Đổi mật khẩu"}
-                </button>
-              </div>
-            )}
-          </div>
-        </div>
-      )}
       {/* Modal xem chi tiết blog */}
       {modalBlog && blogDangXem && (
         <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-[999]">
