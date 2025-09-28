@@ -51,11 +51,11 @@ const AboutUsPage: React.FC = () => {
                 About Us
               </h1>
               <p className="text-xl md:text-2xl mt-4 text-center max-w-3xl mx-auto">
-                HopeHub - Nơi kết nối những chuyên gia tư vấn hàng đầu với những người cần được tư vấn
+                PhilosoSpace - Nơi kết nối những chuyên gia tư vấn hàng đầu với những người cần được tư vấn
               </p>
             </div>
             <div className="flex-1 flex justify-center md:justify-end">
-              <img src={cardImg} alt="HopeHub Card" className="w-[340px] md:w-[420px] rounded-2xl shadow-xl border border-gray-200" />
+              <img src={cardImg} alt="PhilosoSpace Card" className="w-[340px] md:w-[420px] rounded-2xl shadow-xl border border-gray-200" />
             </div>
           </div>
         </motion.div>
@@ -71,7 +71,7 @@ const AboutUsPage: React.FC = () => {
             <h2 className="text-2xl md:text-3xl font-bold text-indigo-900 mb-4">Câu Chuyện Của Chúng Tôi</h2>
             <div className="mt-4">
               <p className="text-lg text-gray-700 mb-4">
-                HopeHub được thành lập với sứ mệnh mang đến một nền tảng kết nối hiệu quả giữa các chuyên gia tư vấn và những người cần được tư vấn. Chúng tôi tin rằng mỗi người đều xứng đáng được tiếp cận với những lời khuyên và hỗ trợ chất lượng cao.
+                PhilosoSpace được thành lập với sứ mệnh mang đến một nền tảng kết nối hiệu quả giữa các chuyên gia tư vấn và những người cần được tư vấn. Chúng tôi tin rằng mỗi người đều xứng đáng được tiếp cận với những lời khuyên và hỗ trợ chất lượng cao.
               </p>
               <p className="text-base md:text-lg text-gray-700">
                 Với đội ngũ chuyên gia giàu kinh nghiệm và hệ thống đặt lịch thông minh, chúng tôi cam kết mang đến trải nghiệm tư vấn tốt nhất cho mọi khách hàng.

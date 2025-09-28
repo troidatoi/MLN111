@@ -1,4 +1,4 @@
-import loginImg from "../assets/login2.png";
+// Removed background image import
 import logo from "/avarta.png";
 import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
@@ -218,32 +218,24 @@ function LoginPage() {
         </div>
       )}
       {forgotStep === "login" && (
-        <div className="relative min-h-screen w-full flex items-center justify-center bg-amber-50 overflow-hidden">
-          {/* Ảnh nền */}
-          <img
-            src={loginImg}
-            alt="Login Background"
-            className="absolute inset-0 w-full h-full object-fill z-0"
-          />
-          {/* Overlay mờ với màu amber */}
-          <div className="absolute inset-0 bg-amber-50/60 z-10" />
+        <div className="min-h-screen w-full flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100">
           {/* Khung login */}
-          <div className="relative z-20 w-full max-w-lg mx-auto rounded-xl shadow-lg bg-amber-50/80 backdrop-blur-md p-8 flex flex-col justify-center border border-amber-200">
+          <div className="w-full max-w-lg mx-auto rounded-xl shadow-lg bg-white p-8 flex flex-col justify-center border border-gray-200">
             <div className="sm:mx-auto sm:w-full sm:max-w-sm">
               <img
-                alt="HopeHub Logo"
+                alt="PhilosoSpace Logo"
                 src={logo}
                 className="mx-auto h-16 w-auto"
               />
-              <p className="mt-2 text-center text-sm text-amber-700">
-                <a href="#" className="font-semibold text-amber-800">
-                  HopeHub - Where Recovery Meets Peace
+              <p className="mt-2 text-center text-sm text-gray-600">
+                <a href="#" className="font-semibold text-blue-800">
+                  PhilosoSpace - Nơi Kết Nối Tâm Hồn
                 </a>
               </p>
-              <h2 className="mt-10 text-center text-2xl/9 font-bold tracking-tight text-amber-900">
+              <h2 className="mt-10 text-center text-2xl/9 font-bold tracking-tight text-gray-900">
                 Sign in to your account
               </h2>
-              <h2 className="text-center text-l tracking-tight text-amber-800">
+              <h2 className="text-center text-l tracking-tight text-gray-600">
                 Lần đầu sử dụng? Đăng nhập bằng Google để tạo tài khoản
               </h2>
             </div>
@@ -264,7 +256,7 @@ function LoginPage() {
                       type="text"
                       autoComplete="username"
                       required
-                      className="block w-full rounded-md bg-amber-50 px-3 py-1.5 text-base text-amber-900 border border-amber-300 placeholder:text-amber-500 focus:border-amber-600 focus:ring-2 focus:ring-amber-600 sm:text-sm"
+                      className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 border border-gray-300 placeholder:text-gray-500 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 sm:text-sm"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       disabled={loading || isLoggingIn}
@@ -302,7 +294,7 @@ function LoginPage() {
                         type={showPassword ? "text" : "password"}
                         required
                         autoComplete="current-password"
-                        className="block w-full rounded-md bg-amber-50 px-3 py-1.5 text-base text-amber-900 border border-amber-300 placeholder:text-amber-500 focus:border-amber-600 focus:ring-2 focus:ring-amber-600 sm:text-sm"
+                        className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 border border-gray-300 placeholder:text-gray-500 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 sm:text-sm"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         disabled={loading || isLoggingIn}
@@ -360,7 +352,7 @@ function LoginPage() {
                 <div>
                   <button
                     type="submit"
-                    className="flex w-full justify-center rounded-md bg-amber-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-amber-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-600"
+                    className="flex w-full justify-center rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
                     disabled={loading || isLoggingIn}
                   >
                     {loading || isLoggingIn ? "Signing in..." : "Sign in"}
@@ -370,10 +362,10 @@ function LoginPage() {
               <div className="mt-8">
                 <div className="relative">
                   <div className="absolute inset-0 flex items-center">
-                    <div className="w-full border-t border-amber-300" />
+                    <div className="w-full border-t border-gray-300" />
                   </div>
                   <div className="relative flex justify-center text-sm">
-                    <span className="bg-amber-50 px-2 text-amber-600">
+                    <span className="bg-white px-2 text-gray-600">
                       Or continue with
                     </span>
                   </div>

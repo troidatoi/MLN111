@@ -203,7 +203,7 @@ const CreateBlogForm: React.FC<CreateBlogFormProps> = ({
             {initialData ? "Sửa Blog" : "Tạo Blog Mới"}
           </h2>
           <p className="text-gray-600">
-            Chia sẻ kiến thức, cảm xúc hoặc kinh nghiệm của bạn với cộng đồng HopeHub!
+            Chia sẻ kiến thức, cảm xúc hoặc kinh nghiệm của bạn với cộng đồng PhilosoSpace!
           </p>
         </div>
         <form onSubmit={handleSubmit} className="space-y-6 w-full">

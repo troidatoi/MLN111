@@ -255,8 +255,8 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
             <div className="flex items-center justify-center h-16">
               <Link to={baseUrl} className="text-xl font-bold text-amber-800">
                 {user?.role === "admin"
-                  ? "HopeHub Admin"
-                  : "HopeHub Consultant"}
+                  ? "PhilosoSpace Admin"
+                  : "PhilosoSpace Consultant"}
               </Link>
             </div>
             {/* Navigation */}
@@ -283,7 +283,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
           {/* Footer */}
           <div className="p-4 border-t">
             <div className="text-center text-xs text-gray-400">
-              @2025 HOPEHUB
+              @2025 PHILOSOSPACE
             </div>
           </div>
         </div>

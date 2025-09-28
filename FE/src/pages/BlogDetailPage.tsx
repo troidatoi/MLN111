@@ -59,7 +59,7 @@ function BlogDetailPage() {
         setBlog(blogData);
         
         // Set page title
-        document.title = `${blogData.title} | HopeHub Blog`;
+        document.title = `${blogData.title} | PhilosoSpace Blog`;
 
         // Lấy bài viết liên quan theo tag
         if (blogData.topics && blogData.topics.length > 0) {
