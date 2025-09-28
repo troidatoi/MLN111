@@ -7,6 +7,7 @@ import logo from "/avarta.png";
 
 function Header() {
   const [showDropdown, setShowDropdown] = useState(false);
+  const [showMobileMenu, setShowMobileMenu] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
   const location = useLocation();
@@ -32,6 +33,11 @@ function Header() {
     };
   }, []);
 
+  // Close mobile menu when route changes
+  useEffect(() => {
+    setShowMobileMenu(false);
+  }, [location.pathname]);
+
   const handleLogout = () => {
     logout();
     navigate("/");
@@ -55,7 +61,7 @@ function Header() {
 
   return (
     <header className="sticky top-0 z-50 bg-light shadow-sm w-full">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-7xl px-2 sm:px-4 md:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between">
           <div className="flex items-center">
             <Link to="/" className="flex items-center">
@@ -64,20 +70,37 @@ function Header() {
                 alt="Logo"
                 className="h-10 w-10 object-cover rounded-full mr-2"
               />
-              <span className="ml-2 text-xl font-semibold text-primary">
+              <span className="ml-2 text-lg sm:text-xl font-semibold text-primary">
                 PhilosoSpace
               </span>
             </Link>
           </div>
 
+          {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-8 text-lg font-medium">
             <Link to="/" className={isActive('/') ? activeStyle : defaultStyle}>
               Trang chủ
             </Link>
             <Link to="/blogs" className={isActive('/blogs') ? activeStyle : defaultStyle}>
-              Triết học
+              Blog
             </Link>
           </nav>
+
+          {/* Mobile Menu Button */}
+          <div className="md:hidden flex items-center">
+            <button
+              onClick={() => setShowMobileMenu(!showMobileMenu)}
+              className="p-2 rounded-md text-gray-600 hover:text-gray-900 hover:bg-gray-100"
+            >
+              <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                {showMobileMenu ? (
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                ) : (
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                )}
+              </svg>
+            </button>
+          </div>
 
           {user ? (
             <div className="relative" ref={dropdownRef}>
@@ -148,6 +171,37 @@ function Header() {
           )}
         </div>
       </div>
+
+      {/* Mobile Menu */}
+      {showMobileMenu && (
+        <div className="md:hidden bg-white border-t border-gray-200 shadow-lg">
+          <div className="px-4 py-2 space-y-1">
+            <Link
+              to="/"
+              className={`block px-3 py-2 text-base font-medium rounded-md ${isActive('/') ? 'bg-gray-100 text-gray-900' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'}`}
+              onClick={() => setShowMobileMenu(false)}
+            >
+              Trang chủ
+            </Link>
+            <Link
+              to="/blogs"
+              className={`block px-3 py-2 text-base font-medium rounded-md ${isActive('/blogs') ? 'bg-gray-100 text-gray-900' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'}`}
+              onClick={() => setShowMobileMenu(false)}
+            >
+              Blog
+            </Link>
+            {!user && (
+              <Link
+                to="/login"
+                className="block px-3 py-2 text-base font-medium rounded-md text-primary hover:text-primary-600 hover:bg-gray-50"
+                onClick={() => setShowMobileMenu(false)}
+              >
+                Đăng nhập
+              </Link>
+            )}
+          </div>
+        </div>
+      )}
     </header>
   );
 }

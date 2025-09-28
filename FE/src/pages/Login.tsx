@@ -218,9 +218,9 @@ function LoginPage() {
         </div>
       )}
       {forgotStep === "login" && (
-        <div className="min-h-screen w-full flex items-center justify-center bg-gradient-to-br from-amber-50 to-orange-100">
+        <div className="min-h-screen w-full flex items-center justify-center bg-gradient-to-br from-amber-50 to-orange-100 px-2 sm:px-4">
           {/* Khung login */}
-          <div className="w-full max-w-lg mx-auto rounded-xl shadow-lg bg-white p-8 flex flex-col justify-center border border-gray-200">
+          <div className="w-full max-w-lg mx-auto rounded-xl shadow-lg bg-white p-4 sm:p-6 md:p-8 flex flex-col justify-center border border-gray-200">
             <div className="sm:mx-auto sm:w-full sm:max-w-sm">
               <img
                 alt="PhilosoSpace Logo"
@@ -365,26 +365,26 @@ function LoginPage() {
                     </span>
                   </div>
                 </div>
-                <div className="mt-6 flex flex-col items-center gap-4 justify-center">
+                <div className="mt-6 w-full">
                   {!googleClientId ? (
                     <div className="text-amber-600 text-sm text-center">
                       <p>Google Sign-In temporarily unavailable</p>
                       <p className="text-xs mt-1">Vui lòng liên hệ admin để được hỗ trợ</p>
                     </div>
                   ) : (
-                    <div className="text-center">
+                    <div className="w-full max-w-sm mx-auto">
                       <GoogleOAuthProvider clientId={googleClientId}>
                         <GoogleLogin
                           onSuccess={handleGoogleSuccess}
                           onError={handleGoogleError}
-                          width="280px"
+                          width="100%"
                           shape="pill"
                           text="signin_with"
                           logo_alignment="center"
                           useOneTap
                         />
                       </GoogleOAuthProvider>
-                      <p className="text-xs text-amber-600 mt-2">
+                      <p className="text-xs text-amber-600 mt-2 text-center">
                         Đăng nhập bằng Google để tạo tài khoản mới
                       </p>
                     </div>
