@@ -1,7 +1,7 @@
 import axios from "axios";
 import type { Quiz, Question } from "../types/global";
 
-const API_URL = "https://swd392-g7-dupss.onrender.com/api";
+const API_URL = import.meta.env.VITE_API_URL || "https://swd392-g7-dupss.onrender.com/api";
 
 interface ApiResponse<T> {
   success: boolean;

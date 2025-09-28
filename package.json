@@ -4,8 +4,8 @@
   "description": "HopeHub - Mental Health Platform",
   "scripts": {
     "build": "cd FE && npm run build",
-    "install": "cd FE && npm install",
-    "start": "cd FE && npm run preview"
+    "start": "cd FE && npm run preview",
+    "dev": "cd FE && npm run dev"
   },
   "workspaces": [
     "FE",
