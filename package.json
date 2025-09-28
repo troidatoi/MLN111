@@ -1,0 +1,15 @@
+{
+  "name": "mln111-project",
+  "version": "1.0.0",
+  "description": "HopeHub - Mental Health Platform",
+  "scripts": {
+    "build": "cd FE && npm run build",
+    "install": "cd FE && npm install",
+    "start": "cd FE && npm run preview"
+  },
+  "workspaces": [
+    "FE",
+    "BE"
+  ],
+  "private": true
+}
