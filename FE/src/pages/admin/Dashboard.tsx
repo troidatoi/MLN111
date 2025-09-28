@@ -83,7 +83,7 @@ const Dashboard = () => {
         
         const tongSoTuVanVien = accounts.filter((account: any) => account.role === 'consultant').length;
         const tongSoKhachHang = accounts.filter((account: any) => account.role === 'customer').length;
-
+        
         setThongKeNguoiDung({
           tongSoNguoiDung: accounts.length,
           tongSoTuVanVien,
@@ -102,7 +102,7 @@ const Dashboard = () => {
         setThongKeNguoiDung(prev => ({ ...prev, dangTai: false }));
       }
     };
-
+    
     fetchUserStats();
   }, []);
 
@@ -170,8 +170,8 @@ const Dashboard = () => {
     
     return Array.from(authorMap.entries())
       .map(([name, count]) => ({ name, count }))
-      .sort((a, b) => b.count - a.count)
-      .slice(0, 5);
+    .sort((a, b) => b.count - a.count)
+    .slice(0, 5);
   };
 
   const authorStats = getAuthorStats();
@@ -200,7 +200,7 @@ const Dashboard = () => {
       data: getBlogsByMonth(),
       backgroundColor: '#F59E0B',
       borderColor: '#D97706',
-      borderWidth: 2,
+        borderWidth: 2,
     }],
   };
 
@@ -295,7 +295,7 @@ const Dashboard = () => {
           </h3>
         </div>
 
-        {loadingBlogs ? (
+          {loadingBlogs ? (
           <div className="text-amber-400 text-center">Đang tải dữ liệu...</div>
         ) : (
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -305,11 +305,11 @@ const Dashboard = () => {
               {blogStats.total > 0 ? (
                 <div className="h-64">
                   <Pie data={blogStatusData} options={chartOptions} />
-                </div>
-              ) : (
-                <div className="text-amber-400 text-center">Chưa có dữ liệu</div>
-              )}
             </div>
+          ) : (
+                <div className="text-amber-400 text-center">Chưa có dữ liệu</div>
+          )}
+      </div>
 
             {/* Blog by Month Chart */}
             <div>
@@ -317,12 +317,12 @@ const Dashboard = () => {
               {blogStats.total > 0 ? (
                 <div className="h-64">
                   <Bar data={monthlyBlogData} options={barOptions} />
-                </div>
+        </div>
               ) : (
                 <div className="text-amber-400 text-center">Chưa có dữ liệu</div>
-              )}
+        )}
+      </div>
             </div>
-          </div>
         )}
 
         {/* Blog Summary Stats */}
@@ -335,17 +335,17 @@ const Dashboard = () => {
             <div className="bg-green-50 p-4 rounded-lg text-center">
               <div className="text-2xl font-bold text-green-600">{blogStats.published}</div>
               <div className="text-sm text-green-700">Đã xuất bản</div>
-            </div>
+                </div>
             <div className="bg-yellow-50 p-4 rounded-lg text-center">
               <div className="text-2xl font-bold text-yellow-600">{blogStats.draft}</div>
               <div className="text-sm text-yellow-700">Bản nháp</div>
-            </div>
+                </div>
             <div className="bg-gray-50 p-4 rounded-lg text-center">
               <div className="text-2xl font-bold text-gray-600">{blogStats.unpublished}</div>
               <div className="text-sm text-gray-700">Chưa xuất bản</div>
+              </div>
             </div>
-          </div>
-        )}
+          )}
 
         {/* Top Authors */}
         {!loadingBlogs && authorStats.length > 0 && (
@@ -360,12 +360,12 @@ const Dashboard = () => {
                   <div className="flex items-center justify-between mb-2">
                     <span className="text-sm text-amber-500 font-semibold">#{idx + 1}</span>
                     <span className="text-xs bg-amber-100 text-amber-700 rounded-full px-2 py-0.5 font-medium">{author.count} bài</span>
-                  </div>
+          </div>
                   <div className="font-medium text-base text-amber-800 mb-1">{author.name}</div>
                   <div className="w-full h-2 bg-amber-100 rounded-full">
                     <div className="h-2 bg-amber-400 rounded-full" style={{ width: `${(author.count / maxCount) * 100}%` }}></div>
-                  </div>
-                </div>
+            </div>
+            </div>
               ))}
             </div>
           </div>

@@ -1,5 +1,6 @@
 import Header from "../components/layout/Header";
 import Footer from "../components/layout/Footer";
+import MemoryGame from "../components/MemoryGame";
 import { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { getAllBlogsApi } from "../api";
@@ -537,6 +538,9 @@ export default function Home() {
   const [quizCompleted, setQuizCompleted] = useState(false);
   const [userAnswers, setUserAnswers] = useState<number[]>([]);
 
+  // State cho Memory Game
+  const [showMemoryGame, setShowMemoryGame] = useState(false);
+
   useEffect(() => {
     const fetchBlogs = async () => {
       try {
@@ -711,6 +715,12 @@ export default function Home() {
               className="px-8 py-4 bg-amber-800 text-white rounded-full text-lg font-medium hover:bg-amber-900 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1"
             >
               Khám phá bài viết triết học
+            </button>
+            <button
+              onClick={() => setShowMemoryGame(true)}
+              className="px-8 py-4 bg-amber-800 text-white rounded-full text-lg font-medium hover:bg-amber-900 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1"
+            >
+              🧠 Memory Game
             </button>
             <div className="flex gap-2">
               {philosophyQuotes.map((_, index) => (
@@ -1192,6 +1202,11 @@ export default function Home() {
       </motion.div>
 
       <Footer />
+
+      {/* Memory Game Modal */}
+      {showMemoryGame && (
+        <MemoryGame onClose={() => setShowMemoryGame(false)} />
+      )}
     </div>
   );
 }
