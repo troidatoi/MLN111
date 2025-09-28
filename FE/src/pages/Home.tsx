@@ -637,7 +637,7 @@ export default function Home() {
         initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 1.2, ease: "easeOut" }}
-        className="relative min-h-screen flex items-center justify-center px-4 py-20"
+        className="relative min-h-screen flex items-center justify-center px-2 sm:px-4 py-8 sm:py-12 md:py-20"
         style={{
           backgroundImage: `url(${bgHome})`,
           backgroundSize: 'cover',
@@ -655,7 +655,7 @@ export default function Home() {
           <div className="absolute bottom-20 right-1/3 w-20 h-20 border border-amber-300 rounded-full"></div>
         </div>
 
-        <div className="max-w-6xl mx-auto text-center relative z-10">
+        <div className="max-w-6xl mx-auto text-center relative z-10 px-2 sm:px-4">
           {/* Main Title */}
           <motion.h1 
             className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl xl:text-8xl font-bold text-amber-900 mb-6 sm:mb-8 leading-tight"
@@ -741,7 +741,7 @@ export default function Home() {
 
       {/* Marxist Dialectics Section */}
       <motion.div 
-        className="py-20 px-4"
+        className="py-8 sm:py-12 md:py-20 px-2 sm:px-4"
         initial={{ opacity: 0, y: 40 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, amount: 0.3 }}
@@ -772,30 +772,32 @@ export default function Home() {
           </div>
 
           {/* Principles Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 md:gap-8 mb-8 sm:mb-12 md:mb-16">
+            {console.log('Rendering principles:', marxistDialectics.principles.length)}
             {marxistDialectics.principles.map((principle, index) => (
               <motion.div
                 key={index}
                 className="philosophy-card group cursor-pointer overflow-hidden"
                 initial={{ opacity: 0, y: 40 }}
+                animate={{ opacity: 1, y: 0 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.3 }}
+                viewport={{ once: true, amount: 0.1 }}
                 transition={{ duration: 0.6, delay: index * 0.1 }}
                 whileHover={{ y: -8, transition: { duration: 0.3 } }}
                 onClick={() => handlePrincipleClick(index)}
               >
-                <div className={`h-32 bg-gradient-to-br ${principle.color} flex items-center justify-center`}>
-                  <span className="text-6xl opacity-80">{principle.icon}</span>
+                <div className={`h-24 sm:h-28 md:h-32 bg-gradient-to-br ${principle.color} flex items-center justify-center`}>
+                  <span className="text-4xl sm:text-5xl md:text-6xl opacity-80">{principle.icon}</span>
                 </div>
-                <div className="p-6">
-                  <h3 className="text-xl font-bold text-amber-900 mb-3 group-hover:text-amber-800 transition-colors">
+                <div className="p-3 sm:p-4 md:p-6">
+                  <h3 className="text-base sm:text-lg md:text-xl font-bold text-amber-900 mb-2 sm:mb-3 group-hover:text-amber-800 transition-colors">
                     {principle.title}
                   </h3>
-                  <p className="text-amber-700 leading-relaxed">
+                  <p className="text-xs sm:text-sm md:text-base text-amber-700 leading-relaxed">
                     {principle.description}
                   </p>
-                  <div className="mt-4 text-center">
-                    <span className="inline-block px-4 py-2 bg-amber-100 text-amber-800 rounded-full text-sm font-medium">
+                  <div className="mt-3 sm:mt-4 text-center">
+                    <span className="inline-block px-3 py-1 sm:px-4 sm:py-2 bg-amber-100 text-amber-800 rounded-full text-xs sm:text-sm font-medium">
                       Bấm để học và kiểm tra
                     </span>
                   </div>
@@ -806,16 +808,16 @@ export default function Home() {
 
           {/* Examples Section */}
           <motion.div 
-            className="bg-gradient-to-r from-amber-50 to-orange-50 rounded-3xl p-8 md:p-12"
+            className="bg-gradient-to-r from-amber-50 to-orange-50 rounded-3xl p-4 sm:p-6 md:p-8 lg:p-12"
             initial={{ opacity: 0, scale: 0.95 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
           >
-            <h3 className="text-3xl font-bold text-amber-900 text-center mb-8" style={{ fontFamily: "'Playfair Display', serif" }}>
+            <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-amber-900 text-center mb-4 sm:mb-6 md:mb-8" style={{ fontFamily: "'Playfair Display', serif" }}>
               Ứng dụng trong thực tiễn
             </h3>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 md:gap-8">
               {marxistDialectics.examples.map((example, index) => (
                 <motion.div
                   key={index}
@@ -1139,7 +1141,7 @@ export default function Home() {
                   }}
                   initial={{ opacity: 0, y: 40 }}
                   whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, amount: 0.3 }}
+                  viewport={{ once: true, amount: 0.1 }}
                   transition={{ duration: 0.6, delay: index * 0.1 }}
                   whileHover={{ y: -8, transition: { duration: 0.3 } }}
                 >
