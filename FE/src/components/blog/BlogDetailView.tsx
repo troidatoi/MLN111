@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { getCommentsApi, addCommentApi, deleteCommentApi, loginApi } from '../../api';
+import { getCommentsApi, deleteCommentApi } from '../../api';
 import { useAuth } from '../../contexts/AuthContext';
 import toast from 'react-hot-toast';
 
@@ -45,10 +45,8 @@ const dinhDangNgay = (chuoiNgay: string) => {
 };
 
 const BlogDetailView: React.FC<BlogDetailViewProps> = ({ blog, onClose }) => {
-  const { user, isAuthenticated } = useAuth();
+  const { user } = useAuth();
   const [comments, setComments] = useState<IComment[]>([]);
-  const [newComment, setNewComment] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
   const [sortOrder, setSortOrder] = useState<'newest' | 'oldest'>('newest');
 
   useEffect(() => {
@@ -78,67 +76,6 @@ const BlogDetailView: React.FC<BlogDetailViewProps> = ({ blog, onClose }) => {
 
   const sortedComments = sortComments(comments);
 
-  const handleSubmitComment = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!isAuthenticated) {
-      toast.error('Vui lòng đăng nhập để bình luận');
-      return;
-    }
-    
-    if (!user || !user._id) {
-      toast.error('Không tìm thấy thông tin người dùng. Vui lòng đăng nhập lại');
-      return;
-    }
-    
-    if (!newComment.trim()) {
-      toast.error('Vui lòng nhập nội dung bình luận');
-      return;
-    }
-
-    setIsLoading(true);
-    try {
-      // Kiểm tra dữ liệu đầu vào
-      if (!blog || !blog._id) {
-        toast.error('Không tìm thấy ID bài viết');
-        setIsLoading(false);
-        return;
-      }
-
-      const commentData = {
-        userId: user._id,
-        username: user.username || user.fullName || 'Người dùng',
-        content: newComment.trim()
-      };
-      
-      console.log('Bài viết ID:', blog._id);
-      console.log('Dữ liệu bình luận:', commentData);
-      
-      try {
-        await addCommentApi(blog._id, commentData);
-        setNewComment('');
-        await fetchComments();
-        toast.success('Đã thêm bình luận');
-      } catch (error: any) {
-        if (error.response && error.response.status === 400) {
-          // Trường hợp lỗi dữ liệu
-          console.error('Lỗi dữ liệu:', error.response.data);
-          toast.error(error.response.data.message || 'Dữ liệu bình luận không hợp lệ');
-        } else if (error.response && error.response.status === 401) {
-          // Trường hợp token hết hạn
-          toast.error('Phiên đăng nhập hết hạn. Vui lòng đăng nhập lại');
-        } else {
-          // Lỗi khác
-          console.error('Lỗi thêm bình luận:', error);
-          toast.error('Không thể thêm bình luận. Vui lòng thử lại sau.');
-        }
-      }
-    } catch (error: any) {
-      console.error('Lỗi:', error);
-      toast.error('Có lỗi xảy ra');
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
   const handleDeleteComment = async (commentId: string) => {
     if (!user?._id) return;
@@ -230,35 +167,6 @@ const BlogDetailView: React.FC<BlogDetailViewProps> = ({ blog, onClose }) => {
             </div>
           </div>
           
-          {/* Comment form */}
-          {isAuthenticated ? (
-            <form onSubmit={handleSubmitComment} className="mb-8">
-              <div className="flex gap-4">
-                <div className="flex-grow">
-                  <textarea
-                    value={newComment}
-                    onChange={(e) => setNewComment(e.target.value)}
-                    placeholder="Viết bình luận của bạn..."
-                    className="w-full px-4 py-3 rounded-lg border border-primary-200 focus:border-primary focus:ring-1 focus:ring-primary resize-none"
-                    rows={3}
-                  />
-                </div>
-                <button
-                  type="submit"
-                  disabled={isLoading}
-                  className="px-6 py-3 bg-gradient-to-r from-primary to-accent text-light rounded-lg hover:from-primary-700 hover:to-accent-700 transition shadow-sm disabled:opacity-50 disabled:cursor-not-allowed h-fit"
-                >
-                  {isLoading ? 'Đang gửi...' : 'Gửi bình luận'}
-                </button>
-              </div>
-            </form>
-          ) : (
-            <div className="mb-8 p-4 bg-primary-50 rounded-lg text-center">
-              <p className="text-bodytext">
-                Vui lòng <a href="/login" className="text-primary hover:text-primary-700 font-medium">đăng nhập</a> để bình luận
-              </p>
-            </div>
-          )}
 
           {/* Comments list */}
           <div className="space-y-6">

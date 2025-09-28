@@ -7,11 +7,8 @@ import {
   sendResetPasswordEmailApi,
   getBlogsByUserIdApi,
   updateBlogApi,
-  getRegisteredEventsApi,
-  unregisterEventApi,
 } from "../api";
 import whaleLogo from "../assets/whale.png";
-import AppointmentsPage from "./Appointments";
 import type { AxiosError } from "axios";
 import { Eye, EyeOff } from "lucide-react";
 import BlogDetailView from "../components/blog/BlogDetailView";
@@ -19,8 +16,6 @@ import CreateBlogForm from "../components/blog/CreateBlogForm";
 import { useAuth } from "../contexts/AuthContext";
 import axios from "axios";
 import { toast } from "react-toastify";
-import PaymentHistory from "./PaymentHistory";
-import { FiMessageCircle, FiCheckCircle } from "react-icons/fi";
 
 interface User {
   _id?: string;
@@ -45,7 +40,7 @@ interface Blog {
   image?: string;
   thumbnail?: string;
   topics?: string[];
-  published: "draft" | "published" | "rejected";
+  published: "draft" | "published" | "unpublished" | "rejected";
   comments: {
     userId: string;
     username: string;
@@ -58,48 +53,10 @@ interface Blog {
   rejectionReason?: string;
 }
 
-// Định nghĩa type cho sponsor (có thể đặt ở đầu file hoặc gần interface Event)
-type Sponsor = {
-  logo: string;
-};
-
-// Định nghĩa type Event (tối thiểu các trường cần dùng)
-type Event = {
-  _id: string;
-  title: string;
-  startDate: string;
-  endDate: string;
-  registrationStartDate: string;
-  registrationEndDate: string;
-  location: string;
-  status: "upcoming" | "ongoing" | "completed" | "cancelled";
-  isCancelled?: boolean;
-  sponsors?: Sponsor[];
-  qrCode?: string;
-  image?: string;
-  checkedInAt?: string;
-};
-
-// Định nghĩa interface EventFeedback nếu chưa có
-interface EventFeedback {
-  _id: string;
-  userId: {
-    _id: string;
-    fullName?: string;
-    photoUrl?: string;
-  };
-  eventId: string;
-  content: string;
-  rating: number;
-  createdAt?: string;
-}
 
 const menuTabs = [
   { key: "profile", label: "Hồ sơ người dùng" },
   { key: "blogs", label: "Bài viết" },
-  { key: "Appointments", label: "Lịch hẹn" },
-  { key: "payments", label: "Thanh toán" },
-  { key: "registeredEvents", label: "Sự kiện đã đăng ký" },
 ];
 
 export default function Profile() {
@@ -131,31 +88,6 @@ export default function Profile() {
   const [filterKeyword, setFilterKeyword] = useState("");
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { user: authUser } = useAuth();
-  const [registeredEvents, setRegisteredEvents] = useState<Event[]>([]);
-  const [showQR, setShowQR] = useState<{ open: boolean; qr?: string } | null>(
-    null
-  );
-  const [eventFilterStatus, setEventFilterStatus] = useState("all");
-  const [eventFilterKeyword, setEventFilterKeyword] = useState("");
-  const filteredEvents = registeredEvents.filter((ev) => {
-    const matchStatus =
-      eventFilterStatus === "all" || ev.status === eventFilterStatus;
-    const matchKeyword = ev.title
-      .toLowerCase()
-      .includes(eventFilterKeyword.toLowerCase());
-    return matchStatus && matchKeyword;
-  });
-  const [eventDangXem, setEventDangXem] = useState<Event | null>(null);
-  const [modalEvent, setModalEvent] = useState(false);
-  const [eventFeedbacks, setEventFeedbacks] = useState<
-    Record<string, EventFeedback | null>
-  >({});
-  const [feedbackLoading, setFeedbackLoading] = useState<
-    Record<string, boolean>
-  >({});
-  const [feedbackForm, setFeedbackForm] = useState<
-    Record<string, { content: string; rating: number }>
-  >({});
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -216,7 +148,7 @@ export default function Profile() {
       setFieldError({}); // Clear any previous errors
     } catch (error: unknown) {
       // Extract error message from response
-      const errorMessage = (error as any).response?.data?.message;
+      const errorMessage = (error as AxiosError<{ message?: string }>).response?.data?.message;
       if (errorMessage?.toLowerCase().includes("số điện thoại")) {
         setFieldError((prev) => ({
           ...prev,
@@ -234,7 +166,7 @@ export default function Profile() {
       setPwdStep("otp");
       setPwdOtp(""); // Clear OTP when resending
       setPwdError(""); // Clear any previous errors
-    } catch (error) {
+    } catch {
       setPwdError("Không gửi được OTP, kiểm tra email!");
     } finally {
       setPwdLoading(false);
@@ -256,7 +188,7 @@ export default function Profile() {
       }
 
       setPwdStep("newpass");
-    } catch (error) {
+    } catch {
       setPwdError("OTP không đúng hoặc đã hết hạn!");
       setPwdOtp(""); // Clear OTP input when wrong
     } finally {
@@ -291,6 +223,7 @@ export default function Profile() {
       filterStatus === "all" ||
       (filterStatus === "published" && blog.published === "published") ||
       (filterStatus === "pending" && blog.published === "draft") ||
+      (filterStatus === "unpublished" && blog.published === "unpublished") ||
       (filterStatus === "rejected" && blog.published === "rejected");
     const matchKeyword = blog.title
       .toLowerCase()
@@ -336,11 +269,8 @@ export default function Profile() {
             "Content-Type": "multipart/form-data",
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
-          onUploadProgress: (progressEvent) => {
-            const progress = progressEvent.total
-              ? Math.round((progressEvent.loaded * 100) / progressEvent.total)
-              : 0;
-            // setUploadProgress(progress); // XÓA biến uploadProgress và setUploadProgress không dùng
+          onUploadProgress: () => {
+            // Progress tracking can be added here if needed
           },
         }
       );
@@ -378,131 +308,25 @@ export default function Profile() {
     }
   };
 
-  const fetchRegisteredEvents = async () => {
-    if (!authUser) return;
-    try {
-      const data = await getRegisteredEventsApi(authUser._id);
-      setRegisteredEvents(data);
-    } catch {
-      // handle error if needed
-    }
-  };
-
-  useEffect(() => {
-    if (authUser) {
-      fetchRegisteredEvents();
-    }
-  }, [authUser]);
-
-  const handleUnregister = async (
-    eventId: string,
-    registrationEndDate: string,
-    userId: string = "",
-    event: Event
-  ) => {
-    if (!authUser) return;
-
-    // Kiểm tra thời gian đăng ký
-    const now = new Date();
-    const regEndDate = new Date(registrationEndDate);
-
-    if (now > regEndDate) {
-      alert("Đã quá thời gian cho phép hủy đăng ký!");
-      return;
-    }
-
-    try {
-      await unregisterEventApi(eventId, authUser._id);
-      // Gọi lại API để lấy danh sách sự kiện đã đăng ký mới nhất
-      await fetchRegisteredEvents();
-      alert("Hủy đăng ký thành công!");
-    } catch (error: unknown) {
-      const message =
-        (error as any)?.response?.data?.message || "Không thể hủy đăng ký!";
-      alert(message);
-    }
-  };
-
-  // Hàm lấy feedback của user cho từng event
-  const fetchEventFeedback = async (eventId: string) => {
-    setFeedbackLoading((prev) => ({ ...prev, [eventId]: true }));
-    try {
-      const res = await axios.get(`/api/event-feedback/${eventId}`);
-      // Lấy feedback của user hiện tại (nếu có)
-      const userId = authUser?._id;
-      const fb = Array.isArray(res.data)
-        ? res.data.find((f: any) => f.userId._id === userId)
-        : null;
-      setEventFeedbacks((prev) => ({ ...prev, [eventId]: fb || null }));
-    } catch {
-      setEventFeedbacks((prev) => ({ ...prev, [eventId]: null }));
-    } finally {
-      setFeedbackLoading((prev) => ({ ...prev, [eventId]: false }));
-    }
-  };
-
-  // Khi load danh sách event, fetch feedback cho từng event
-  useEffect(() => {
-    if (authUser && registeredEvents.length > 0) {
-      registeredEvents.forEach((ev) => {
-        fetchEventFeedback(ev._id);
-      });
-    }
-    // eslint-disable-next-line
-  }, [authUser, registeredEvents.length]);
-
-  // Hàm gửi feedback
-  const handleSendFeedback = async (eventId: string) => {
-    const form = feedbackForm[eventId];
-    console.log("[DEBUG] Gửi feedback:", eventId, form);
-    if (!form || !form.content || !form.rating) return;
-    setFeedbackLoading((prev) => ({ ...prev, [eventId]: true }));
-    try {
-      await axios.post(
-        "/api/event-feedback",
-        {
-          eventId,
-          content: form.content,
-          rating: form.rating,
-          userId: authUser?._id, // Truyền userId vào body
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        }
-      );
-      toast.success("Gửi feedback thành công!");
-      setFeedbackForm((prev) => ({
-        ...prev,
-        [eventId]: { content: "", rating: 5 },
-      }));
-      fetchEventFeedback(eventId);
-    } catch (err: any) {
-      toast.error(err?.response?.data?.message || "Không thể gửi feedback");
-    } finally {
-      setFeedbackLoading((prev) => ({ ...prev, [eventId]: false }));
-    }
-  };
 
   return (
-    <div className="min-h-screen bg-[#DBE8FA] flex flex-col items-center py-4 px-2 relative overflow-x-hidden">
-      {/* Bóng tròn 2 màu chủ đạo */}
-      <div className="absolute top-10 left-[-80px] w-60 h-60 bg-[#e3f2fd] rounded-full opacity-20 blur-2xl z-0"></div>
-      <div className="absolute top-1/3 left-[-100px] w-72 h-72 bg-[#b3e5fc] rounded-full opacity-20 blur-2xl z-0"></div>
-      <div className="absolute bottom-20 left-[-60px] w-44 h-44 bg-[#e3f2fd] rounded-full opacity-20 blur-2xl z-0"></div>
-      <div className="absolute top-20 right-[-80px] w-60 h-60 bg-[#b3e5fc] rounded-full opacity-20 blur-2xl z-0"></div>
-      <div className="absolute top-1/2 right-[-100px] w-72 h-72 bg-[#e3f2fd] rounded-full opacity-20 blur-2xl z-0"></div>
-      <div className="absolute bottom-10 right-[-60px] w-44 h-44 bg-[#b3e5fc] rounded-full opacity-20 blur-2xl z-0"></div>
-      <div className="bg-white rounded-3xl shadow-sm flex flex-col w-full max-w-6xl overflow-hidden relative">
+    <div className="min-h-screen bg-amber-50 flex flex-col items-center py-4 px-2 relative overflow-x-hidden">
+      {/* Bóng tròn 2 màu chủ đạo - triết học */}
+      <div className="absolute top-10 left-[-80px] w-60 h-60 bg-amber-100 rounded-full opacity-30 blur-2xl z-0"></div>
+      <div className="absolute top-1/3 left-[-100px] w-72 h-72 bg-yellow-100 rounded-full opacity-25 blur-2xl z-0"></div>
+      <div className="absolute bottom-20 left-[-60px] w-44 h-44 bg-amber-200 rounded-full opacity-20 blur-2xl z-0"></div>
+      <div className="absolute top-20 right-[-80px] w-60 h-60 bg-yellow-200 rounded-full opacity-25 blur-2xl z-0"></div>
+      <div className="absolute top-1/2 right-[-100px] w-72 h-72 bg-amber-100 rounded-full opacity-30 blur-2xl z-0"></div>
+      <div className="absolute bottom-10 right-[-60px] w-44 h-44 bg-yellow-100 rounded-full opacity-20 blur-2xl z-0"></div>
+      <div className="bg-amber-50/80 backdrop-blur-md rounded-3xl shadow-lg border border-amber-200 flex flex-col w-full max-w-6xl overflow-hidden relative">
         {/* Main content container */}
         <div className="flex flex-row w-full">
           {/* Sidebar */}
-          <div className="w-64 py-10 px-6 bg-[#f7fafd]">
+          <div className="w-64 py-10 px-6 bg-amber-100/50">
             {/* Nút quay về trang chủ nằm trong menu */}
             <Link
               to="/"
-              className="inline-flex items-center text-blue-600 font-medium hover:underline bg-white rounded-lg px-3 py-1.5 shadow-sm border border-blue-100 mb-4"
+              className="inline-flex items-center text-amber-700 font-medium hover:underline bg-amber-50 rounded-lg px-3 py-1.5 shadow-sm border border-amber-200 mb-4"
             >
               <svg
                 className="w-5 h-5 mr-2"
@@ -520,49 +344,23 @@ export default function Profile() {
               Trang chủ
             </Link>
             <nav className="flex flex-col gap-2">
-              {menuTabs.map((m) =>
-                m.key === "Appointments" ? (
-                  <button
-                    key={m.key}
-                    className={`text-left px-4 py-3 rounded-lg font-medium transition-colors ${
-                      tab === m.key
-                        ? "bg-white text-blue-700 shadow-sm"
-                        : "text-gray-600 hover:bg-blue-50"
-                    }`}
-                    onClick={() => setTab(m.key)}
-                  >
-                    {m.label}
-                  </button>
-                ) : m.key === "payments" ? (
-                  <button
-                    key={m.key}
-                    className={`text-left px-4 py-3 rounded-lg font-medium transition-colors ${
-                      tab === m.key
-                        ? "bg-white text-blue-700 shadow-sm"
-                        : "text-gray-600 hover:bg-blue-50"
-                    }`}
-                    onClick={() => setTab(m.key)}
-                  >
-                    {m.label}
-                  </button>
-                ) : (
-                  <button
-                    key={m.key}
-                    className={`text-left px-4 py-3 rounded-lg font-medium transition-colors ${
-                      tab === m.key
-                        ? "bg-white text-blue-700 shadow-sm"
-                        : "text-gray-600 hover:bg-blue-50"
-                    }`}
-                    onClick={() => setTab(m.key)}
-                  >
-                    {m.label}
-                  </button>
-                )
-              )}
-              <div className="mt-auto pt-8 border-t border-gray-200 mt-8">
+              {menuTabs.map((m) => (
+                <button
+                  key={m.key}
+                  className={`text-left px-4 py-3 rounded-lg font-medium transition-colors ${
+                    tab === m.key
+                      ? "bg-amber-50 text-amber-800 shadow-sm border border-amber-200"
+                      : "text-amber-700 hover:bg-amber-100"
+                  }`}
+                  onClick={() => setTab(m.key)}
+                >
+                  {m.label}
+                </button>
+              ))}
+              <div className="mt-auto pt-8 border-t border-amber-200">
                 <Link
                   to="/login"
-                  className="text-red-500 font-medium hover:underline flex items-center gap-2 px-4"
+                  className="text-amber-600 font-medium hover:underline flex items-center gap-2 px-4"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -585,7 +383,7 @@ export default function Profile() {
           <div className="flex-1">
             <div className="max-w-4xl mx-auto">
               {tab === "profile" && (
-                <div className="bg-white rounded-lg shadow-lg p-8">
+                <div className="bg-amber-50/80 backdrop-blur-md rounded-lg shadow-lg border border-amber-200 p-8">
                   <div className="flex flex-col md:flex-row gap-8">
                     {/* Phần Avatar */}
                     <div className="flex flex-col items-center space-y-4 w-full md:w-1/3">
@@ -593,11 +391,11 @@ export default function Profile() {
                         <img
                           src={user?.photoUrl || whaleLogo}
                           alt="Avatar"
-                          className="w-full h-full object-cover rounded-full border-4 border-blue-500"
+                          className="w-full h-full object-cover rounded-full border-4 border-amber-500"
                         />
                         <button
                           onClick={handleAvatarClick}
-                          className="absolute bottom-2 right-2 bg-blue-500 text-white p-2 rounded-full hover:bg-blue-600 transition-colors"
+                          className="absolute bottom-2 right-2 bg-amber-500 text-white p-2 rounded-full hover:bg-amber-600 transition-colors"
                         >
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -616,10 +414,10 @@ export default function Profile() {
                           accept="image/*"
                         />
                       </div>
-                      <h2 className="text-2xl font-bold text-center">
+                      <h2 className="text-2xl font-bold text-center text-amber-800">
                         {user?.fullName}
                       </h2>
-                      <p className="text-gray-600 text-center">
+                      <p className="text-amber-600 text-center">
                         {user?.role === "consultant"
                           ? "Tư vấn viên"
                           : "Khách hàng"}
@@ -629,14 +427,14 @@ export default function Profile() {
                     {/* Phần thông tin */}
                     <div className="flex-1">
                       <div className="flex justify-between items-center mb-6">
-                        <h3 className="text-xl font-semibold">
+                        <h3 className="text-xl font-semibold text-amber-800">
                           Thông tin cá nhân
                         </h3>
                         <div className="flex items-center gap-4">
                           {!editMode ? (
                             <button
                               onClick={handleEdit}
-                              className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors flex items-center gap-2"
+                              className="px-4 py-2 bg-amber-500 text-white rounded-lg hover:bg-amber-600 transition-colors flex items-center gap-2"
                             >
                               <svg
                                 xmlns="http://www.w3.org/2000/svg"
@@ -655,13 +453,13 @@ export default function Profile() {
                                   setEditMode(false);
                                   setEditData(user || {});
                                 }}
-                                className="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors"
+                                className="px-4 py-2 bg-amber-600 text-white rounded-lg hover:bg-amber-700 transition-colors"
                               >
                                 Hủy
                               </button>
                               <button
                                 onClick={handleUpdate}
-                                className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors flex items-center gap-2"
+                                className="px-4 py-2 bg-amber-500 text-white rounded-lg hover:bg-amber-600 transition-colors flex items-center gap-2"
                               >
                                 <svg
                                   xmlns="http://www.w3.org/2000/svg"
@@ -685,7 +483,7 @@ export default function Profile() {
                       {/* Form fields */}
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div className="space-y-2">
-                          <label className="block text-sm font-medium text-gray-700">
+                          <label className="block text-sm font-medium text-amber-700">
                             Họ và tên
                           </label>
                           <input
@@ -700,8 +498,8 @@ export default function Profile() {
                             disabled={!editMode}
                             className={`w-full px-4 py-2 rounded-lg border ${
                               editMode
-                                ? "border-blue-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
-                                : "bg-gray-50 border-gray-200"
+                                ? "border-amber-300 focus:border-amber-500 focus:ring-2 focus:ring-amber-200"
+                                : "bg-amber-50 border-amber-200"
                             } transition-colors`}
                             placeholder="Nhập họ và tên"
                           />
@@ -713,19 +511,19 @@ export default function Profile() {
                         </div>
 
                         <div className="space-y-2">
-                          <label className="block text-sm font-medium text-gray-700">
+                          <label className="block text-sm font-medium text-amber-700">
                             Email
                           </label>
                           <input
                             type="email"
                             value={editData.email || ""}
                             disabled
-                            className="w-full px-4 py-2 rounded-lg bg-gray-50 border border-gray-200"
+                            className="w-full px-4 py-2 rounded-lg bg-amber-50 border border-amber-200"
                           />
                         </div>
 
                         <div className="space-y-2">
-                          <label className="block text-sm font-medium text-gray-700">
+                          <label className="block text-sm font-medium text-amber-700">
                             Số điện thoại
                           </label>
                           <input
@@ -762,7 +560,7 @@ export default function Profile() {
                         </div>
 
                         <div className="space-y-2">
-                          <label className="block text-sm font-medium text-gray-700">
+                          <label className="block text-sm font-medium text-amber-700">
                             Giới tính
                           </label>
                           <select
@@ -779,8 +577,8 @@ export default function Profile() {
                             disabled={!editMode}
                             className={`w-full px-4 py-2 rounded-lg border ${
                               editMode
-                                ? "border-blue-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
-                                : "bg-gray-50 border-gray-200"
+                                ? "border-amber-300 focus:border-amber-500 focus:ring-2 focus:ring-amber-200"
+                                : "bg-amber-50 border-amber-200"
                             } transition-colors`}
                           >
                             <option value="">Chọn giới tính</option>
@@ -791,7 +589,7 @@ export default function Profile() {
                         </div>
 
                         <div className="space-y-2">
-                          <label className="block text-sm font-medium text-gray-700">
+                          <label className="block text-sm font-medium text-amber-700">
                             Năm sinh
                           </label>
                           <input
@@ -806,8 +604,8 @@ export default function Profile() {
                             disabled={!editMode}
                             className={`w-full px-4 py-2 rounded-lg border ${
                               editMode
-                                ? "border-blue-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
-                                : "bg-gray-50 border-gray-200"
+                                ? "border-amber-300 focus:border-amber-500 focus:ring-2 focus:ring-amber-200"
+                                : "bg-amber-50 border-amber-200"
                             } transition-colors`}
                             min="1900"
                             max={new Date().getFullYear()}
@@ -820,7 +618,7 @@ export default function Profile() {
                       <div className="col-span-2">
                         <button
                           onClick={() => setShowPwdModal(true)}
-                          className="mt-4 px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors flex items-center gap-2"
+                          className="mt-4 px-4 py-2 bg-amber-600 text-white rounded-lg hover:bg-amber-700 transition-colors flex items-center gap-2"
                         >
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -842,45 +640,63 @@ export default function Profile() {
                 </div>
               )}
               {tab === "blogs" && (
-                <div className="p-7">
-                  <div className="font-semibold text-gray-700 mb-4 text-lg">
-                    Bài viết của bạn
+                <div className="p-8">
+                  <div className="text-center mb-8">
+                    <h2 className="text-3xl font-bold text-amber-800 mb-2">
+                      Bài viết của bạn
+                    </h2>
+                    <p className="text-amber-600 text-lg">
+                      Quản lý và theo dõi các bài viết của bạn
+                    </p>
                   </div>
                   {/* Filter */}
-                  <div className="flex flex-col md:flex-row md:items-center gap-3 mb-6">
-                    <select
-                      value={filterStatus}
-                      onChange={(e) => setFilterStatus(e.target.value)}
-                      className="rounded-lg border border-sky-100 px-3 py-2 text-sm focus:ring-sky-500 focus:border-sky-500"
-                    >
-                      <option value="all">Tất cả</option>
-                      <option value="published">Đã xuất bản</option>
-                      <option value="pending">Chưa duyệt</option>
-                      <option value="rejected">Đã từ chối</option>
-                    </select>
-                    <input
-                      type="text"
-                      value={filterKeyword}
-                      onChange={(e) => setFilterKeyword(e.target.value)}
-                      placeholder="Tìm theo tiêu đề..."
-                      className="rounded-lg border border-sky-100 px-3 py-2 text-sm focus:ring-sky-500 focus:border-sky-500 w-full md:w-64"
-                    />
+                  <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-6 mb-8 shadow-lg border border-amber-200">
+                    <div className="flex flex-col md:flex-row md:items-center gap-4">
+                      <div className="flex-1">
+                        <label className="block text-sm font-medium text-amber-700 mb-2">
+                          Lọc theo trạng thái
+                        </label>
+                        <select
+                          value={filterStatus}
+                          onChange={(e) => setFilterStatus(e.target.value)}
+                          className="w-full rounded-xl border border-amber-200 px-4 py-3 text-sm focus:ring-2 focus:ring-amber-500 focus:border-amber-500 bg-white/80"
+                        >
+                          <option value="all">Tất cả bài viết</option>
+                          <option value="published">Đã xuất bản</option>
+                          <option value="pending">Chưa duyệt</option>
+                          <option value="unpublished">Ngừng xuất bản</option>
+                          <option value="rejected">Đã từ chối</option>
+                        </select>
+                      </div>
+                      <div className="flex-1">
+                        <label className="block text-sm font-medium text-amber-700 mb-2">
+                          Tìm kiếm
+                        </label>
+                        <input
+                          type="text"
+                          value={filterKeyword}
+                          onChange={(e) => setFilterKeyword(e.target.value)}
+                          placeholder="Tìm theo tiêu đề bài viết..."
+                          className="w-full rounded-xl border border-amber-200 px-4 py-3 text-sm focus:ring-2 focus:ring-amber-500 focus:border-amber-500 bg-white/80"
+                        />
+                      </div>
+                    </div>
                   </div>
 
                   {/* Stats Cards */}
-                  <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
                     {/* Đã xuất bản */}
                     <div
-                      className={`bg-white rounded-xl p-4 shadow-sm border flex flex-col items-center justify-center transition-all cursor-pointer ${
+                      className={`bg-gradient-to-br from-green-50 to-emerald-50 rounded-2xl p-6 shadow-lg border-2 flex flex-col items-center justify-center transition-all cursor-pointer hover:shadow-xl hover:scale-105 ${
                         filterStatus === "published"
-                          ? "border-green-500 ring-2 ring-green-200"
-                          : "border-gray-100"
+                          ? "border-green-500 ring-4 ring-green-200"
+                          : "border-green-200 hover:border-green-300"
                       }`}
                       onClick={() => setFilterStatus("published")}
                     >
-                      <div className="p-2.5 bg-green-50 rounded-full mb-2 flex items-center justify-center">
+                      <div className="p-4 bg-gradient-to-br from-green-100 to-emerald-100 rounded-full mb-4 flex items-center justify-center">
                         <svg
-                          className="w-5 h-5 text-green-500"
+                          className="w-8 h-8 text-green-600"
                           fill="none"
                           stroke="currentColor"
                           viewBox="0 0 24 24"
@@ -893,8 +709,8 @@ export default function Profile() {
                           />
                         </svg>
                       </div>
-                      <p className="text-sm text-gray-600 mb-1">Đã xuất bản</p>
-                      <p className="text-xl font-bold text-gray-900">
+                      <p className="text-sm font-medium text-green-700 mb-2">Đã xuất bản</p>
+                      <p className="text-3xl font-bold text-green-800">
                         {
                           blogs.filter((blog) => blog.published === "published")
                             .length
@@ -904,16 +720,16 @@ export default function Profile() {
 
                     {/* Chưa duyệt */}
                     <div
-                      className={`bg-white rounded-xl p-4 shadow-sm border flex flex-col items-center justify-center transition-all cursor-pointer ${
+                      className={`bg-gradient-to-br from-yellow-50 to-amber-50 rounded-2xl p-6 shadow-lg border-2 flex flex-col items-center justify-center transition-all cursor-pointer hover:shadow-xl hover:scale-105 ${
                         filterStatus === "pending"
-                          ? "border-yellow-500 ring-2 ring-yellow-200"
-                          : "border-gray-100"
+                          ? "border-yellow-500 ring-4 ring-yellow-200"
+                          : "border-yellow-200 hover:border-yellow-300"
                       }`}
                       onClick={() => setFilterStatus("pending")}
                     >
-                      <div className="p-2.5 bg-yellow-50 rounded-full mb-2 flex items-center justify-center">
+                      <div className="p-4 bg-gradient-to-br from-yellow-100 to-amber-100 rounded-full mb-4 flex items-center justify-center">
                         <svg
-                          className="w-5 h-5 text-yellow-500"
+                          className="w-8 h-8 text-yellow-600"
                           fill="none"
                           stroke="currentColor"
                           viewBox="0 0 24 24"
@@ -926,8 +742,8 @@ export default function Profile() {
                           />
                         </svg>
                       </div>
-                      <p className="text-sm text-gray-600 mb-1">Chưa duyệt</p>
-                      <p className="text-xl font-bold text-gray-900">
+                      <p className="text-sm font-medium text-yellow-700 mb-2">Chưa duyệt</p>
+                      <p className="text-3xl font-bold text-yellow-800">
                         {
                           blogs.filter((blog) => blog.published === "draft")
                             .length
@@ -935,18 +751,51 @@ export default function Profile() {
                       </p>
                     </div>
 
+                    {/* Ngừng xuất bản */}
+                    <div
+                      className={`bg-gradient-to-br from-orange-50 to-amber-50 rounded-2xl p-6 shadow-lg border-2 flex flex-col items-center justify-center transition-all cursor-pointer hover:shadow-xl hover:scale-105 ${
+                        filterStatus === "unpublished"
+                          ? "border-orange-500 ring-4 ring-orange-200"
+                          : "border-orange-200 hover:border-orange-300"
+                      }`}
+                      onClick={() => setFilterStatus("unpublished")}
+                    >
+                      <div className="p-4 bg-gradient-to-br from-orange-100 to-amber-100 rounded-full mb-4 flex items-center justify-center">
+                        <svg
+                          className="w-8 h-8 text-orange-600"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="2"
+                            d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728L5.636 5.636m12.728 12.728L18.364 5.636M5.636 18.364l12.728-12.728"
+                          />
+                        </svg>
+                      </div>
+                      <p className="text-sm font-medium text-orange-700 mb-2">Ngừng xuất bản</p>
+                      <p className="text-3xl font-bold text-orange-800">
+                        {
+                          blogs.filter((blog) => blog.published === "unpublished")
+                            .length
+                        }
+                      </p>
+                    </div>
+
                     {/* Đã từ chối */}
                     <div
-                      className={`bg-white rounded-xl p-4 shadow-sm border flex flex-col items-center justify-center transition-all cursor-pointer ${
+                      className={`bg-gradient-to-br from-red-50 to-rose-50 rounded-2xl p-6 shadow-lg border-2 flex flex-col items-center justify-center transition-all cursor-pointer hover:shadow-xl hover:scale-105 ${
                         filterStatus === "rejected"
-                          ? "border-red-500 ring-2 ring-red-200"
-                          : "border-gray-100"
+                          ? "border-red-500 ring-4 ring-red-200"
+                          : "border-red-200 hover:border-red-300"
                       }`}
                       onClick={() => setFilterStatus("rejected")}
                     >
-                      <div className="p-2.5 bg-red-50 rounded-full mb-2 flex items-center justify-center">
+                      <div className="p-4 bg-gradient-to-br from-red-100 to-rose-100 rounded-full mb-4 flex items-center justify-center">
                         <svg
-                          className="w-5 h-5 text-red-500"
+                          className="w-8 h-8 text-red-600"
                           fill="none"
                           stroke="currentColor"
                           viewBox="0 0 24 24"
@@ -959,8 +808,8 @@ export default function Profile() {
                           />
                         </svg>
                       </div>
-                      <p className="text-sm text-gray-600 mb-1">Đã từ chối</p>
-                      <p className="text-xl font-bold text-gray-900">
+                      <p className="text-sm font-medium text-red-700 mb-2">Đã từ chối</p>
+                      <p className="text-3xl font-bold text-red-800">
                         {
                           blogs.filter((blog) => blog.published === "rejected")
                             .length
@@ -970,91 +819,132 @@ export default function Profile() {
                   </div>
 
                   {/* Danh sách bài viết */}
-                  <div>
-                    <div className="font-semibold mb-2 text-sky-700">
-                      {filterStatus === "published"
-                        ? "Bài viết đã xuất bản"
-                        : filterStatus === "pending"
-                        ? "Bài viết chưa duyệt"
-                        : filterStatus === "rejected"
-                        ? "Bài viết bị từ chối"
-                        : "Tất cả bài viết"}
+                  <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-amber-200">
+                    <div className="flex items-center justify-between mb-6">
+                      <h3 className="text-xl font-bold text-amber-800">
+                        {filterStatus === "published"
+                          ? "Bài viết đã xuất bản"
+                          : filterStatus === "pending"
+                          ? "Bài viết chưa duyệt"
+                          : filterStatus === "unpublished"
+                          ? "Bài viết ngừng xuất bản"
+                          : filterStatus === "rejected"
+                          ? "Bài viết bị từ chối"
+                          : "Tất cả bài viết"}
+                      </h3>
+                      <div className="text-sm text-amber-600">
+                        {filteredBlogs.length} bài viết
+                      </div>
                     </div>
 
                     {filteredBlogs.length === 0 ? (
-                      <div className="text-gray-500 italic">
-                        Không tìm thấy bài viết nào.
+                      <div className="text-center py-12">
+                        <div className="w-24 h-24 mx-auto mb-4 bg-amber-100 rounded-full flex items-center justify-center">
+                          <svg className="w-12 h-12 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                          </svg>
+                        </div>
+                        <h4 className="text-lg font-medium text-gray-600 mb-2">Không có bài viết nào</h4>
+                        <p className="text-gray-500">Hãy tạo bài viết đầu tiên của bạn!</p>
                       </div>
                     ) : (
-                      <div className="space-y-3">
+                      <div className="space-y-4">
                         {filteredBlogs.map((blog) => (
                           <div
                             key={blog._id}
-                            className={`bg-gradient-to-r from-sky-50 via-cyan-50 to-white hover:from-sky-100 transition rounded-xl p-4 flex flex-col md:flex-row md:items-center md:justify-between gap-2 shadow-sm cursor-pointer border border-sky-100`}
+                            className={`bg-gradient-to-r from-amber-50 via-yellow-50 to-white hover:from-amber-100 hover:shadow-lg transition-all duration-300 rounded-2xl p-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4 shadow-md cursor-pointer border-2 border-amber-200 hover:border-amber-300`}
                           >
-                            <div>
-                              <div className="font-medium text-base text-gray-800">
+                            <div className="flex-1">
+                              <div className="font-bold text-lg text-gray-800 mb-2">
                                 {blog.title}
                               </div>
-                              <div className="text-xs text-gray-500 mt-1 flex items-center gap-1">
-                                <svg
-                                  className="w-3 h-3 text-sky-500"
-                                  fill="none"
-                                  stroke="currentColor"
-                                  viewBox="0 0 24 24"
-                                >
-                                  <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeWidth="2"
-                                    d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
-                                  />
-                                </svg>
-                                {new Date(blog.createdAt).toLocaleDateString(
-                                  "vi-VN"
-                                )}
-                              </div>
-                              <div className="text-xs text-gray-500 mt-1">
-                                Tác giả:{" "}
-                                {(blog.author === user?.fullName ||
-                                  blog.author === user?.username) &&
-                                blog.anDanh
-                                  ? "Ẩn danh"
-                                  : blog.author}
+                              <div className="flex flex-wrap items-center gap-4 text-sm text-gray-600 mb-3">
+                                <div className="flex items-center gap-1">
+                                  <svg
+                                    className="w-4 h-4 text-amber-500"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                  >
+                                    <path
+                                      strokeLinecap="round"
+                                      strokeLinejoin="round"
+                                      strokeWidth="2"
+                                      d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                                    />
+                                  </svg>
+                                  {new Date(blog.createdAt).toLocaleDateString(
+                                    "vi-VN"
+                                  )}
+                                </div>
+                                <div className="flex items-center gap-1">
+                                  <svg
+                                    className="w-4 h-4 text-amber-500"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                  >
+                                    <path
+                                      strokeLinecap="round"
+                                      strokeLinejoin="round"
+                                      strokeWidth="2"
+                                      d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                                    />
+                                  </svg>
+                                  {(blog.author === user?.fullName ||
+                                    blog.author === user?.username) &&
+                                  blog.anDanh
+                                    ? "Ẩn danh"
+                                    : blog.author}
+                                </div>
                               </div>
                               <div
-                                className={`text-xs ${
+                                className={`text-sm ${
                                   blog.published === "published"
                                     ? "text-green-700"
+                                    : blog.published === "draft"
+                                    ? "text-yellow-700"
+                                    : blog.published === "unpublished"
+                                    ? "text-orange-700"
                                     : "text-red-700"
-                                } font-medium mt-1 inline-block px-2 py-0.5 rounded-full ${
+                                } font-semibold inline-block px-3 py-1.5 rounded-full ${
                                   blog.published === "published"
-                                    ? "bg-green-50 border-green-200"
-                                    : "bg-red-50 border-red-200"
-                                } border`}
+                                    ? "bg-green-100 border-2 border-green-200"
+                                    : blog.published === "draft"
+                                    ? "bg-yellow-100 border-2 border-yellow-200"
+                                    : blog.published === "unpublished"
+                                    ? "bg-orange-100 border-2 border-orange-200"
+                                    : "bg-red-100 border-2 border-red-200"
+                                }`}
                               >
                                 {blog.published === "published"
                                   ? "Đã xuất bản"
                                   : blog.published === "draft"
                                   ? "Chưa duyệt"
+                                  : blog.published === "unpublished"
+                                  ? "Ngừng xuất bản"
                                   : "Đã từ chối"}
                               </div>
                               {blog.published === "rejected" &&
                                 blog.rejectionReason && (
-                                  <div className="text-xs text-red-600 mt-1">
-                                    Lý do từ chối: {blog.rejectionReason}
+                                  <div className="text-sm text-red-600 mt-2 p-2 bg-red-50 rounded-lg border border-red-200">
+                                    <strong>Lý do từ chối:</strong> {blog.rejectionReason}
                                   </div>
                                 )}
                             </div>
-                            <div className="flex items-center gap-2">
+                            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
                               <button
                                 onClick={(e) => {
                                   e.preventDefault();
                                   setBlogDangXem(blog);
                                   setModalBlog(true);
                                 }}
-                                className="px-3 py-1.5 bg-sky-50 hover:bg-sky-100 text-sky-700 rounded-lg text-sm font-medium transition-colors"
+                                className="px-4 py-2.5 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white rounded-xl text-sm font-semibold transition-all duration-300 shadow-md hover:shadow-lg flex items-center justify-center gap-2"
                               >
+                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                </svg>
                                 Xem chi tiết
                               </button>
                               {blog.published !== "rejected" &&
@@ -1064,447 +954,15 @@ export default function Profile() {
                                       setBlogDangSua(blog);
                                       setModalEdit(true);
                                     }}
-                                    className="px-3 py-1.5 bg-white hover:bg-gray-50 text-gray-700 border border-gray-200 rounded-lg text-sm font-medium transition-colors"
+                                    className="px-4 py-2.5 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white rounded-xl text-sm font-semibold transition-all duration-300 shadow-md hover:shadow-lg flex items-center justify-center gap-2"
                                   >
+                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                    </svg>
                                     Chỉnh sửa
                                   </button>
                                 )}
                             </div>
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                </div>
-              )}
-              {tab === "Appointments" && (
-                <div className="w-full">
-                  <AppointmentsPage />
-                </div>
-              )}
-              {tab === "payments" && (
-                <div className="w-full">
-                  <PaymentHistory />
-                </div>
-              )}
-              {tab === "registeredEvents" && (
-                <div className="p-7">
-                  <div className="font-semibold text-sky-700 mb-4 text-lg">
-                    Sự kiện đã đăng ký
-                  </div>
-                  {/* Filter */}
-                  <div className="flex flex-col md:flex-row md:items-center gap-3 mb-6">
-                    <select
-                      value={eventFilterStatus}
-                      onChange={(e) => setEventFilterStatus(e.target.value)}
-                      className="rounded-lg border border-sky-100 px-3 py-2 text-sm focus:ring-sky-500 focus:border-sky-500"
-                    >
-                      <option value="all">Tất cả</option>
-                      <option value="upcoming">Sắp diễn ra</option>
-                      <option value="ongoing">Đang diễn ra</option>
-                      <option value="completed">Đã kết thúc</option>
-                      <option value="cancelled">Đã hủy</option>
-                    </select>
-                    <input
-                      type="text"
-                      value={eventFilterKeyword}
-                      onChange={(e) => setEventFilterKeyword(e.target.value)}
-                      placeholder="Tìm theo tên sự kiện..."
-                      className="rounded-lg border border-sky-100 px-3 py-2 text-sm focus:ring-sky-500 focus:border-sky-500 w-full md:w-64"
-                    />
-                  </div>
-                  {/* Stats Cards */}
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-                    {/* Sắp diễn ra */}
-                    <div
-                      className={`bg-white rounded-xl p-4 shadow-sm border flex flex-col items-center justify-center transition-all cursor-pointer ${
-                        eventFilterStatus === "upcoming"
-                          ? "border-sky-500 ring-2 ring-sky-200"
-                          : "border-gray-100"
-                      }`}
-                      onClick={() => setEventFilterStatus("upcoming")}
-                    >
-                      <div className="p-2.5 bg-gradient-to-r from-sky-50 to-cyan-50 rounded-full mb-2 flex items-center justify-center">
-                        <svg
-                          className="w-5 h-5 text-sky-600"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth="2"
-                            d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-                          />
-                        </svg>
-                      </div>
-                      <p className="text-sm text-gray-600 mb-1">Sắp diễn ra</p>
-                      <p className="text-xl font-bold text-gray-900">
-                        {
-                          registeredEvents.filter(
-                            (ev) => ev.status === "upcoming"
-                          ).length
-                        }
-                      </p>
-                    </div>
-                    {/* Đang diễn ra */}
-                    <div
-                      className={`bg-white rounded-xl p-4 shadow-sm border flex flex-col items-center justify-center transition-all cursor-pointer ${
-                        eventFilterStatus === "ongoing"
-                          ? "border-green-500 ring-2 ring-green-200"
-                          : "border-gray-100"
-                      }`}
-                      onClick={() => setEventFilterStatus("ongoing")}
-                    >
-                      <div className="p-2.5 bg-gradient-to-r from-green-50 to-green-100 rounded-full mb-2 flex items-center justify-center">
-                        <svg
-                          className="w-5 h-5 text-green-600"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <circle
-                            cx="12"
-                            cy="12"
-                            r="10"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            fill="none"
-                          />
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth="2"
-                            d="M12 8v4l3 3"
-                          />
-                        </svg>
-                      </div>
-                      <p className="text-sm text-gray-600 mb-1">Đang diễn ra</p>
-                      <p className="text-xl font-bold text-gray-900">
-                        {
-                          registeredEvents.filter(
-                            (ev) => ev.status === "ongoing"
-                          ).length
-                        }
-                      </p>
-                    </div>
-                    {/* Đã kết thúc */}
-                    <div
-                      className={`bg-white rounded-xl p-4 shadow-sm border flex flex-col items-center justify-center transition-all cursor-pointer ${
-                        eventFilterStatus === "completed"
-                          ? "border-gray-500 ring-2 ring-gray-200"
-                          : "border-gray-100"
-                      }`}
-                      onClick={() => setEventFilterStatus("completed")}
-                    >
-                      <div className="p-2.5 bg-gradient-to-r from-gray-50 to-gray-100 rounded-full mb-2 flex items-center justify-center">
-                        <svg
-                          className="w-5 h-5 text-gray-600"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth="2"
-                            d="M5 13l4 4L19 7"
-                          />
-                        </svg>
-                      </div>
-                      <p className="text-sm text-gray-600 mb-1">Đã kết thúc</p>
-                      <p className="text-xl font-bold text-gray-900">
-                        {
-                          registeredEvents.filter(
-                            (ev) => ev.status === "completed"
-                          ).length
-                        }
-                      </p>
-                    </div>
-                    {/* Đã hủy */}
-                    <div
-                      className={`bg-white rounded-xl p-4 shadow-sm border flex flex-col items-center justify-center transition-all cursor-pointer ${
-                        eventFilterStatus === "cancelled"
-                          ? "border-red-500 ring-2 ring-red-200"
-                          : "border-gray-100"
-                      }`}
-                      onClick={() => setEventFilterStatus("cancelled")}
-                    >
-                      <div className="p-2.5 bg-gradient-to-r from-red-50 to-red-100 rounded-full mb-2 flex items-center justify-center">
-                        <svg
-                          className="w-5 h-5 text-red-600"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth="2"
-                            d="M6 18L18 6M6 6l12 12"
-                          />
-                        </svg>
-                      </div>
-                      <p className="text-sm text-gray-600 mb-1">Đã hủy</p>
-                      <p className="text-xl font-bold text-gray-900">
-                        {
-                          registeredEvents.filter(
-                            (ev) => ev.status === "cancelled"
-                          ).length
-                        }
-                      </p>
-                    </div>
-                  </div>
-                  {/* Danh sách sự kiện */}
-                  <div>
-                    <div className="font-semibold mb-2 text-sky-700">
-                      {eventFilterStatus === "upcoming"
-                        ? "Sự kiện sắp diễn ra"
-                        : eventFilterStatus === "ongoing"
-                        ? "Sự kiện đang diễn ra"
-                        : eventFilterStatus === "completed"
-                        ? "Sự kiện đã kết thúc"
-                        : eventFilterStatus === "cancelled"
-                        ? "Sự kiện đã hủy"
-                        : "Tất cả sự kiện"}
-                    </div>
-                    {filteredEvents.length === 0 ? (
-                      <div className="text-gray-500 italic">
-                        Bạn chưa đăng ký sự kiện nào.
-                      </div>
-                    ) : (
-                      <div className="space-y-3">
-                        {filteredEvents.map((event) => (
-                          <div
-                            key={event._id}
-                            className="bg-gradient-to-r from-sky-50 via-cyan-50 to-white hover:from-sky-100 transition rounded-xl p-4 flex flex-col md:flex-row md:items-center md:justify-between gap-2 shadow-sm cursor-pointer border border-sky-100"
-                          >
-                            <div>
-                              <div className="font-medium text-base text-gray-800">
-                                {event.title}
-                              </div>
-                              <div className="text-xs text-gray-500 mt-1 flex items-center gap-1">
-                                <svg
-                                  className="w-3 h-3 text-sky-500"
-                                  fill="none"
-                                  stroke="currentColor"
-                                  viewBox="0 0 24 24"
-                                >
-                                  <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeWidth="2"
-                                    d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
-                                  />
-                                </svg>
-                                {new Date(event.startDate).toLocaleDateString(
-                                  "vi-VN"
-                                )}{" "}
-                                -{" "}
-                                {new Date(event.endDate).toLocaleDateString(
-                                  "vi-VN"
-                                )}
-                              </div>
-                              <div className="text-xs text-gray-500 mt-1">
-                                Địa điểm: {event.location}
-                              </div>
-                              <div
-                                className={`text-xs font-medium mt-1 inline-block px-2 py-0.5 rounded-full border ${
-                                  event.status === "upcoming"
-                                    ? "bg-sky-50 border-sky-200 text-sky-700"
-                                    : event.status === "ongoing"
-                                    ? "bg-green-50 border-green-200 text-green-700"
-                                    : event.status === "completed"
-                                    ? "bg-gray-50 border-gray-200 text-gray-700"
-                                    : "bg-red-50 border-red-200 text-red-700"
-                                }`}
-                              >
-                                {event.status === "upcoming"
-                                  ? "Sắp diễn ra"
-                                  : event.status === "ongoing"
-                                  ? "Đang diễn ra"
-                                  : event.status === "completed"
-                                  ? "Đã kết thúc"
-                                  : "Đã hủy"}
-                              </div>
-                              {event.sponsors && event.sponsors.length > 0 && (
-                                <div className="flex items-center gap-2 mt-1">
-                                  <span className="text-xs text-gray-500">
-                                    Nhà tài trợ:
-                                  </span>
-                                  {event.sponsors.map((s, idx) => (
-                                    <img
-                                      key={idx}
-                                      src={s.logo}
-                                      alt="sponsor"
-                                      className="w-6 h-6 object-contain rounded-full border border-gray-200"
-                                    />
-                                  ))}
-                                </div>
-                              )}
-                              {event.qrCode && (
-                                <div className="mt-2">
-                                  <img
-                                    src={event.qrCode}
-                                    alt="QR code"
-                                    className="w-20 h-20 object-contain border border-gray-200 rounded-lg"
-                                  />
-                                </div>
-                              )}
-                            </div>
-                            <div className="flex items-center gap-2">
-                              <button
-                                onClick={(e) => {
-                                  e.preventDefault();
-                                  setEventDangXem(event);
-                                  setModalEvent(true);
-                                }}
-                                className="px-3 py-1.5 bg-sky-50 hover:bg-sky-100 text-sky-700 rounded-lg text-sm font-medium transition-colors"
-                              >
-                                Xem chi tiết
-                              </button>
-                              {event.status === "upcoming" &&
-                                (event.isCancelled ? (
-                                  <button
-                                    disabled
-                                    className="px-3 py-1.5 bg-gray-200 text-gray-500 border border-gray-200 rounded-lg text-sm font-medium cursor-not-allowed"
-                                  >
-                                    Đã hủy đăng ký
-                                  </button>
-                                ) : (
-                                  <button
-                                    onClick={() =>
-                                      handleUnregister(
-                                        event._id,
-                                        event.registrationEndDate,
-                                        user?._id || "",
-                                        event
-                                      )
-                                    }
-                                    className="px-3 py-1.5 bg-white hover:bg-red-50 text-red-700 border border-red-200 rounded-lg text-sm font-medium transition-colors"
-                                  >
-                                    Hủy đăng ký
-                                  </button>
-                                ))}
-                            </div>
-                            {/* Feedback cho event đã check-in */}
-                            {event.status === "completed" &&
-                              event.checkedInAt && (
-                                <div className="mt-2">
-                                  {feedbackLoading[event._id] ? (
-                                    <div className="text-xs text-gray-400 italic">
-                                      Đang tải feedback...
-                                    </div>
-                                  ) : eventFeedbacks[event._id] ? (
-                                    <div className="bg-green-50 border border-green-200 rounded-xl shadow p-4 flex flex-col items-start max-w-md">
-                                      <div className="flex items-center gap-2 mb-1">
-                                        <FiCheckCircle className="text-green-500 text-xl" />
-                                        <span className="font-semibold text-green-700">
-                                          Bạn đã gửi feedback
-                                        </span>
-                                      </div>
-                                      <div className="flex items-center gap-1 mb-1">
-                                        {[1, 2, 3, 4, 5].map((star) => (
-                                          <span
-                                            key={star}
-                                            className={
-                                              star <=
-                                              eventFeedbacks[event._id]!.rating
-                                                ? "text-yellow-400 text-xl"
-                                                : "text-gray-300 text-xl"
-                                            }
-                                          >
-                                            ★
-                                          </span>
-                                        ))}
-                                      </div>
-                                      <div className="text-gray-700 mb-1 italic">
-                                        "{eventFeedbacks[event._id]!.content}"
-                                      </div>
-                                      <div className="text-xs text-gray-400">
-                                        {new Date(
-                                          eventFeedbacks[event._id]!.createdAt!
-                                        ).toLocaleString()}
-                                      </div>
-                                    </div>
-                                  ) : (
-                                    <div className="bg-white rounded-xl shadow-md border border-sky-100 p-4 max-w-md">
-                                      <div className="font-semibold text-sky-700 mb-2 flex items-center gap-2">
-                                        <FiMessageCircle className="text-sky-500" />{" "}
-                                        Gửi feedback cho sự kiện này
-                                      </div>
-                                      <form
-                                        onSubmit={(e) => {
-                                          e.preventDefault();
-                                          handleSendFeedback(event._id);
-                                        }}
-                                      >
-                                        <div className="flex items-center gap-2 mb-2">
-                                          {[1, 2, 3, 4, 5].map((star) => (
-                                            <button
-                                              type="button"
-                                              key={star}
-                                              className={
-                                                (star <=
-                                                (feedbackForm[event._id]
-                                                  ?.rating || 5)
-                                                  ? "text-yellow-400"
-                                                  : "text-gray-300") +
-                                                " text-2xl transition-transform transform hover:scale-125 focus:outline-none"
-                                              }
-                                              onClick={() =>
-                                                setFeedbackForm((prev) => ({
-                                                  ...prev,
-                                                  [event._id]: {
-                                                    ...prev[event._id],
-                                                    rating: star,
-                                                    content:
-                                                      prev[event._id]
-                                                        ?.content || "",
-                                                  },
-                                                }))
-                                              }
-                                            >
-                                              ★
-                                            </button>
-                                          ))}
-                                        </div>
-                                        <textarea
-                                          className="w-full border rounded p-2 text-sm mb-2 focus:ring-2 focus:ring-sky-200"
-                                          rows={2}
-                                          placeholder="Cảm nhận của bạn về sự kiện..."
-                                          value={
-                                            feedbackForm[event._id]?.content ||
-                                            ""
-                                          }
-                                          onChange={(e) =>
-                                            setFeedbackForm((prev) => ({
-                                              ...prev,
-                                              [event._id]: {
-                                                ...prev[event._id],
-                                                content: e.target.value,
-                                                rating:
-                                                  prev[event._id]?.rating || 5,
-                                              },
-                                            }))
-                                          }
-                                          required
-                                        />
-                                        <button
-                                          type="submit"
-                                          className="px-4 py-1.5 bg-sky-500 text-white rounded-lg font-semibold hover:bg-sky-600 transition-colors text-sm shadow"
-                                          disabled={feedbackLoading[event._id]}
-                                        >
-                                          {feedbackLoading[event._id]
-                                            ? "Đang gửi..."
-                                            : "Gửi feedback"}
-                                        </button>
-                                      </form>
-                                    </div>
-                                  )}
-                                </div>
-                              )}
                           </div>
                         ))}
                       </div>
@@ -1781,108 +1239,6 @@ export default function Profile() {
                 await updateBlogApi(blogDangSua._id, dataUpdate);
               }}
             />
-          </div>
-        </div>
-      )}
-      {/* Modal xem chi tiết sự kiện đã đăng ký */}
-      {modalEvent && eventDangXem && (
-        <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-[999]">
-          <div className="bg-white rounded-xl shadow-lg max-w-lg w-full max-h-[90vh] overflow-y-auto relative p-6">
-            <button
-              onClick={() => setModalEvent(false)}
-              className="absolute top-4 right-4 text-gray-400 hover:text-gray-600"
-            >
-              <svg
-                className="w-6 h-6"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M6 18L18 6M6 6l12 12"
-                />
-              </svg>
-            </button>
-            <h3 className="text-xl font-bold text-gray-800 mb-4">
-              {eventDangXem.title}
-            </h3>
-            <div className="space-y-2">
-              <div>
-                <b>Thời gian:</b>{" "}
-                {new Date(eventDangXem.startDate).toLocaleString("vi-VN")} -{" "}
-                {new Date(eventDangXem.endDate).toLocaleString("vi-VN")}
-              </div>
-              <div>
-                <b>Địa điểm:</b> {eventDangXem.location}
-              </div>
-              <div>
-                <b>Trạng thái:</b>{" "}
-                {eventDangXem.status === "upcoming"
-                  ? "Sắp diễn ra"
-                  : eventDangXem.status === "ongoing"
-                  ? "Đang diễn ra"
-                  : eventDangXem.status === "completed"
-                  ? "Đã kết thúc"
-                  : "Đã hủy"}
-              </div>
-              {eventDangXem.sponsors && eventDangXem.sponsors.length > 0 && (
-                <div>
-                  <b>Nhà tài trợ:</b>
-                  {eventDangXem.sponsors.map((s, idx) => (
-                    <img
-                      key={idx}
-                      src={s.logo}
-                      alt="sponsor"
-                      className="w-6 h-6 inline-block mx-1 rounded-full border"
-                    />
-                  ))}
-                </div>
-              )}
-              {eventDangXem.qrCode && (
-                <div>
-                  <b>Mã QR:</b>
-                  <div className="flex items-center gap-4 mt-2">
-                    <img
-                      src={eventDangXem.qrCode}
-                      alt="QR code"
-                      className="w-64 h-64 object-contain border rounded-lg"
-                    />
-                    <a
-                      href={eventDangXem.qrCode}
-                      download={`qr-event-${eventDangXem._id}.png`}
-                      className="px-3 py-2 bg-sky-100 hover:bg-sky-200 text-sky-700 rounded-lg text-sm font-medium transition-colors border border-sky-200"
-                    >
-                      Tải mã QR
-                    </a>
-                  </div>
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-      )}
-      {/* Modal QR code */}
-      {showQR?.open && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="bg-white rounded-2xl shadow-xl p-8 flex flex-col items-center relative min-w-[320px]">
-            <button
-              onClick={() => setShowQR(null)}
-              className="absolute top-2 right-2 text-gray-400 hover:text-gray-700 text-2xl font-bold"
-              aria-label="Đóng"
-            >
-              ×
-            </button>
-            <img
-              src={showQR.qr}
-              alt="QR Check-in"
-              className="w-60 h-60 rounded-xl border shadow mb-2"
-            />
-            <span className="text-base text-gray-700 font-medium">
-              Mã QR check-in
-            </span>
           </div>
         </div>
       )}

@@ -1,12 +1,5 @@
 import React, { useState, useEffect } from "react";
 import toast from "react-hot-toast";
-// @ts-expect-error - react-draft-wysiwyg không có type definitions
-import { Editor } from "react-draft-wysiwyg";
-import { EditorState, convertToRaw, ContentState } from "draft-js";
-// @ts-expect-error - draftjs-to-html không có type definitions
-import draftToHtml from "draftjs-to-html";
-import htmlToDraft from "html-to-draftjs";
-import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import type { BlogData } from "../../api";
 
 interface CreateBlogFormProps {
@@ -40,19 +33,7 @@ const CreateBlogForm: React.FC<CreateBlogFormProps> = ({
   isAdmin,
 }) => {
   const [tieuDe, setTieuDe] = useState(initialData?.title || "");
-  const [editorState, setEditorState] = useState(() => {
-    if (initialData?.content) {
-      const blocksFromHtml = htmlToDraft(initialData.content);
-      const { contentBlocks, entityMap } = blocksFromHtml;
-      const contentState = ContentState.createFromBlockArray(
-        contentBlocks,
-        entityMap
-      );
-      return EditorState.createWithContent(contentState);
-    }
-    return EditorState.createEmpty();
-  });
-  const [noiDung, setNoiDung] = useState(initialData?.content || ""); // HTML string
+  const [noiDung, setNoiDung] = useState(initialData?.content || ""); // Plain text
   const [tacGia, setTacGia] = useState(initialData?.authorId || "");
   const [topics, setTopics] = useState(initialData?.topics || "");
   const [hinhAnh, setHinhAnh] = useState<File | null>(null);
@@ -87,11 +68,7 @@ const CreateBlogForm: React.FC<CreateBlogFormProps> = ({
     }
   }, [anDanh, userInfo, initialData]);
 
-  // Cập nhật HTML khi editorState thay đổi
-  useEffect(() => {
-    const html = draftToHtml(convertToRaw(editorState.getCurrentContent()));
-    setNoiDung(html);
-  }, [editorState]);
+  // Không cần useEffect này nữa vì sử dụng textarea đơn giản
 
   useEffect(() => {
     validateAll();
@@ -129,8 +106,8 @@ const CreateBlogForm: React.FC<CreateBlogFormProps> = ({
       errors.tacGia = "Không tìm thấy thông tin tác giả. Vui lòng đăng nhập lại.";
     }
     
-    // Validate nội dung: loại bỏ tag html để đếm ký tự thực
-    const plainText = noiDung.replace(/<[^>]*>/g, "").trim();
+    // Validate nội dung: kiểm tra text thuần
+    const plainText = noiDung.trim();
     if (!plainText) {
       errors.noiDung = "Nội dung không được để trống";
     } else if (plainText.length < 50) {
@@ -218,48 +195,25 @@ const CreateBlogForm: React.FC<CreateBlogFormProps> = ({
   };
 
   return (
-    <div className="relative min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-blue-50 via-cyan-100 to-blue-100 overflow-hidden">
-      {/* Blue bubbles */}
-      <div className="absolute top-8 left-1/4 w-32 h-32 rounded-full bg-cyan-200 opacity-30 blur-xl"></div>
-      <div className="absolute top-20 right-1/4 w-40 h-40 rounded-full bg-blue-300 opacity-30 blur-xl"></div>
-      <div className="absolute bottom-10 left-1/3 w-24 h-24 rounded-full bg-cyan-100 opacity-20 blur-xl"></div>
-      <div className="absolute bottom-0 right-1/3 w-36 h-36 rounded-full bg-blue-200 opacity-20 blur-xl"></div>
-      {/* Bubble animation */}
-      {[...Array(12)].map((_, i) => (
-        <div
-          key={i}
-          className={`absolute bottom-0 left-[${5 + i * 7}%] w-${((i % 3) + 2) * 3} h-${((i % 3) + 2) * 3} rounded-full bg-blue-100 opacity-30 animate-bubble`}
-          style={{ animationDelay: `${i * 0.8}s` }}
-        />
-      ))}
-      <style>{`
-        @keyframes bubble {
-          0% { transform: translateY(0) scale(1); opacity: 0.3; }
-          70% { opacity: 0.5; }
-          100% { transform: translateY(-600px) scale(1.2); opacity: 0; }
-        }
-        .animate-bubble {
-          animation: bubble 8s linear infinite;
-        }
-      `}</style>
+    <div className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
       {/* Form card */}
-      <div className="relative z-10 bg-white/90 rounded-2xl shadow-2xl p-8 w-full max-w-xl border border-blue-100 backdrop-blur-md">
+      <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-lg p-8">
         <div className="mb-8 text-center">
-          <h2 className="text-3xl md:text-4xl font-extrabold text-blue-900 mb-2 drop-shadow-lg">
+          <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">
             {initialData ? "Sửa Blog" : "Tạo Blog Mới"}
           </h2>
-          <p className="text-lg text-cyan-700 font-medium">
+          <p className="text-gray-600">
             Chia sẻ kiến thức, cảm xúc hoặc kinh nghiệm của bạn với cộng đồng HopeHub!
           </p>
         </div>
         <form onSubmit={handleSubmit} className="space-y-6 w-full">
           <div>
-            <label className="block text-sm font-medium text-blue-800">
+            <label className="block text-sm font-medium text-gray-700 mb-2">
               Tiêu đề
             </label>
             <input
               type="text"
-              className="mt-1 block w-full rounded-xl border border-blue-200 shadow-sm focus:border-cyan-500 focus:ring-cyan-500 sm:text-base px-4 py-3 bg-blue-50 text-blue-900 placeholder-blue-400"
+              className="mt-1 block w-full rounded-lg border border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-base px-4 py-3 bg-white text-gray-900 placeholder-gray-400"
               value={tieuDe}
               onChange={(e) => {
                 setTieuDe(e.target.value);
@@ -268,7 +222,7 @@ const CreateBlogForm: React.FC<CreateBlogFormProps> = ({
               required
               style={{
                 borderColor:
-                  touched.tieuDe && formErrors.tieuDe ? "#f56565" : "#bae6fd",
+                  touched.tieuDe && formErrors.tieuDe ? "#f56565" : "#d1d5db",
               }}
             />
             {touched.tieuDe && formErrors.tieuDe && (
@@ -277,10 +231,9 @@ const CreateBlogForm: React.FC<CreateBlogFormProps> = ({
               </p>
             )}
           </div>
-          {/* Ẩn trường tác giả nếu không phải admin */}
-          {/* Tác giả - ẩn trường vì sẽ lấy từ user đăng nhập */}
+          {/* Tác giả */}
           <div>
-            <label className="block text-sm font-medium text-blue-800">
+            <label className="block text-sm font-medium text-gray-700 mb-2">
               Tác giả
             </label>
             <div className="flex items-center gap-3 mb-2">
@@ -289,17 +242,17 @@ const CreateBlogForm: React.FC<CreateBlogFormProps> = ({
                 type="checkbox"
                 checked={anDanh}
                 onChange={(e) => setAnDanh(e.target.checked)}
-                className="h-4 w-4 text-cyan-600 border-blue-200 rounded focus:ring-cyan-500"
-                disabled={isLockedAnonymous} // Nếu đã từng là ẩn danh thì không cho sửa lại
+                className="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                disabled={isLockedAnonymous}
               />
               <label
                 htmlFor="anDanh"
-                className="text-sm text-blue-800 select-none cursor-pointer"
+                className="text-sm text-gray-700 select-none cursor-pointer"
               >
                 Đăng ẩn danh
               </label>
             </div>
-            <div className="mt-1 block w-full rounded-xl border border-blue-200 shadow-sm px-4 py-3 bg-blue-50 text-blue-900">
+            <div className="mt-1 block w-full rounded-lg border border-gray-300 shadow-sm px-4 py-3 bg-gray-50 text-gray-900">
               {anDanh ? "Ẩn danh" : (initialData?.authorName || userInfo?.fullName || userInfo?.username || "Đang tải...")}
             </div>
             {isLockedAnonymous && (
@@ -308,89 +261,29 @@ const CreateBlogForm: React.FC<CreateBlogFormProps> = ({
               </p>
             )}
             {anDanh && !isLockedAnonymous && (
-              <p className="mt-1 text-xs text-cyan-600">
+              <p className="mt-1 text-xs text-blue-600">
                 Tên tác giả thực sẽ được lưu trong hệ thống nhưng hiển thị là "Ẩn danh" cho người đọc.
               </p>
             )}
           </div>
           <div>
-            <label className="block text-sm font-medium text-blue-800">
+            <label className="block text-sm font-medium text-gray-700 mb-2">
               Nội dung
             </label>
-            <div className="bg-white rounded-xl border border-blue-200 focus:border-cyan-500 focus:ring-cyan-500">
-              <Editor
-                editorState={editorState}
-                onEditorStateChange={(state: EditorState) => {
-                  setEditorState(state);
-                  setTouched((prev) => ({ ...prev, noiDung: true }));
-                }}
-                toolbar={{
-                  options: [
-                    "inline",
-                    "blockType",
-                    "list",
-                    "textAlign",
-                    "history",
-                    "link",
-                    "emoji",
-                    "image",
-                  ],
-                  inline: {
-                    options: [
-                      "bold",
-                      "italic",
-                      "underline",
-                      "strikethrough",
-                      "monospace",
-                    ],
-                    bold: { className: "bordered-option-classname" },
-                    italic: { className: "bordered-option-classname" },
-                    underline: { className: "bordered-option-classname" },
-                    strikethrough: { className: "bordered-option-classname" },
-                    monospace: { className: "bordered-option-classname" },
-                  },
-                  blockType: {
-                    inDropdown: true,
-                    options: [
-                      "Normal",
-                      "H1",
-                      "H2",
-                      "H3",
-                      "H4",
-                      "H5",
-                      "H6",
-                      "Blockquote",
-                      "Code",
-                    ],
-                    className: "bordered-option-classname",
-                  },
-                  list: {
-                    inDropdown: false,
-                    options: ["unordered", "ordered", "indent", "outdent"],
-                    className: "bordered-option-classname",
-                  },
-                  textAlign: {
-                    inDropdown: false,
-                    options: ["left", "center", "right", "justify"],
-                    className: "bordered-option-classname",
-                  },
-                  link: {
-                    inDropdown: false,
-                    options: ["link", "unlink"],
-                    className: "bordered-option-classname",
-                  },
-                  history: {
-                    inDropdown: false,
-                    options: ["undo", "redo"],
-                    className: "bordered-option-classname",
-                  },
-                }}
-                wrapperClassName="wysiwyg-wrapper"
-                editorClassName="wysiwyg-editor min-h-[180px] px-3 py-2 text-blue-900"
-                toolbarClassName="wysiwyg-toolbar rounded-t-xl bg-blue-50 border-blue-200"
-                onBlur={() => handleBlur("noiDung")}
-              />
-            </div>
+            <textarea
+              value={noiDung}
+              onChange={(e) => {
+                setNoiDung(e.target.value);
+                setTouched((prev) => ({ ...prev, noiDung: true }));
+              }}
+              onBlur={() => handleBlur("noiDung")}
+              placeholder="Nhập nội dung bài viết của bạn..."
+              className="mt-1 block w-full rounded-lg border border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-base px-4 py-3 bg-white text-gray-900 placeholder-gray-400 min-h-[200px] resize-y"
+              style={{
+                borderColor:
+                  touched.noiDung && formErrors.noiDung ? "#f56565" : "#d1d5db",
+              }}
+            />
             {touched.noiDung && formErrors.noiDung && (
               <p className="mt-1 text-sm text-red-600 font-medium">
                 {formErrors.noiDung}
@@ -398,7 +291,7 @@ const CreateBlogForm: React.FC<CreateBlogFormProps> = ({
             )}
           </div>
           <div>
-            <label className="block text-sm font-medium text-blue-800">
+            <label className="block text-sm font-medium text-gray-700 mb-2">
               Ảnh đại diện blog
             </label>
             <input
@@ -406,7 +299,7 @@ const CreateBlogForm: React.FC<CreateBlogFormProps> = ({
               accept="image/*"
               onChange={handleImageChange}
               onBlur={() => handleBlur("hinhAnh")}
-              className="mt-1 block w-full text-base bg-blue-50 text-blue-900"
+              className="mt-1 block w-full text-base bg-white text-gray-900 border border-gray-300 rounded-lg px-4 py-3"
               style={{
                 color:
                   touched.hinhAnh && formErrors.hinhAnh ? "#f56565" : "inherit",
@@ -421,12 +314,12 @@ const CreateBlogForm: React.FC<CreateBlogFormProps> = ({
               <img
                 src={imagePreview}
                 alt="Preview"
-                className="mt-2 w-40 h-28 object-cover rounded-xl border border-blue-200 mx-auto"
+                className="mt-2 w-40 h-28 object-cover rounded-lg border border-gray-300 mx-auto"
               />
             )}
           </div>
           <div>
-            <label className="block text-sm font-medium text-blue-800">
+            <label className="block text-sm font-medium text-gray-700 mb-2">
               Chủ đề (phân tách bằng dấu phẩy)
             </label>
             <input
@@ -435,10 +328,10 @@ const CreateBlogForm: React.FC<CreateBlogFormProps> = ({
               onChange={(e) => setTopics(e.target.value)}
               onBlur={() => handleBlur("topics")}
               placeholder="Ví dụ: sức khỏe, tâm lý, dinh dưỡng"
-              className="mt-1 block w-full rounded-xl border border-blue-200 shadow-sm focus:border-cyan-500 focus:ring-cyan-500 sm:text-base px-4 py-3 bg-blue-50 text-blue-900 placeholder-blue-400"
+              className="mt-1 block w-full rounded-lg border border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-base px-4 py-3 bg-white text-gray-900 placeholder-gray-400"
               style={{
                 borderColor:
-                  touched.topics && formErrors.topics ? "#f56565" : "#bae6fd",
+                  touched.topics && formErrors.topics ? "#f56565" : "#d1d5db",
               }}
             />
             {touched.topics && formErrors.topics && (
@@ -451,13 +344,13 @@ const CreateBlogForm: React.FC<CreateBlogFormProps> = ({
           {/* Trạng thái xuất bản - chỉ hiển thị cho admin */}
           {isAdmin && (
             <div>
-              <label className="block text-sm font-medium text-blue-800">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
                 Trạng thái xuất bản
               </label>
               <select
                 value={trangThai}
                 onChange={(e) => setTrangThai(e.target.value as 'draft' | 'published' | 'unpublished' | 'rejected')}
-                className="mt-1 block w-full rounded-xl border border-blue-200 shadow-sm focus:border-cyan-500 focus:ring-cyan-500 sm:text-base px-4 py-3 bg-blue-50 text-blue-900"
+                className="mt-1 block w-full rounded-lg border border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-base px-4 py-3 bg-white text-gray-900"
               >
                 <option value="published">Xuất bản</option>
                 <option value="unpublished">Ngừng xuất bản</option>
@@ -465,18 +358,18 @@ const CreateBlogForm: React.FC<CreateBlogFormProps> = ({
             </div>
           )}
           
-          <div className="flex justify-end gap-3 pt-2">
+          <div className="flex justify-end gap-3 pt-6">
             <button
               type="button"
               onClick={onCancel}
-              className="px-4 py-2 text-sm font-medium text-blue-700 bg-blue-100 rounded-md hover:bg-blue-200 border border-blue-200"
+              className="px-6 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 border border-gray-300"
             >
               Hủy
             </button>
             <button
               type="submit"
               disabled={dangTai}
-              className={`px-4 py-2 text-sm font-medium text-white bg-cyan-600 hover:bg-cyan-700 rounded-md shadow-md border border-cyan-700 ${dangTai ? "opacity-50 cursor-not-allowed" : ""}`}
+              className={`px-6 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-lg shadow-md border border-blue-700 ${dangTai ? "opacity-50 cursor-not-allowed" : ""}`}
             >
               {dangTai ? "Đang xử lý..." : initialData ? "Cập nhật" : "Tạo mới"}
             </button>

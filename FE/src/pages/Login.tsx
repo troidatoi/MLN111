@@ -1,7 +1,7 @@
 import loginImg from "../assets/login2.png";
 import logo from "/avarta.png";
 import { useState, useEffect } from "react";
-import { Link, useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { GoogleLogin, GoogleOAuthProvider } from "@react-oauth/google";
 import { jwtDecode } from "jwt-decode";
 import type { CredentialResponse } from "@react-oauth/google";
@@ -27,6 +27,8 @@ function LoginPage() {
   const { login, loginWithGoogle, error: authError, loading, user } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
+  const googleClientId = import.meta.env
+    .VITE_GOOGLE_CLIENT_ID as string | undefined;
   const [forgotStep, setForgotStep] = useState<
     "login" | "email" | "otp" | "newpass"
   >("login");
@@ -67,9 +69,10 @@ function LoginPage() {
       setShowColdStartLoading(true);
       await login(email, password);
       // Chuyển hướng sẽ được xử lý trong useEffect khi user cập nhật
-    } catch (error: any) {
+    } catch (error: unknown) {
       // Check if it's a cold start error
-      if (error.code === "ECONNABORTED" || error.message?.includes("timeout")) {
+      const err = error as { code?: string; message?: string };
+      if (err.code === "ECONNABORTED" || err.message?.includes("timeout")) {
         console.log("🔄 Server is waking up, showing cold start loading...");
         // Keep showing cold start loading
       } else {
@@ -107,8 +110,9 @@ function LoginPage() {
           ? (fromObjGoogle as { pathname: string }).pathname
           : "/";
       navigate(fromGoogle, { replace: true });
-    } catch (error: any) {
-      if (error.code === "ECONNABORTED" || error.message?.includes("timeout")) {
+    } catch (error: unknown) {
+      const err = error as { code?: string; message?: string };
+      if (err.code === "ECONNABORTED" || err.message?.includes("timeout")) {
         console.log("🔄 Server is waking up, showing cold start loading...");
       } else {
         setShowColdStartLoading(false);
@@ -172,7 +176,7 @@ function LoginPage() {
       }
 
       setForgotStep("newpass");
-    } catch (error) {
+    } catch {
       setForgotError("OTP không đúng hoặc đã hết hạn!");
       setForgotOtp(""); // Clear OTP input when wrong
     }
@@ -183,7 +187,7 @@ function LoginPage() {
     setForgotError("");
     setForgotLoading(true);
     try {
-      await changePasswordApi(forgotEmail, forgotNew, forgotConfirm);
+      await changePasswordApi(forgotEmail, "", forgotNew, forgotConfirm);
       setForgotStep("login");
       setForgotEmail("");
       setForgotOtp("");
@@ -207,46 +211,40 @@ function LoginPage() {
   };
 
   return (
-    <div className="relative min-h-screen w-full flex items-center justify-center bg-white overflow-hidden">
+    <div className="relative min-h-screen w-full flex items-center justify-center bg-amber-50 overflow-hidden">
       {forgotToast && (
         <div className="fixed top-6 right-6 z-50 px-6 py-3 rounded-lg shadow-lg text-white text-base font-semibold transition-all bg-green-500">
           {forgotToast}
         </div>
       )}
       {forgotStep === "login" && (
-        <div className="relative min-h-screen w-full flex items-center justify-center bg-white overflow-hidden">
+        <div className="relative min-h-screen w-full flex items-center justify-center bg-amber-50 overflow-hidden">
           {/* Ảnh nền */}
           <img
             src={loginImg}
             alt="Login Background"
             className="absolute inset-0 w-full h-full object-fill z-0"
           />
-          {/* Overlay mờ */}
-          <div className="absolute inset-0 bg-white/40 z-10" />
+          {/* Overlay mờ với màu amber */}
+          <div className="absolute inset-0 bg-amber-50/60 z-10" />
           {/* Khung login */}
-          <div className="relative z-20 w-full max-w-lg mx-auto rounded-xl shadow-lg bg-white/70 backdrop-blur-md p-8 flex flex-col justify-center">
+          <div className="relative z-20 w-full max-w-lg mx-auto rounded-xl shadow-lg bg-amber-50/80 backdrop-blur-md p-8 flex flex-col justify-center border border-amber-200">
             <div className="sm:mx-auto sm:w-full sm:max-w-sm">
               <img
                 alt="HopeHub Logo"
                 src={logo}
                 className="mx-auto h-16 w-auto"
               />
-              <p className="mt-2 text-center text-sm text-gray-600">
-                <a href="#" className="font-semibold text-white-600">
+              <p className="mt-2 text-center text-sm text-amber-700">
+                <a href="#" className="font-semibold text-amber-800">
                   HopeHub - Where Recovery Meets Peace
                 </a>
               </p>
-              <h2 className="mt-10 text-center text-2xl/9 font-bold tracking-tight text-gray-900">
+              <h2 className="mt-10 text-center text-2xl/9 font-bold tracking-tight text-amber-900">
                 Sign in to your account
               </h2>
-              <h2 className="text-center text-l tracking-tight text-gray-900">
-                First time?{" "}
-                <Link
-                  to="/register"
-                  className="text-indigo-600 hover:text-indigo-500"
-                >
-                  Sign up
-                </Link>
+              <h2 className="text-center text-l tracking-tight text-amber-800">
+                Lần đầu sử dụng? Đăng nhập bằng Google để tạo tài khoản
               </h2>
             </div>
 
@@ -255,7 +253,7 @@ function LoginPage() {
                 <div>
                   <label
                     htmlFor="identifier"
-                    className="block text-sm font-medium text-gray-900"
+                    className="block text-sm font-medium text-amber-900"
                   >
                     Email hoặc Username
                   </label>
@@ -266,7 +264,7 @@ function LoginPage() {
                       type="text"
                       autoComplete="username"
                       required
-                      className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 border border-gray-300 placeholder:text-gray-400 focus:border-indigo-600 focus:ring-2 focus:ring-indigo-600 sm:text-sm"
+                      className="block w-full rounded-md bg-amber-50 px-3 py-1.5 text-base text-amber-900 border border-amber-300 placeholder:text-amber-500 focus:border-amber-600 focus:ring-2 focus:ring-amber-600 sm:text-sm"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       disabled={loading || isLoggingIn}
@@ -279,14 +277,14 @@ function LoginPage() {
                   <div className="flex items-center justify-between">
                     <label
                       htmlFor="password"
-                      className="block text-sm font-medium text-gray-900"
+                      className="block text-sm font-medium text-amber-900"
                     >
                       Password
                     </label>
                     <div className="text-sm">
                       <a
                         href="#"
-                        className="font-semibold text-indigo-600 hover:text-indigo-500"
+                        className="font-semibold text-amber-600 hover:text-amber-500"
                         onClick={(e) => {
                           e.preventDefault();
                           setForgotStep("email");
@@ -304,7 +302,7 @@ function LoginPage() {
                         type={showPassword ? "text" : "password"}
                         required
                         autoComplete="current-password"
-                        className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 border border-gray-300 placeholder:text-gray-400 focus:border-indigo-600 focus:ring-2 focus:ring-indigo-600 sm:text-sm"
+                        className="block w-full rounded-md bg-amber-50 px-3 py-1.5 text-base text-amber-900 border border-amber-300 placeholder:text-amber-500 focus:border-amber-600 focus:ring-2 focus:ring-amber-600 sm:text-sm"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         disabled={loading || isLoggingIn}
@@ -312,7 +310,7 @@ function LoginPage() {
                       <button
                         type="button"
                         tabIndex={-1}
-                        className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500"
+                        className="absolute right-2 top-1/2 -translate-y-1/2 text-amber-500"
                         onClick={() => setShowPassword((v) => !v)}
                         disabled={loading || isLoggingIn}
                         aria-label={
@@ -362,7 +360,7 @@ function LoginPage() {
                 <div>
                   <button
                     type="submit"
-                    className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                    className="flex w-full justify-center rounded-md bg-amber-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-amber-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-600"
                     disabled={loading || isLoggingIn}
                   >
                     {loading || isLoggingIn ? "Signing in..." : "Sign in"}
@@ -372,30 +370,38 @@ function LoginPage() {
               <div className="mt-8">
                 <div className="relative">
                   <div className="absolute inset-0 flex items-center">
-                    <div className="w-full border-t border-gray-300" />
+                    <div className="w-full border-t border-amber-300" />
                   </div>
                   <div className="relative flex justify-center text-sm">
-                    <span className="bg-white px-2 text-gray-500">
+                    <span className="bg-amber-50 px-2 text-amber-600">
                       Or continue with
                     </span>
                   </div>
                 </div>
-                <div className="mt-6 flex gap-4 justify-center">
-                  {/* Temporarily disabled Google Sign-In due to domain config */}
-                  <div className="text-gray-500 text-sm">
-                    Google Sign-In temporarily unavailable
-                  </div>
-                  {/* <GoogleOAuthProvider clientId="661139917114-21bc75lm5d3ci1iafnj3id4hck2bbegj.apps.googleusercontent.com">
-                    <GoogleLogin
-                      onSuccess={handleGoogleSuccess}
-                      onError={handleGoogleError}
-                      width="100%"
-                      shape="pill"
-                      text="signin_with"
-                      logo_alignment="center"
-                      useOneTap
-                    />
-                  </GoogleOAuthProvider> */}
+                <div className="mt-6 flex flex-col items-center gap-4 justify-center">
+                  {!googleClientId ? (
+                    <div className="text-amber-600 text-sm text-center">
+                      <p>Google Sign-In temporarily unavailable</p>
+                      <p className="text-xs mt-1">Vui lòng liên hệ admin để được hỗ trợ</p>
+                    </div>
+                  ) : (
+                    <div className="text-center">
+                      <GoogleOAuthProvider clientId={googleClientId}>
+                        <GoogleLogin
+                          onSuccess={handleGoogleSuccess}
+                          onError={handleGoogleError}
+                          width="280px"
+                          shape="pill"
+                          text="signin_with"
+                          logo_alignment="center"
+                          useOneTap
+                        />
+                      </GoogleOAuthProvider>
+                      <p className="text-xs text-amber-600 mt-2">
+                        Đăng nhập bằng Google để tạo tài khoản mới
+                      </p>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -403,11 +409,11 @@ function LoginPage() {
         </div>
       )}
       {forgotStep === "email" && (
-        <div className="relative z-20 w-full max-w-md mx-auto rounded-xl shadow-lg bg-white/70 backdrop-blur-md p-8 flex flex-col justify-center">
-          <h2 className="text-2xl font-bold mb-6 text-center">Quên mật khẩu</h2>
-          <label className="block text-gray-500 text-sm mb-2">Email</label>
+        <div className="relative z-20 w-full max-w-md mx-auto rounded-xl shadow-lg bg-amber-50/80 backdrop-blur-md p-8 flex flex-col justify-center border border-amber-200">
+          <h2 className="text-2xl font-bold mb-6 text-center text-amber-900">Quên mật khẩu</h2>
+          <label className="block text-amber-700 text-sm mb-2">Email</label>
           <input
-            className="w-full border border-gray-300 rounded px-3 py-2 mb-3"
+            className="w-full border border-amber-300 rounded px-3 py-2 mb-3 bg-amber-50 text-amber-900 placeholder-amber-500 focus:border-amber-600 focus:ring-2 focus:ring-amber-600"
             value={forgotEmail}
             onChange={(e) => setForgotEmail(e.target.value)}
             placeholder="Nhập email đã đăng ký"
@@ -416,14 +422,14 @@ function LoginPage() {
             <div className="text-red-500 text-xs mb-2">{forgotError}</div>
           )}
           <button
-            className="w-full bg-blue-600 text-white py-2 rounded font-medium"
+            className="w-full bg-amber-600 text-white py-2 rounded font-medium hover:bg-amber-500"
             onClick={handleForgotSendOtp}
             disabled={forgotLoading}
           >
             {forgotLoading ? "Đang gửi..." : "Gửi mã OTP"}
           </button>
           <button
-            className="w-full mt-3 text-gray-500 hover:text-gray-700 text-sm"
+            className="w-full mt-3 text-amber-600 hover:text-amber-700 text-sm"
             onClick={() => setForgotStep("login")}
           >
             Quay lại đăng nhập
@@ -431,11 +437,11 @@ function LoginPage() {
         </div>
       )}
       {forgotStep === "otp" && (
-        <div className="relative z-20 w-full max-w-md mx-auto rounded-xl shadow-lg bg-white/70 backdrop-blur-md p-8 flex flex-col justify-center">
-          <h2 className="text-2xl font-bold mb-6 text-center">Xác thực OTP</h2>
-          <label className="block text-gray-500 text-sm mb-2">Mã OTP</label>
+        <div className="relative z-20 w-full max-w-md mx-auto rounded-xl shadow-lg bg-amber-50/80 backdrop-blur-md p-8 flex flex-col justify-center border border-amber-200">
+          <h2 className="text-2xl font-bold mb-6 text-center text-amber-900">Xác thực OTP</h2>
+          <label className="block text-amber-700 text-sm mb-2">Mã OTP</label>
           <input
-            className="w-full border border-gray-300 rounded px-3 py-2 mb-3"
+            className="w-full border border-amber-300 rounded px-3 py-2 mb-3 bg-amber-50 text-amber-900 placeholder-amber-500 focus:border-amber-600 focus:ring-2 focus:ring-amber-600"
             value={forgotOtp}
             onChange={(e) => setForgotOtp(e.target.value)}
             placeholder="Nhập mã OTP"
@@ -444,14 +450,14 @@ function LoginPage() {
             <div className="text-red-500 text-xs mb-2">{forgotError}</div>
           )}
           <button
-            className="w-full bg-blue-600 text-white py-2 rounded font-medium"
+            className="w-full bg-amber-600 text-white py-2 rounded font-medium hover:bg-amber-500"
             onClick={handleForgotVerifyOtp}
             disabled={forgotLoading}
           >
             {forgotLoading ? "Đang xác thực..." : "Xác nhận OTP"}
           </button>
           <button
-            className="w-full mt-3 text-gray-500 hover:text-gray-700 text-sm"
+            className="w-full mt-3 text-amber-600 hover:text-amber-700 text-sm"
             onClick={() => setForgotStep("email")}
           >
             Quay lại nhập email
@@ -459,24 +465,24 @@ function LoginPage() {
         </div>
       )}
       {forgotStep === "newpass" && (
-        <div className="relative z-20 w-full max-w-md mx-auto rounded-xl shadow-lg bg-white/70 backdrop-blur-md p-8 flex flex-col justify-center">
-          <h2 className="text-2xl font-bold mb-6 text-center">
+        <div className="relative z-20 w-full max-w-md mx-auto rounded-xl shadow-lg bg-amber-50/80 backdrop-blur-md p-8 flex flex-col justify-center border border-amber-200">
+          <h2 className="text-2xl font-bold mb-6 text-center text-amber-900">
             Đặt lại mật khẩu mới
           </h2>
-          <label className="block text-gray-500 text-sm mb-2">
+          <label className="block text-amber-700 text-sm mb-2">
             Mật khẩu mới
           </label>
           <div className="relative mb-2">
             <input
               type={showForgotNew ? "text" : "password"}
-              className="w-full border border-gray-300 rounded px-3 py-2 pr-10"
+              className="w-full border border-amber-300 rounded px-3 py-2 pr-10 bg-amber-50 text-amber-900 placeholder-amber-500 focus:border-amber-600 focus:ring-2 focus:ring-amber-600"
               value={forgotNew}
               onChange={(e) => setForgotNew(e.target.value)}
               placeholder="Mật khẩu mới"
             />
             <button
               type="button"
-              className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400"
+              className="absolute right-2 top-1/2 -translate-y-1/2 text-amber-500"
               onClick={() => setShowForgotNew((v) => !v)}
             >
               {showForgotNew ? (
@@ -489,14 +495,14 @@ function LoginPage() {
           <div className="relative mb-3">
             <input
               type={showForgotConfirm ? "text" : "password"}
-              className="w-full border border-gray-300 rounded px-3 py-2 pr-10"
+              className="w-full border border-amber-300 rounded px-3 py-2 pr-10 bg-amber-50 text-amber-900 placeholder-amber-500 focus:border-amber-600 focus:ring-2 focus:ring-amber-600"
               value={forgotConfirm}
               onChange={(e) => setForgotConfirm(e.target.value)}
               placeholder="Xác nhận mật khẩu"
             />
             <button
               type="button"
-              className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400"
+              className="absolute right-2 top-1/2 -translate-y-1/2 text-amber-500"
               onClick={() => setShowForgotConfirm((v) => !v)}
             >
               {showForgotConfirm ? (
@@ -510,14 +516,14 @@ function LoginPage() {
             <div className="text-red-500 text-xs mb-2">{forgotError}</div>
           )}
           <button
-            className="w-full bg-blue-600 text-white py-2 rounded font-medium"
+            className="w-full bg-amber-600 text-white py-2 rounded font-medium hover:bg-amber-500"
             onClick={handleForgotChangePassword}
             disabled={forgotLoading}
           >
             {forgotLoading ? "Đang đổi..." : "Đổi mật khẩu"}
           </button>
           <button
-            className="w-full mt-3 text-gray-500 hover:text-gray-700 text-sm"
+            className="w-full mt-3 text-amber-600 hover:text-amber-700 text-sm"
             onClick={() => setForgotStep("login")}
           >
             Quay lại đăng nhập

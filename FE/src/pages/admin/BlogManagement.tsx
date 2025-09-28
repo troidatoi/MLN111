@@ -4,7 +4,6 @@ import { createBlogApi, updateBlogApi, updateBlogStatusApi } from '../../api';
 import { getAllBlogsApi } from '../../api/index';
 import api from '../../api';
 import { useAuth } from '../../contexts/AuthContext';
-import Editor from '../../components/Editor';
 import CreateBlogForm from '../../components/blog/CreateBlogForm';
 import BlogDetailView from '../../components/blog/BlogDetailView';
 
