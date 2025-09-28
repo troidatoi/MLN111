@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { getCommentsApi, deleteCommentApi } from '../../api';
+import { Link } from 'react-router-dom';
+import { getCommentsApi, deleteCommentApi, addCommentApi } from '../../api';
 import { useAuth } from '../../contexts/AuthContext';
 import toast from 'react-hot-toast';
 
@@ -48,6 +49,9 @@ const BlogDetailView: React.FC<BlogDetailViewProps> = ({ blog, onClose }) => {
   const { user } = useAuth();
   const [comments, setComments] = useState<IComment[]>([]);
   const [sortOrder, setSortOrder] = useState<'newest' | 'oldest'>('newest');
+  const [newComment, setNewComment] = useState('');
+  const [commentName, setCommentName] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     fetchComments();
@@ -87,6 +91,29 @@ const BlogDetailView: React.FC<BlogDetailViewProps> = ({ blog, onClose }) => {
     } catch (error) {
       console.error('Error deleting comment:', error);
       toast.error('Không thể xóa bình luận');
+    }
+  };
+
+  const handleSubmitComment = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newComment.trim()) return;
+    
+    setIsSubmitting(true);
+    try {
+      await addCommentApi(blog._id, {
+        userId: user?._id || 'anonymous',
+        username: user?.username || user?.fullName || commentName.trim() || 'Khách',
+        content: newComment.trim()
+      });
+      setNewComment('');
+      setCommentName('');
+      await fetchComments();
+      toast.success('Đã thêm bình luận');
+    } catch (error) {
+      console.error('Error adding comment:', error);
+      toast.error('Không thể thêm bình luận');
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -167,6 +194,44 @@ const BlogDetailView: React.FC<BlogDetailViewProps> = ({ blog, onClose }) => {
             </div>
           </div>
           
+          {/* Add comment form */}
+          {user ? (
+            <form onSubmit={handleSubmitComment} className="mb-8">
+              <div className="bg-primary-50 rounded-lg p-6">
+                <label htmlFor="newComment" className="block text-sm font-medium text-primary mb-3">
+                  Thêm bình luận
+                </label>
+                <textarea
+                  id="newComment"
+                  value={newComment}
+                  onChange={(e) => setNewComment(e.target.value)}
+                  placeholder="Chia sẻ suy nghĩ của bạn về bài viết này..."
+                  className="w-full px-4 py-3 border border-primary-200 rounded-lg focus:border-primary focus:ring-1 focus:ring-primary resize-none"
+                  rows={4}
+                  required
+                />
+                <div className="flex justify-end mt-4">
+                  <button
+                    type="submit"
+                    disabled={isSubmitting || !newComment.trim()}
+                    className="px-6 py-2 bg-primary text-white rounded-lg hover:bg-primary-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                  >
+                    {isSubmitting ? 'Đang gửi...' : 'Gửi bình luận'}
+                  </button>
+                </div>
+              </div>
+            </form>
+          ) : (
+            <div className="mb-8 text-center py-8 bg-primary-50 rounded-lg">
+              <p className="text-bodytext mb-4">Đăng nhập để tham gia bình luận</p>
+              <Link 
+                to="/login" 
+                className="inline-block px-6 py-2 bg-primary text-white rounded-lg hover:bg-primary-600 transition-colors"
+              >
+                Đăng nhập
+              </Link>
+            </div>
+          )}
 
           {/* Comments list */}
           <div className="space-y-6">

@@ -658,21 +658,21 @@ export default function Home() {
         <div className="max-w-6xl mx-auto text-center relative z-10">
           {/* Main Title */}
           <motion.h1 
-            className="text-5xl md:text-7xl lg:text-8xl font-bold text-amber-900 mb-8 leading-tight"
+            className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl xl:text-8xl font-bold text-amber-900 mb-6 sm:mb-8 leading-tight"
             style={{ fontFamily: "'Playfair Display', serif" }}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.3 }}
           >
             Triết Học
-            <span className="block text-amber-700 text-4xl md:text-5xl lg:text-6xl mt-4 font-light italic">
+            <span className="block text-amber-700 text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl mt-2 sm:mt-4 font-light italic">
               Hành trình tìm kiếm chân lý
             </span>
           </motion.h1>
 
           {/* Philosophy Quote Carousel */}
           <motion.div 
-            className="philosophy-card max-w-4xl mx-auto my-16 p-8 md:p-12"
+            className="philosophy-card max-w-4xl mx-auto my-8 sm:my-12 md:my-16 p-4 sm:p-6 md:p-8 lg:p-12"
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 1, delay: 0.6 }}
@@ -680,7 +680,7 @@ export default function Home() {
             <div className="philosophy-quote">
               <motion.p 
                 key={currentQuoteIndex}
-                className="text-2xl md:text-3xl text-amber-900 mb-6 leading-relaxed"
+                className="text-lg sm:text-xl md:text-2xl lg:text-3xl text-amber-900 mb-4 sm:mb-6 leading-relaxed"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8 }}
@@ -710,18 +710,20 @@ export default function Home() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.9 }}
           >
-            <button
-              onClick={() => navigate("/blogs")}
-              className="px-8 py-4 bg-amber-800 text-white rounded-full text-lg font-medium hover:bg-amber-900 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1"
-            >
-              Khám phá bài viết triết học
-            </button>
-            <button
-              onClick={() => setShowMemoryGame(true)}
-              className="px-8 py-4 bg-amber-800 text-white rounded-full text-lg font-medium hover:bg-amber-900 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1"
-            >
-              🧠 Memory Game
-            </button>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+              <button
+                onClick={() => navigate("/blogs")}
+                className="w-full sm:w-auto px-6 py-3 sm:px-8 sm:py-4 bg-amber-800 text-white rounded-full text-base sm:text-lg font-medium hover:bg-amber-900 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1"
+              >
+                Khám phá bài viết triết học
+              </button>
+              <button
+                onClick={() => setShowMemoryGame(true)}
+                className="w-full sm:w-auto px-6 py-3 sm:px-8 sm:py-4 bg-amber-800 text-white rounded-full text-base sm:text-lg font-medium hover:bg-amber-900 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1"
+              >
+                🧠 Memory Game
+              </button>
+            </div>
             <div className="flex gap-2">
               {philosophyQuotes.map((_, index) => (
                 <button
@@ -749,7 +751,7 @@ export default function Home() {
           {/* Section Header */}
           <div className="text-center mb-16">
             <motion.h2 
-              className="text-4xl md:text-5xl lg:text-6xl font-bold text-amber-900 mb-6"
+              className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-amber-900 mb-4 sm:mb-6"
               style={{ fontFamily: "'Playfair Display', serif" }}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -1090,7 +1092,7 @@ export default function Home() {
           {/* Section Header */}
           <div className="text-center mb-16">
             <motion.h2 
-              className="text-4xl md:text-5xl lg:text-6xl font-bold text-amber-900 mb-6"
+              className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-amber-900 mb-4 sm:mb-6"
               style={{ fontFamily: "'Playfair Display', serif" }}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}

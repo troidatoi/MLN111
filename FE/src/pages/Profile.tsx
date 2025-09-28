@@ -912,7 +912,7 @@ export default function Profile() {
       {/* Modal xem chi tiết blog */}
       {modalBlog && blogDangXem && (
         <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-[999]">
-          <div className="bg-white rounded-xl shadow-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto relative">
+          <div className="bg-white rounded-xl shadow-lg max-w-4xl w-full max-h-[95vh] overflow-y-auto relative">
             <BlogDetailView
               blog={{
                 ...blogDangXem!,
