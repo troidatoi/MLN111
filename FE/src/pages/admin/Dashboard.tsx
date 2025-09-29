@@ -146,21 +146,63 @@ const Dashboard = () => {
     rejected: blogs.filter(blog => blog.published === 'rejected').length,
   };
 
-  // Thống kê blog theo tháng
-  const getBlogsByMonth = () => {
-    const monthlyData = Array(12).fill(0);
+  // Thống kê chủ đề blog phổ biến
+  const getTopicStats = () => {
+    const topicMap = new Map();
     blogs.forEach(blog => {
-      const month = new Date(blog.createdAt).getMonth();
-      monthlyData[month]++;
+      if (blog.topics && blog.topics.length > 0) {
+        blog.topics.forEach(topic => {
+          if (topicMap.has(topic)) {
+            topicMap.set(topic, topicMap.get(topic) + 1);
+          } else {
+            topicMap.set(topic, 1);
+          }
+        });
+      }
     });
-    return monthlyData;
+    
+    return Array.from(topicMap.entries())
+      .map(([topic, count]) => ({ topic, count }))
+      .sort((a, b) => b.count - a.count)
+      .slice(0, 8);
+  };
+
+  // Thống kê blog có nhiều comment nhất
+  const getTopCommentedBlogs = () => {
+    return blogs
+      .map(blog => ({
+        title: blog.title,
+        commentCount: blog.comments ? blog.comments.length : 0,
+        author: blog.authorId?.fullName || blog.authorId?.username || 'Tác giả không xác định'
+      }))
+      .sort((a, b) => b.commentCount - a.commentCount)
+      .slice(0, 5);
+  };
+
+  // Thống kê blog ẩn danh vs không ẩn danh
+  const getAnonymousStats = () => {
+    const anonymous = blogs.filter(blog => blog.anDanh).length;
+    const notAnonymous = blogs.length - anonymous;
+    return { anonymous, notAnonymous };
+  };
+
+  // Thống kê blog theo ngày trong tuần
+  const getBlogsByDayOfWeek = () => {
+    const dayNames = ['Chủ nhật', 'Thứ 2', 'Thứ 3', 'Thứ 4', 'Thứ 5', 'Thứ 6', 'Thứ 7'];
+    const dayData = Array(7).fill(0);
+    blogs.forEach(blog => {
+      const day = new Date(blog.createdAt).getDay();
+      dayData[day]++;
+    });
+    return { labels: dayNames, data: dayData };
   };
 
   // Thống kê tác giả
   const getAuthorStats = () => {
     const authorMap = new Map();
     blogs.forEach(blog => {
-      const authorName = blog.authorId.fullName;
+      // Sử dụng fullName nếu có, nếu không thì dùng username (cho Google login)
+      const authorName = blog.authorId?.fullName || blog.authorId?.username || 'Tác giả không xác định';
       if (authorMap.has(authorName)) {
         authorMap.set(authorName, authorMap.get(authorName) + 1);
       } else {
@@ -174,33 +216,38 @@ const Dashboard = () => {
     .slice(0, 5);
   };
 
+  const topicStats = getTopicStats();
+  const topCommentedBlogs = getTopCommentedBlogs();
+  const anonymousStats = getAnonymousStats();
+  const dayOfWeekStats = getBlogsByDayOfWeek();
   const authorStats = getAuthorStats();
+  const maxTopicCount = topicStats.length > 0 ? Math.max(...topicStats.map(t => t.count)) : 1;
   const maxCount = authorStats.length > 0 ? Math.max(...authorStats.map(a => a.count)) : 1;
 
-  // Chart data cho trạng thái blog
-  const blogStatusData = {
-    labels: ['Đã xuất bản', 'Bản nháp', 'Chưa xuất bản', 'Từ chối'],
+
+
+  // Chart data cho blog ẩn danh vs không ẩn danh
+  const anonymousBlogData = {
+    labels: ['Không ẩn danh', 'Ẩn danh'],
     datasets: [{
-      data: [blogStats.published, blogStats.draft, blogStats.unpublished, blogStats.rejected],
+      data: [anonymousStats.notAnonymous, anonymousStats.anonymous],
       backgroundColor: [
         '#10B981', // green-500
         '#F59E0B', // amber-500
-        '#6B7280', // gray-500
-        '#EF4444', // red-500
       ],
       borderWidth: 0,
     }],
   };
 
-  // Chart data cho blog theo tháng
-  const monthlyBlogData = {
-    labels: ['T1', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'T8', 'T9', 'T10', 'T11', 'T12'],
+  // Chart data cho blog theo ngày trong tuần
+  const dayOfWeekBlogData = {
+    labels: dayOfWeekStats.labels,
     datasets: [{
       label: 'Số bài viết',
-      data: getBlogsByMonth(),
+      data: dayOfWeekStats.data,
       backgroundColor: '#F59E0B',
       borderColor: '#D97706',
-        borderWidth: 2,
+      borderWidth: 2,
     }],
   };
 
@@ -299,53 +346,32 @@ const Dashboard = () => {
           <div className="text-amber-400 text-center">Đang tải dữ liệu...</div>
         ) : (
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            {/* Blog Status Chart */}
+            {/* Anonymous vs Non-anonymous Chart */}
             <div>
-              <h2 className="text-xl font-bold mb-4 text-center text-amber-700 tracking-wide">Trạng thái bài viết</h2>
+              <h2 className="text-xl font-bold mb-4 text-center text-amber-700 tracking-wide">Blog ẩn danh vs không ẩn danh</h2>
               {blogStats.total > 0 ? (
                 <div className="h-64">
-                  <Pie data={blogStatusData} options={chartOptions} />
-            </div>
-          ) : (
-                <div className="text-amber-400 text-center">Chưa có dữ liệu</div>
-          )}
-      </div>
-
-            {/* Blog by Month Chart */}
-            <div>
-              <h2 className="text-xl font-bold mb-4 text-center text-amber-700 tracking-wide">Bài viết theo tháng</h2>
-              {blogStats.total > 0 ? (
-                <div className="h-64">
-                  <Bar data={monthlyBlogData} options={barOptions} />
-        </div>
+                  <Pie data={anonymousBlogData} options={chartOptions} />
+                </div>
               ) : (
                 <div className="text-amber-400 text-center">Chưa có dữ liệu</div>
-        )}
-      </div>
+              )}
             </div>
+
+            {/* Blog by Day of Week Chart */}
+            <div>
+              <h2 className="text-xl font-bold mb-4 text-center text-amber-700 tracking-wide">Bài viết theo ngày trong tuần</h2>
+              {blogStats.total > 0 ? (
+                <div className="h-64">
+                  <Bar data={dayOfWeekBlogData} options={barOptions} />
+                </div>
+              ) : (
+                <div className="text-amber-400 text-center">Chưa có dữ liệu</div>
+              )}
+            </div>
+          </div>
         )}
 
-        {/* Blog Summary Stats */}
-        {!loadingBlogs && blogStats.total > 0 && (
-          <div className="mt-8 grid grid-cols-2 md:grid-cols-4 gap-4">
-            <div className="bg-amber-50 p-4 rounded-lg text-center">
-              <div className="text-2xl font-bold text-amber-600">{blogStats.total}</div>
-              <div className="text-sm text-amber-700">Tổng bài viết</div>
-            </div>
-            <div className="bg-green-50 p-4 rounded-lg text-center">
-              <div className="text-2xl font-bold text-green-600">{blogStats.published}</div>
-              <div className="text-sm text-green-700">Đã xuất bản</div>
-                </div>
-            <div className="bg-yellow-50 p-4 rounded-lg text-center">
-              <div className="text-2xl font-bold text-yellow-600">{blogStats.draft}</div>
-              <div className="text-sm text-yellow-700">Bản nháp</div>
-                </div>
-            <div className="bg-gray-50 p-4 rounded-lg text-center">
-              <div className="text-2xl font-bold text-gray-600">{blogStats.unpublished}</div>
-              <div className="text-sm text-gray-700">Chưa xuất bản</div>
-              </div>
-            </div>
-          )}
 
         {/* Top Authors */}
         {!loadingBlogs && authorStats.length > 0 && (
@@ -360,12 +386,58 @@ const Dashboard = () => {
                   <div className="flex items-center justify-between mb-2">
                     <span className="text-sm text-amber-500 font-semibold">#{idx + 1}</span>
                     <span className="text-xs bg-amber-100 text-amber-700 rounded-full px-2 py-0.5 font-medium">{author.count} bài</span>
-          </div>
-                  <div className="font-medium text-base text-amber-800 mb-1">{author.name}</div>
+                  </div>
+                  <div className="font-medium text-base text-amber-800 mb-1">{author.name || 'Tác giả không xác định'}</div>
                   <div className="w-full h-2 bg-amber-100 rounded-full">
                     <div className="h-2 bg-amber-400 rounded-full" style={{ width: `${(author.count / maxCount) * 100}%` }}></div>
+                  </div>
+                </div>
+              ))}
             </div>
+          </div>
+        )}
+
+        {/* Top Topics */}
+        {!loadingBlogs && topicStats.length > 0 && (
+          <div className="mt-8">
+            <h3 className="text-lg font-bold text-amber-700 mb-4 flex items-center">
+              <FileText className="w-5 h-5 mr-2 text-amber-500" />
+              Chủ đề phổ biến
+            </h3>
+            <div className="space-y-3">
+              {topicStats.map((topic, idx) => (
+                <div key={topic.topic} className="bg-white rounded-xl px-4 py-3 border border-amber-50 shadow-sm">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-sm text-amber-500 font-semibold">#{idx + 1}</span>
+                    <span className="text-xs bg-amber-100 text-amber-700 rounded-full px-2 py-0.5 font-medium">{topic.count} bài</span>
+                  </div>
+                  <div className="font-medium text-base text-amber-800 mb-1">{topic.topic}</div>
+                  <div className="w-full h-2 bg-amber-100 rounded-full">
+                    <div className="h-2 bg-amber-400 rounded-full" style={{ width: `${(topic.count / maxTopicCount) * 100}%` }}></div>
+                  </div>
+                </div>
+              ))}
             </div>
+          </div>
+        )}
+
+        {/* Top Commented Blogs */}
+        {!loadingBlogs && topCommentedBlogs.length > 0 && (
+          <div className="mt-8">
+            <h3 className="text-lg font-bold text-amber-700 mb-4 flex items-center">
+              <FileText className="w-5 h-5 mr-2 text-amber-500" />
+              Blog có nhiều bình luận nhất
+            </h3>
+            <div className="space-y-3">
+              {topCommentedBlogs.map((blog, idx) => (
+                <div key={blog.title} className="bg-white rounded-xl px-4 py-3 border border-amber-50 shadow-sm">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-sm text-amber-500 font-semibold">#{idx + 1}</span>
+                    <span className="text-xs bg-amber-100 text-amber-700 rounded-full px-2 py-0.5 font-medium">{blog.commentCount} bình luận</span>
+                  </div>
+                  <div className="font-medium text-base text-amber-800 mb-1 truncate" title={blog.title}>{blog.title}</div>
+                  <div className="text-sm text-amber-600">Tác giả: {blog.author}</div>
+                </div>
               ))}
             </div>
           </div>
