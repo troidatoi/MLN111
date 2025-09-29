@@ -45,6 +45,25 @@ const dinhDangNgay = (chuoiNgay: string) => {
   return new Date(chuoiNgay).toLocaleDateString('vi-VN', tuyChon);
 };
 
+// Hàm chuyển đổi text thuần thành HTML với line breaks
+const formatBlogContent = (content: string) => {
+  if (!content) return '';
+  
+  // Escape HTML để tránh XSS
+  const escapedContent = content
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+  
+  // Chuyển đổi line breaks thành <br> tags
+  return escapedContent
+    .replace(/\n/g, '<br>')
+    .replace(/\r\n/g, '<br>')
+    .replace(/\r/g, '<br>');
+};
+
 const BlogDetailView: React.FC<BlogDetailViewProps> = ({ blog, onClose }) => {
   const { user } = useAuth();
   const [comments, setComments] = useState<IComment[]>([]);
@@ -172,7 +191,7 @@ const BlogDetailView: React.FC<BlogDetailViewProps> = ({ blog, onClose }) => {
         {/* Nội dung chính */}
         <div
           className="prose lg:prose-xl prose-stone max-w-none mb-6"
-          dangerouslySetInnerHTML={{ __html: blog.content }}
+          dangerouslySetInnerHTML={{ __html: formatBlogContent(blog.content) }}
         />
 
         {/* Comments section */}

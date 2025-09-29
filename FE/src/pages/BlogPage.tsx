@@ -129,7 +129,9 @@ function BlogPage() {
 
   // Truncate content for preview
   const truncateContent = (content: string, maxLength = 150) => {
-    const strippedContent = content.replace(/<[^>]*>?/gm, ''); // Remove HTML tags
+    // Chuyển đổi line breaks thành spaces để hiển thị preview
+    const normalizedContent = content.replace(/\n/g, ' ').replace(/\r/g, ' ');
+    const strippedContent = normalizedContent.replace(/<[^>]*>?/gm, ''); // Remove HTML tags
     return strippedContent.length > maxLength 
       ? strippedContent.substring(0, maxLength) + '...' 
       : strippedContent;

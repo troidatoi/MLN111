@@ -574,7 +574,9 @@ export default function Home() {
 
   // Truncate content for preview
   const truncateContent = useCallback((content: string): string => {
-    const strippedContent = content.replace(/<[^>]*>?/gm, '');
+    // Chuyển đổi line breaks thành spaces để hiển thị preview
+    const normalizedContent = content.replace(/\n/g, ' ').replace(/\r/g, ' ');
+    const strippedContent = normalizedContent.replace(/<[^>]*>?/gm, '');
     return strippedContent.length > 150 
       ? strippedContent.substring(0, 150) + '...' 
       : strippedContent;

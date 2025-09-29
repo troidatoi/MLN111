@@ -50,7 +50,9 @@ interface Service {
 }
 
 const truncateContent = (content: string, maxLength: number = 120) => {
-  const strippedContent = content.replace(/<[^>]*>?/gm, '');
+  // Chuyển đổi line breaks thành spaces để hiển thị preview
+  const normalizedContent = content.replace(/\n/g, ' ').replace(/\r/g, ' ');
+  const strippedContent = normalizedContent.replace(/<[^>]*>?/gm, '');
   return strippedContent.length > maxLength
     ? strippedContent.substring(0, maxLength) + '...'
     : strippedContent;
