@@ -64,7 +64,9 @@ const marxistDialectics = {
       title: "Phủ định của phủ định",
       description: "Sự phát triển diễn ra theo hình xoáy ốc, phủ định cái cũ để tạo ra cái mới cao hơn.",
       icon: "🌀",
-      color: "from-yellow-500 to-amber-500"
+      color: "from-yellow-500 to-amber-500",
+      image: "/card4.png",
+      imageNote: "Một đường xoáy ốc đơn giản đi lên với 5 giai đoạn rõ ràng trong chu kỳ phát triển của cây: Hạt giống → Mầm cây → Cây non → Cây trưởng thành → Hạt giống mới. Mỗi giai đoạn phủ định giai đoạn trước nhưng phát triển lên trình độ cao hơn"
     }
   ],
   examples: [
