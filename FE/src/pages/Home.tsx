@@ -40,19 +40,25 @@ const marxistDialectics = {
       title: "Mâu thuẫn là nguồn gốc của sự vận động",
       description: "Mọi sự vật, hiện tượng đều chứa đựng những mặt đối lập, tạo nên mâu thuẫn nội tại thúc đẩy sự phát triển.",
       icon: "⚡",
-      color: "from-red-500 to-orange-500"
+      color: "from-red-500 to-orange-500",
+      image: "/mauThuanBienChung.jpg",
+      imageNote: "Biểu tượng âm-dương thể hiện sự đối lập và hài hòa, chuyển động xoáy ốc từ trung tâm ra ngoài minh họa cách mâu thuẫn thúc đẩy sự phát triển"
     },
     {
       title: "Thống nhất và đấu tranh của các mặt đối lập",
       description: "Các mặt đối lập vừa thống nhất với nhau, vừa đấu tranh với nhau, tạo nên động lực phát triển.",
       icon: "⚖️",
-      color: "from-blue-500 to-purple-500"
+      color: "from-blue-500 to-purple-500",
+      image: "/card2.png",
+      imageNote: "Một khung cảnh được chia đôi giữa ngày và đêm cùng tồn tại trong cùng một không gian, tượng trưng cho hai mặt đối lập. Phía ngày có ánh sáng mặt trời, hoa nở rực rỡ và sự sống sinh sôi. Phía đêm có ánh trăng, những vì sao và các sinh vật hoạt động về đêm"
     },
     {
       title: "Chuyển hóa từ lượng thành chất",
       description: "Sự tích lũy về lượng dẫn đến sự thay đổi về chất, tạo nên bước nhảy vọt trong phát triển.",
       icon: "📈",
-      color: "from-green-500 to-teal-500"
+      color: "from-green-500 to-teal-500",
+      image: "/card3.png",
+      imageNote: "Quá trình từ trứng → sâu bướm → nhộng → bướm minh họa sự chuyển hóa từ lượng thành chất. Sự chuyển đổi từ nhộng thành bướm được nhấn mạnh như một bước nhảy vọt về chất"
     },
     {
       title: "Phủ định của phủ định",
@@ -476,16 +482,6 @@ const principleQuizzes = [
   }
 ];
 
-// Interface cho event hiển thị ở Home
-interface EventHome {
-  _id: string;
-  
-  title: string;
-  startDate: string;
-  location?: string;
-  description?: string;
-  image?: string;
-}
 
 // Interface cho blog
 interface Blog {
@@ -535,7 +531,6 @@ export default function Home() {
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
   const [score, setScore] = useState(0);
   const [showResult, setShowResult] = useState(false);
-  const [quizCompleted, setQuizCompleted] = useState(false);
   const [userAnswers, setUserAnswers] = useState<number[]>([]);
 
   // State cho Memory Game
@@ -589,7 +584,6 @@ export default function Home() {
     setSelectedAnswer(null);
     setScore(0);
     setShowResult(false);
-    setQuizCompleted(false);
     setUserAnswers([]);
   };
 
@@ -616,7 +610,6 @@ export default function Home() {
       setSelectedAnswer(null);
     } else {
       setShowResult(true);
-      setQuizCompleted(true);
     }
   };
 
@@ -626,7 +619,6 @@ export default function Home() {
     setSelectedAnswer(null);
     setScore(0);
     setShowResult(false);
-    setQuizCompleted(false);
     setUserAnswers([]);
   };
 
@@ -775,7 +767,6 @@ export default function Home() {
 
           {/* Principles Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 md:gap-8 mb-8 sm:mb-12 md:mb-16">
-            {console.log('Rendering principles:', marxistDialectics.principles.length)}
             {marxistDialectics.principles.map((principle, index) => (
               <motion.div
                 key={index}
@@ -788,8 +779,22 @@ export default function Home() {
                 whileHover={{ y: -8, transition: { duration: 0.3 } }}
                 onClick={() => handlePrincipleClick(index)}
               >
-                <div className={`h-24 sm:h-28 md:h-32 bg-gradient-to-br ${principle.color} flex items-center justify-center`}>
-                  <span className="text-4xl sm:text-5xl md:text-6xl opacity-80">{principle.icon}</span>
+                <div className={`h-24 sm:h-28 md:h-32 bg-gradient-to-br ${principle.color} flex items-center justify-center relative overflow-hidden`}>
+                  {principle.image ? (
+                    <>
+                      <img 
+                        src={principle.image} 
+                        alt={principle.title}
+                        className="w-full h-full object-cover opacity-90"
+                      />
+                      <div className="absolute inset-0 bg-black/20"></div>
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <span className="text-4xl sm:text-5xl md:text-6xl opacity-80 drop-shadow-lg">{principle.icon}</span>
+                      </div>
+                    </>
+                  ) : (
+                    <span className="text-4xl sm:text-5xl md:text-6xl opacity-80">{principle.icon}</span>
+                  )}
                 </div>
                 <div className="p-3 sm:p-4 md:p-6">
                   <h3 className="text-base sm:text-lg md:text-xl font-bold text-amber-900 mb-2 sm:mb-3 group-hover:text-amber-800 transition-colors">
@@ -798,6 +803,13 @@ export default function Home() {
                   <p className="text-xs sm:text-sm md:text-base text-amber-700 leading-relaxed">
                     {principle.description}
                   </p>
+                  {principle.imageNote && (
+                    <div className="mt-2 sm:mt-3 p-2 sm:p-3 bg-amber-50/50 rounded-lg border-l-2 border-amber-300">
+                      <p className="text-xs text-amber-600 italic leading-relaxed">
+                        💭 {principle.imageNote}
+                      </p>
+                    </div>
+                  )}
                   <div className="mt-3 sm:mt-4 text-center">
                     <span className="inline-block px-3 py-1 sm:px-4 sm:py-2 bg-amber-100 text-amber-800 rounded-full text-xs sm:text-sm font-medium">
                       Bấm để học và kiểm tra
@@ -899,6 +911,28 @@ export default function Home() {
                 {/* Detail Content */}
                 <div className="bg-gradient-to-r from-amber-50 to-orange-50 rounded-xl p-6 mb-8">
                   <h3 className="text-xl font-bold text-amber-900 mb-4">Nội dung chi tiết:</h3>
+                  
+                  {/* Image and meaning for principles with images */}
+                  {marxistDialectics.principles[selectedPrinciple].image && (
+                    <div className="mb-6">
+                      <div className="relative h-64 sm:h-80 md:h-96 lg:h-[28rem] rounded-xl overflow-hidden mb-4">
+                        <img 
+                          src={marxistDialectics.principles[selectedPrinciple].image} 
+                          alt={marxistDialectics.principles[selectedPrinciple].title}
+                          className="w-full h-full object-contain bg-amber-50"
+                        />
+                        <div className="absolute inset-0 bg-black/20"></div>
+                        <div className="absolute bottom-4 left-4 right-4">
+                          <div className="bg-white/95 backdrop-blur-sm rounded-lg p-4 shadow-lg">
+                            <p className="text-sm text-amber-800 italic leading-relaxed">
+                              💭 {marxistDialectics.principles[selectedPrinciple].imageNote}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                  
                   <p className="text-amber-800 leading-relaxed mb-4">
                     {principleQuizzes[selectedPrinciple].detail}
                   </p>
