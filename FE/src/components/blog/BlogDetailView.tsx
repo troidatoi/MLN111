@@ -119,9 +119,27 @@ const BlogDetailView: React.FC<BlogDetailViewProps> = ({ blog, onClose }) => {
     
     setIsSubmitting(true);
     try {
+      // Cải thiện logic xử lý tên người dùng
+      let displayName = 'Khách';
+      
+      if (user) {
+        // Nếu đã đăng nhập, ưu tiên fullName, sau đó username, cuối cùng là email
+        if (user.fullName && user.fullName.trim()) {
+          displayName = user.fullName.trim();
+        } else if (user.username && user.username.trim()) {
+          displayName = user.username.trim();
+        } else if (user.email) {
+          // Lấy phần trước @ của email làm tên hiển thị
+          displayName = user.email.split('@')[0];
+        }
+      } else if (commentName.trim()) {
+        // Nếu chưa đăng nhập nhưng có nhập tên
+        displayName = commentName.trim();
+      }
+      
       await addCommentApi(blog._id, {
         userId: user?._id || 'anonymous',
-        username: user?.username || user?.fullName || commentName.trim() || 'Khách',
+        username: displayName,
         content: newComment.trim()
       });
       setNewComment('');

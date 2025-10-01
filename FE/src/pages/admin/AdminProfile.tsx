@@ -21,6 +21,7 @@ interface User {
 }
 
 const AdminProfile: React.FC = () => {
+  const { user: authUser, updateUserInfo } = useAuth();
   const [user, setUser] = useState<User | null>(null);
   const [editData, setEditData] = useState<User>({});
   const [editMode, setEditMode] = useState(false);
@@ -87,6 +88,9 @@ const AdminProfile: React.FC = () => {
       setEditMode(false);
       setFieldError({});
       toast.success('Cập nhật thành công!');
+      
+      // Cập nhật AuthContext để comment có thể sử dụng fullName mới
+      await updateUserInfo();
     } catch (error: unknown) {
       const errorMessage = (error as any).response?.data?.message;
       if (errorMessage?.toLowerCase().includes('số điện thoại')) {
@@ -117,6 +121,9 @@ const AdminProfile: React.FC = () => {
       setUser((prev) => prev ? { ...prev, photoUrl: imageUrl } : prev);
       setEditData((prev) => ({ ...prev, photoUrl: imageUrl }));
       toast.success('Đổi ảnh đại diện thành công!');
+      
+      // Cập nhật AuthContext để comment có thể sử dụng thông tin mới
+      await updateUserInfo();
     } catch (err) {
       toast.error('Lỗi khi upload ảnh!');
     } finally {

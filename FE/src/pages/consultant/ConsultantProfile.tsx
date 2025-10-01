@@ -66,6 +66,7 @@ const DEFAULT_CERT_IMAGE =
   "https://cdn.prod.website-files.com/60a530a795c0ca8a81c5868a/660568c3773236b1fdefc245_badge-preview%20(2)%2011.46.22.png";
 
 export default function ConsultantProfile() {
+  const { user: authUser, updateUserInfo } = useAuth();
   const [user, setUser] = useState<User | null>(null);
   const [editData, setEditData] = useState<User>({});
   const [editMode, setEditMode] = useState(false);
@@ -181,6 +182,9 @@ export default function ConsultantProfile() {
       setEditData(updated);
       setEditMode(false);
       showToast("success", "Cập nhật thành công!");
+      
+      // Cập nhật AuthContext để comment có thể sử dụng fullName mới
+      await updateUserInfo();
     } catch {
       showToast("error", "Cập nhật thất bại!");
     }
@@ -198,6 +202,9 @@ export default function ConsultantProfile() {
       const updated = await getAccountByIdApi(user._id);
       setUser(updated);
       setEditData(updated);
+      
+      // Cập nhật AuthContext để comment có thể sử dụng fullName mới
+      await updateUserInfo();
     } catch (err: unknown) {
       const axiosErr = err as AxiosError<{ message?: string }>;
       if (axiosErr?.response?.data?.message) {

@@ -61,6 +61,7 @@ const menuTabs = [
 export default function Profile() {
   const location = useLocation();
   const [tab, setTab] = useState("profile");
+  const { user: authUser, updateUserInfo } = useAuth();
   const [user, setUser] = useState<User | null>(null);
   const [editData, setEditData] = useState<User>({});
   const [editMode, setEditMode] = useState(false);
@@ -76,22 +77,13 @@ export default function Profile() {
   const [filterStatus, setFilterStatus] = useState("all");
   const [filterKeyword, setFilterKeyword] = useState("");
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const { user: authUser } = useAuth();
 
   useEffect(() => {
-    const fetchUser = async () => {
-      const userId = localStorage.getItem("userId");
-      if (!userId) return;
-      try {
-        const data = await getAccountByIdApi(userId);
-        setUser(data);
-        setEditData(data);
-      } catch {
-        setUser(null);
-      }
-    };
-    fetchUser();
-  }, []);
+    if (authUser) {
+      setUser(authUser);
+      setEditData(authUser);
+    }
+  }, [authUser]);
 
   // Tự động chuyển tab nếu có query ?tab=payments
   useEffect(() => {
@@ -135,6 +127,9 @@ export default function Profile() {
       setEditData(updated);
       setEditMode(false);
       setFieldError({}); // Clear any previous errors
+      
+      // Cập nhật AuthContext để comment có thể sử dụng fullName mới
+      await updateUserInfo();
     } catch (error: unknown) {
       // Extract error message from response
       const errorMessage = (error as AxiosError<{ message?: string }>).response?.data?.message;
@@ -218,6 +213,9 @@ export default function Profile() {
           const updated = await getAccountByIdApi(user._id);
           setUser(updated);
           setEditData(updated);
+          
+          // Cập nhật AuthContext để comment có thể sử dụng thông tin mới
+          await updateUserInfo();
         }
 
         toast.success("Cập nhật ảnh đại diện thành công!", {
