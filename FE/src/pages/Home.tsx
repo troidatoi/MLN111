@@ -20,7 +20,7 @@ const philosophyQuotes = [
     context: "Triết học hiện đại"
   },
   {
-    quote: "Con người bị kết án tự do",
+    quote: "Con người bị kết án phải tự do",
     author: "Jean-Paul Sartre",
     context: "Chủ nghĩa hiện sinh"
   },

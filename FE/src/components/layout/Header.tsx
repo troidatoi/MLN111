@@ -84,6 +84,9 @@ function Header() {
             <Link to="/blogs" className={isActive('/blogs') ? activeStyle : defaultStyle}>
               Blog
             </Link>
+            <Link to="/about-us" className={isActive('/about-us') ? activeStyle : defaultStyle}>
+              About Us
+            </Link>
           </nav>
 
           {/* Mobile Menu Button */}
@@ -189,6 +192,13 @@ function Header() {
               onClick={() => setShowMobileMenu(false)}
             >
               Blog
+            </Link>
+            <Link
+              to="/about-us"
+              className={`block px-3 py-2 text-base font-medium rounded-md ${isActive('/about-us') ? 'bg-gray-100 text-gray-900' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'}`}
+              onClick={() => setShowMobileMenu(false)}
+            >
+              About Us
             </Link>
             {!user && (
               <Link
