@@ -39,8 +39,7 @@ const AdminProfile: React.FC = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
   const [isUploadingAvatar, setIsUploadingAvatar] = useState(false);
-  const { user: authUser } = useAuth();
-
+  
   // Thêm state cho đổi mật khẩu
   const [oldPassword, setOldPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
